@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">hlbmerge2</string>
+    <string-array name="judge_merge_dialog_export_type">
+        <item>有声音视频</item>
+        <item>无声音视频</item>
+        <item>仅音频</item>
+    </string-array>
+</resources>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/side_container_drawerlayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/linl_main_layout_area"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_above="@id/frameLayout_main_handle_area"
+            android:layout_alignParentTop="true">
+            <!--titlebar-->
+            <FrameLayout
+                android:id="@+id/frameLayout_main_titlebar_area"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <!--主要显示区域-->
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/main_view_pager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+        </LinearLayout>
+        <!--处理按钮-->
+        <FrameLayout
+            android:id="@+id/frameLayout_main_handle_area"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/bottom_navigationview_body_viewpager" />
+        <!--导航选项-->
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigationview_body_viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            app:menu="@menu/menu_bottom_navigationview_body_viewpager"
+            tools:ignore="MissingConstraints" />
+
+    </RelativeLayout>
+
+    <!--  侧滑栏  NavigationView-->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/side_navigationview"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/fragment_navigation_head"
+        app:menu="@menu/side_navigation_menu" />
+
+</androidx.drawerlayout.widget.DrawerLayout>
+
+
+
+

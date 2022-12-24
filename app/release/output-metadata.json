@@ -1,0 +1,20 @@
+{
+  "version": 3,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "com.molihua.hlbmerge",
+  "variantName": "release",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "attributes": [],
+      "versionCode": 39,
+      "versionName": "1.6.0",
+      "outputFile": "app-release.apk"
+    }
+  ],
+  "elementType": "File"
+}

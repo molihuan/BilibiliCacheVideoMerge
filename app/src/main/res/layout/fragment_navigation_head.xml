@@ -1,0 +1,36 @@
+<RelativeLayout android:layout_height="wrap_content" android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+   >
+    <ImageView
+        android:id="@+id/ceHuaImg"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/ic_launcher_ml"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="15dp"
+        />
+
+    <TextView
+        android:id="@+id/HLBTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ceHuaImg"
+        android:layout_marginTop="0dp"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/black"
+        android:text="HLB站缓存合并"
+        android:textSize="17dp"
+        />
+
+    <TextView
+        android:id="@+id/cehuaTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/HLBTitle"
+        android:layout_marginTop="5dp"
+        />
+
+</RelativeLayout>
