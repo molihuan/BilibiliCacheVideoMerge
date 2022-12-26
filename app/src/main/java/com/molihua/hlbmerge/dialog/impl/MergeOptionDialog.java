@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 import com.molihua.hlbmerge.R;
 import com.molihua.hlbmerge.dao.ConfigData;
@@ -17,6 +18,7 @@ import com.xuexiang.xui.widget.spinner.materialspinner.MaterialSpinner;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @ClassName: JudgeMergeDialog
@@ -26,14 +28,29 @@ import java.util.List;
  */
 public class MergeOptionDialog {
 
-
-    public static MaterialDialog showMergeOptionDialog(CacheFile cacheFile, Context context) {
+    /**
+     * 单个合并
+     *
+     * @param cacheFile
+     * @param fragment
+     * @return
+     */
+    public static MaterialDialog showMergeOptionDialog(CacheFile cacheFile, Fragment fragment) {
         List<CacheFile> cacheFileList = new ArrayList<>();
         cacheFileList.add(cacheFile);
-        return showMergeOptionDialog(cacheFileList, context);
+        return showMergeOptionDialog(cacheFileList, fragment);
     }
 
-    public static MaterialDialog showMergeOptionDialog(List<CacheFile> cacheFileList, Context context) {
+    /**
+     * 多个合并
+     *
+     * @param cacheFileList
+     * @param fragment
+     * @return
+     */
+    public static MaterialDialog showMergeOptionDialog(List<CacheFile> cacheFileList, Fragment fragment) {
+        Context context = fragment.getContext();
+        Objects.requireNonNull(context, "context is null");
 
         View dialog_judgemerge = LayoutInflater.from(context).inflate(R.layout.dialog_judge_merge, null);
         MaterialSpinner dialog_materialspinner = dialog_judgemerge.findViewById(R.id.dialog_materialspinner);
@@ -68,7 +85,7 @@ public class MergeOptionDialog {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         //打开合并进度窗口
-                        MergeProgressDialog.showMergeProgressDialog(cacheFileList, context);
+                        MergeProgressDialog.showMergeProgressDialog(cacheFileList, fragment);
                     }
                 })
                 .negativeText("取消")

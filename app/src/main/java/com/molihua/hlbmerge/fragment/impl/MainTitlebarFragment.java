@@ -87,7 +87,13 @@ public class MainTitlebarFragment extends AbstractMainTitlebarFragment implement
                 return;
             }
 
-            CacheFile cacheFile = abstractMainActivity.getAllCacheFileList().get(0);
+            List<CacheFile> allCacheFileList = abstractMainActivity.getAllCacheFileList();
+            
+            if (allCacheFileList.size() == 0) {
+                return;
+            }
+
+            CacheFile cacheFile = allCacheFileList.get(0);
             if (cacheFile.getFlag() == BaseCacheFileManager.FLAG_CACHE_FILE_COLLECTION) {
                 abstractMainActivity.updateCollectionFileList();
             } else {
@@ -151,7 +157,7 @@ public class MainTitlebarFragment extends AbstractMainTitlebarFragment implement
                     cacheFile.setWholeVisibility(View.VISIBLE);
                     break;
                 default:
-                    
+
             }
 
         }

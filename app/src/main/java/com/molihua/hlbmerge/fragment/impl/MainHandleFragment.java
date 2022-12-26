@@ -64,7 +64,7 @@ public class MainHandleFragment extends AbstractMainHandleFragment implements Vi
             }
 
         } else if (id == R.id.center_tv) {
-            MergeOptionDialog.showMergeOptionDialog(abstractMainActivity.getSelectedCacheFileList(), mActivity);
+            MergeOptionDialog.showMergeOptionDialog(abstractMainActivity.getSelectedCacheFileList(), abstractMainActivity.getMainFileShowFragment());
         } else if (id == R.id.right_tv) {
             abstractMainActivity.openCloseMultipleMode(false);
         }

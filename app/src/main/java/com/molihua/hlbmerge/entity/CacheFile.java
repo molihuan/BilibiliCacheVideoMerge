@@ -1,5 +1,10 @@
 package com.molihua.hlbmerge.entity;
 
+import androidx.annotation.NonNull;
+import androidx.documentfile.provider.DocumentFile;
+
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -8,7 +13,7 @@ import java.util.List;
  * @Date: 2022/12/21/17:13
  * @Description:
  */
-public class CacheFile {
+public class CacheFile implements Serializable, Cloneable {
     //如果是合集则为0，如果是章节则是1
     private Integer flag;
     //整体是否可见
@@ -37,6 +42,10 @@ public class CacheFile {
     private Boolean boxCheck;
     //存储blv格式的文件路径
     private List<String> blvPathList;
+    //是否使用uri地址
+    private Boolean useUri;
+    //document
+    private DocumentFile documentFile;
 
     public CacheFile() {
     }
@@ -158,6 +167,34 @@ public class CacheFile {
         return this;
     }
 
+    public Boolean getUseUri() {
+        return useUri;
+    }
+
+    public CacheFile setUseUri(Boolean useUri) {
+        this.useUri = useUri;
+        return this;
+    }
+
+    public DocumentFile getDocumentFile() {
+        return documentFile;
+    }
+
+    public CacheFile setDocumentFile(DocumentFile documentFile) {
+        this.documentFile = documentFile;
+        return this;
+    }
+
+    @NonNull
+    @Override
+    public CacheFile clone() throws CloneNotSupportedException {
+        CacheFile cloneCacheFile = (CacheFile) super.clone();
+        if (blvPathList != null) {
+            cloneCacheFile.setBlvPathList(new ArrayList<>(blvPathList));
+        }
+        return cloneCacheFile;
+    }
+
     @Override
     public String toString() {
         return "CacheFile{" +
@@ -173,6 +210,10 @@ public class CacheFile {
                 ", danmakuPath='" + danmakuPath + '\'' +
                 ", boxVisibility=" + boxVisibility +
                 ", boxCheck=" + boxCheck +
+                ", useUri=" + useUri +
+                ", documentFile=" + documentFile +
                 '}';
     }
+
+
 }

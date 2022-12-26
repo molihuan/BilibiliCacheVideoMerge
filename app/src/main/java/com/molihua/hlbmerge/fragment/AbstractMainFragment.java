@@ -22,4 +22,6 @@ public abstract class AbstractMainFragment extends BaseFragment {
             abstractMainActivity = (AbstractMainActivity) mActivity;
         }
     }
+
+
 }

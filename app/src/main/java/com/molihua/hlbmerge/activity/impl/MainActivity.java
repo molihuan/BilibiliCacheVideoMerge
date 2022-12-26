@@ -66,6 +66,8 @@ public class MainActivity extends AbstractMainActivity implements NavigationView
 
     @Override
     public void initData() {
+
+        //申请权限
         PermissionsTools.getStoragePermissions(this);
 
         mainTitlebarFragment = new MainTitlebarFragment();
@@ -185,6 +187,11 @@ public class MainActivity extends AbstractMainActivity implements NavigationView
     @Override
     public NavigationView getNavigationView() {
         return navigationView;
+    }
+
+    @Override
+    public AbstractMainFileShowFragment getMainFileShowFragment() {
+        return mainFileShowFragment;
     }
 
     @Override

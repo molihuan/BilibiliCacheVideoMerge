@@ -4,6 +4,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.molihua.hlbmerge.fragment.AbstractMainFileShowFragment;
 import com.molihua.hlbmerge.interfaces.IMainFileShowFragment;
 import com.molihua.hlbmerge.interfaces.IMainTitlebarFragment;
 
@@ -23,4 +24,6 @@ public abstract class AbstractMainActivity extends BaseActivity implements IMain
     public abstract void showHideNavigation(boolean status);
 
     public abstract void handleShowHide(boolean isShow);
+
+    public abstract AbstractMainFileShowFragment getMainFileShowFragment();
 }

@@ -31,7 +31,7 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", includes: ["*.aar", "*.jar"])
     //文件选择器(包含权限请求)
-    implementation 'io.github.molihuan:pathselector:1.1.5'
+    implementation 'io.github.molihuan:pathselector:1.1.6'
     //RxFFmpeg依赖
     implementation 'com.github.microshow:RxFFmpeg:4.9.0-lite'
     //bugly依赖
@@ -46,6 +46,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation 'com.github.bumptech.glide:glide:4.12.0'
     //XUI
+
 
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.5.0'

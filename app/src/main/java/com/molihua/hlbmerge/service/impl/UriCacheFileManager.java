@@ -1,12 +1,14 @@
 package com.molihua.hlbmerge.service.impl;
 
-import android.annotation.SuppressLint;
+import android.net.Uri;
 import android.view.View;
 
-import com.molihua.hlbmerge.adapter.CacheFileListAdapter;
+import androidx.documentfile.provider.DocumentFile;
+import androidx.fragment.app.Fragment;
+
 import com.molihua.hlbmerge.entity.CacheFile;
 import com.molihua.hlbmerge.service.BaseCacheFileManager;
-import com.molihua.hlbmerge.utils.FileTools;
+import com.molihua.hlbmerge.utils.UriTool;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -21,36 +23,49 @@ import java.util.Objects;
  */
 public class UriCacheFileManager extends BaseCacheFileManager {
 
+    private Fragment fragment;
+
+    public UriCacheFileManager(Fragment fragment) {
+        this.fragment = fragment;
+    }
 
     @Override
     public List<CacheFile> updateCollectionFileList(String path, List<CacheFile> cacheFileList) {
         //初始化列表
         cacheFileList = initCollectionFileList(path, cacheFileList);
 
-        String[] needPath = new String[4];
+        Uri[] needUri = new Uri[4];
         String[] names = new String[2];
-        //获取所有的合集
-        File[] collectionFile = FileTools.getCollectionChapterFile(path);
-        for (int i = 0; i < collectionFile.length; i++) {
-            //获取每一个集合中的第一个章节
-            File oneChapterPath = Objects.requireNonNull(collectionFile[i].listFiles())[0];
-            //获取章节里需要的路径
-            needPath = FileTools.getNeedPath(oneChapterPath, needPath);
+        //获取所有的合集路径
+        DocumentFile[] collectionFiles = UriTool.getCollectionChapterFile(fragment, path);
+
+        if (collectionFiles == null) {
+            return cacheFileList;
+        }
+        for (int i = 0; i < collectionFiles.length; i++) {
+            //获取每一个集合中的第一个章节路径
+            DocumentFile oneChapterPath = Objects.requireNonNull(collectionFiles[i].listFiles())[0];
+
+            //获取章节里需要的Uri
+            needUri = UriTool.getNeedUri(oneChapterPath, needUri);
+
             //获取合集名称和章节名称
-            names = FileTools.getCollectionChapterName(needPath[2], names);
+            names = UriTool.getCollectionChapterName(needUri[2], names);
+
             cacheFileList.add(
                     new CacheFile()
                             .setFlag(BaseCacheFileManager.FLAG_CACHE_FILE_COLLECTION)
                             .setWholeVisibility(View.VISIBLE)
-                            .setCollectionPath(collectionFile[i].getAbsolutePath())
+                            .setCollectionPath(path + File.separator + collectionFiles[i].getName())
                             .setCollectionName(names[0])
                             .setChapterName(names[1])
-                            .setAudioPath(needPath[0])
-                            .setVideoPath(needPath[1])
-                            .setJsonPath(needPath[2])
-                            .setDanmakuPath(needPath[3])
+                            .setAudioPath(needUri[0].toString())
+                            .setVideoPath(needUri[1].toString())
+                            .setJsonPath(needUri[2].toString())
+                            .setDanmakuPath(needUri[3].toString())
                             .setBoxVisibility(View.INVISIBLE)
                             .setBoxCheck(false)
+                            .setUseUri(true)
             );
         }
 
@@ -67,12 +82,13 @@ public class UriCacheFileManager extends BaseCacheFileManager {
 
         cacheFileList.add(
                 new CacheFile()
-                        .setFlag(-1)
+                        .setFlag(BaseCacheFileManager.FLAG_CACHE_FILE_BACK)
                         .setWholeVisibility(View.VISIBLE)
                         .setCollectionPath(collectionPath)
                         .setChapterName("...")
                         .setBoxVisibility(View.INVISIBLE)
                         .setBoxCheck(false)
+                        .setUseUri(true)
         );
 
         return cacheFileList;
@@ -82,126 +98,99 @@ public class UriCacheFileManager extends BaseCacheFileManager {
     public List<CacheFile> updateChapterFileList(String collectionPath, List<CacheFile> cacheFileList) {
         cacheFileList = initChapterFileList(collectionPath, cacheFileList);
 
-        String[] needPath = new String[4];
+        Uri[] needUri = new Uri[4];
         String[] names = new String[2];
         //获取一个合集下面所有的章节
-        File[] chapterFile = FileTools.getCollectionChapterFile(collectionPath);
+        DocumentFile[] chapterFile = UriTool.getCollectionChapterFile(fragment, collectionPath);
+
+        if (chapterFile == null) {
+            return cacheFileList;
+        }
+
         for (int i = 0; i < chapterFile.length; i++) {
-            //获取章节里需要的路径
-            needPath = FileTools.getNeedPath(chapterFile[i], needPath);
+
+            //获取章节里需要的Uri
+            needUri = UriTool.getNeedUri(chapterFile[i], needUri);
+
             //获取合集名称和章节名称
-            names = FileTools.getCollectionChapterName(needPath[2], names);
+            names = UriTool.getCollectionChapterName(needUri[2], names);
+
             cacheFileList.add(
                     new CacheFile()
                             .setFlag(BaseCacheFileManager.FLAG_CACHE_FILE_CHAPTER)
                             .setWholeVisibility(View.VISIBLE)
                             .setCollectionPath(collectionPath)
                             .setCollectionName(names[0])
-                            .setChapterPath(chapterFile[i].getAbsolutePath())
+                            .setChapterPath(collectionPath + File.separator + chapterFile[i].getName())
                             .setChapterName(names[1])
-                            .setAudioPath(needPath[0])
-                            .setVideoPath(needPath[1])
-                            .setJsonPath(needPath[2])
-                            .setDanmakuPath(needPath[3])
+                            .setAudioPath(needUri[0].toString())
+                            .setVideoPath(needUri[1].toString())
+                            .setJsonPath(needUri[2].toString())
+                            .setDanmakuPath(needUri[3].toString())
                             .setBoxVisibility(View.INVISIBLE)
                             .setBoxCheck(false)
+                            .setUseUri(true)
             );
         }
 
         return cacheFileList;
     }
 
-    @Override
-    public List<CacheFile> setBoxVisible(List<CacheFile> cacheFileList, CacheFileListAdapter cacheFileAdapter, boolean state) {
+    /**
+     * 将合集item转换为章节item
+     *
+     * @param collectionCacheFileList
+     * @return
+     */
+    public static List<CacheFile> collection2ChapterCacheFileList(Fragment fragment, List<CacheFile> collectionCacheFileList) {
+        Objects.requireNonNull(collectionCacheFileList, "collectionCacheFileList is null");
 
-        int type;
-        if (state) {
-            type = View.VISIBLE;
-        } else {
-            type = View.INVISIBLE;
+        //如果已经是章节了就直接返回
+        if (collectionCacheFileList.get(0).getFlag() == BaseCacheFileManager.FLAG_CACHE_FILE_CHAPTER) {
+            return collectionCacheFileList;
         }
 
-        CacheFile cacheFile;
-        for (int i = 0; i < cacheFileList.size(); i++) {
-            cacheFile = cacheFileList.get(i);
-            //判断是不是返回item
-            if (cacheFile.getFlag() == BaseCacheFileManager.FLAG_CACHE_FILE_BACK) {
-                continue;
+        List<CacheFile> tempList = new ArrayList<>();
+
+        Uri[] needUri = new Uri[4];
+        String[] names = new String[2];
+
+        String collectionPath;
+        //遍历所有合集
+        for (int n = 0; n < collectionCacheFileList.size(); n++) {
+            //获取一个合集路径
+            collectionPath = collectionCacheFileList.get(n).getCollectionPath();
+            //获取一个合集下面所有的章节
+            DocumentFile[] chapterFile = UriTool.getCollectionChapterFile(fragment, collectionPath);
+            for (int i = 0; i < chapterFile.length; i++) {
+
+                //获取章节里需要的Uri
+                needUri = UriTool.getNeedUri(chapterFile[i], needUri);
+
+                //获取合集名称和章节名称
+                names = UriTool.getCollectionChapterName(needUri[2], names);
+
+                tempList.add(
+                        new CacheFile()
+                                .setFlag(BaseCacheFileManager.FLAG_CACHE_FILE_CHAPTER)
+                                .setWholeVisibility(View.VISIBLE)
+                                .setCollectionPath(collectionPath)
+                                .setCollectionName(names[0])
+                                .setChapterPath(collectionPath + File.separator + chapterFile[i].getName())
+                                .setChapterName(names[1])
+                                .setAudioPath(needUri[0].toString())
+                                .setVideoPath(needUri[1].toString())
+                                .setJsonPath(needUri[2].toString())
+                                .setDanmakuPath(needUri[3].toString())
+                                .setBoxVisibility(View.INVISIBLE)
+                                .setBoxCheck(false)
+                                .setUseUri(true)
+                );
             }
-            cacheFile.setBoxVisibility(type);
-            //显示和不显示时都设为不选中防止有缓存
-            cacheFile.setBoxCheck(false);
+
         }
 
-        return cacheFileList;
+        return tempList;
     }
 
-    @Override
-    public List<CacheFile> setBoxChecked(List<CacheFile> cacheFileList, CacheFileListAdapter cacheFileAdapter, boolean state) {
-        CacheFile cacheFile;
-        for (int i = 0; i < cacheFileList.size(); i++) {
-            cacheFile = cacheFileList.get(i);
-            //判断是不是返回item
-            if (cacheFile.getFlag() == BaseCacheFileManager.FLAG_CACHE_FILE_BACK) {
-                continue;
-            }
-            //如果是不可见的
-            if (cacheFile.getBoxVisibility() != View.VISIBLE || cacheFile.getWholeVisibility() != View.VISIBLE) {
-                cacheFile.setBoxCheck(false);
-            } else {
-                cacheFile.setBoxCheck(state);
-            }
-
-        }
-        return cacheFileList;
-    }
-
-    @Override
-    public List<CacheFile> setWholeVisible(List<CacheFile> cacheFileList, boolean state) {
-        int type;
-        if (state) {
-            type = View.VISIBLE;
-        } else {
-            type = View.GONE;
-        }
-
-        CacheFile cacheFile;
-        for (int i = 0; i < cacheFileList.size(); i++) {
-            cacheFile = cacheFileList.get(i);
-            //判断是不是返回item
-            if (cacheFile.getFlag() == BaseCacheFileManager.FLAG_CACHE_FILE_BACK) {
-                continue;
-            }
-            cacheFile.setWholeVisibility(type);
-            //显示和不显示时都设为不选中防止有缓存
-            cacheFile.setBoxCheck(false);
-        }
-
-        return cacheFileList;
-    }
-
-    @Override
-    public List<CacheFile> getSelectedCacheFileList(List<CacheFile> allCacheFileList, List<CacheFile> selectedCacheFileList) {
-        Objects.requireNonNull(allCacheFileList, "allCacheFileList is null");
-        //初始化
-        if (selectedCacheFileList == null) {
-            selectedCacheFileList = new ArrayList<>();
-        } else {
-            selectedCacheFileList.clear();
-        }
-        //把勾选的添加到选择列表中
-        for (CacheFile cacheFile : allCacheFileList) {
-            if (cacheFile.getBoxCheck()) {
-                selectedCacheFileList.add(cacheFile);
-            }
-        }
-
-        return selectedCacheFileList;
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    @Override
-    public void refreshCacheFileList(CacheFileListAdapter cacheFileAdapter) {
-        cacheFileAdapter.notifyDataSetChanged();
-    }
 }

@@ -1,5 +1,8 @@
 package com.molihua.hlbmerge.fragment.impl;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -19,6 +22,10 @@ import com.molihua.hlbmerge.fragment.AbstractMainFileShowFragment;
 import com.molihua.hlbmerge.service.BaseCacheFileManager;
 import com.molihua.hlbmerge.service.ICacheFileManager;
 import com.molihua.hlbmerge.service.impl.PathCacheFileManager;
+import com.molihua.hlbmerge.service.impl.UriCacheFileManager;
+import com.molihuan.pathselector.utils.FileTools;
+import com.molihuan.pathselector.utils.PermissionsTools;
+import com.molihuan.pathselector.utils.VersionTool;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +46,7 @@ public class MainFileShowFragment extends AbstractMainFileShowFragment implement
     private CacheFileListAdapter cacheFileListAdapter;
 
     private ICacheFileManager pathCacheFileManager;
+    private ICacheFileManager uriCacheFileManager;
 
     //当前是否为多选模式
     private boolean multipleSelectionMode = false;
@@ -56,7 +64,13 @@ public class MainFileShowFragment extends AbstractMainFileShowFragment implement
 
     @Override
     public void initData() {
+        //权限申请
+//        UriTool.grantedUriPermission(ConfigData.getCacheFilePath(), this);
+
+
         pathCacheFileManager = new PathCacheFileManager();
+        uriCacheFileManager = new UriCacheFileManager(this);
+
         allCacheFileList = new ArrayList<>();
         updateCollectionFileList();
     }
@@ -102,8 +116,8 @@ public class MainFileShowFragment extends AbstractMainFileShowFragment implement
                         refreshCacheFileList();
                         break;
                     case BaseCacheFileManager.FLAG_CACHE_FILE_CHAPTER:
-
-                        MergeOptionDialog.showMergeOptionDialog(item, mActivity);
+                        //打开合并弹窗
+                        MergeOptionDialog.showMergeOptionDialog(item, this);
                         break;
                     case BaseCacheFileManager.FLAG_CACHE_FILE_BACK:
                         updateCollectionFileList();
@@ -131,23 +145,47 @@ public class MainFileShowFragment extends AbstractMainFileShowFragment implement
             return true;
         }
 
-
         return false;
     }
 
     @Override
     public List<CacheFile> updateCollectionFileList() {
-        return pathCacheFileManager.updateCollectionFileList(ConfigData.getCacheFilePath(), allCacheFileList);
+        //是否需要使用uri
+        boolean dataUseUri = FileTools.underAndroidDataUseUri(ConfigData.getCacheFilePath());
+
+        if (dataUseUri) {
+            allCacheFileList = uriCacheFileManager.updateCollectionFileList(ConfigData.getCacheFilePath(), allCacheFileList);
+        } else {
+            allCacheFileList = pathCacheFileManager.updateCollectionFileList(ConfigData.getCacheFilePath(), allCacheFileList);
+        }
+
+        return allCacheFileList;
     }
 
     @Override
     public List<CacheFile> updateChapterFileList() {
-        return pathCacheFileManager.updateChapterFileList(allCacheFileList.get(0).getCollectionPath(), allCacheFileList);
+        boolean dataUseUri = FileTools.underAndroidDataUseUri(ConfigData.getCacheFilePath());
+
+        if (dataUseUri) {
+            allCacheFileList = uriCacheFileManager.updateChapterFileList(allCacheFileList.get(0).getCollectionPath(), allCacheFileList);
+        } else {
+            allCacheFileList = pathCacheFileManager.updateChapterFileList(allCacheFileList.get(0).getCollectionPath(), allCacheFileList);
+        }
+
+        return allCacheFileList;
     }
 
     @Override
     public List<CacheFile> updateChapterFileList(String collectionPath) {
-        return pathCacheFileManager.updateChapterFileList(collectionPath, allCacheFileList);
+        boolean dataUseUri = FileTools.underAndroidDataUseUri(ConfigData.getCacheFilePath());
+
+        if (dataUseUri) {
+            allCacheFileList = uriCacheFileManager.updateChapterFileList(collectionPath, allCacheFileList);
+        } else {
+            allCacheFileList = pathCacheFileManager.updateChapterFileList(collectionPath, allCacheFileList);
+        }
+
+        return allCacheFileList;
     }
 
     @Override
@@ -228,14 +266,37 @@ public class MainFileShowFragment extends AbstractMainFileShowFragment implement
             return true;
         }
 
-        Integer flag = allCacheFileList.get(0).getFlag();
-        if (flag == BaseCacheFileManager.FLAG_CACHE_FILE_BACK || flag == BaseCacheFileManager.FLAG_CACHE_FILE_CHAPTER) {
-            updateCollectionFileList();
-            refreshCacheFileList();
-            return true;
+        if (allCacheFileList != null && allCacheFileList.size() > 0) {
+            Integer flag = allCacheFileList.get(0).getFlag();
+            if (flag != BaseCacheFileManager.FLAG_CACHE_FILE_COLLECTION) {
+                updateCollectionFileList();
+                refreshCacheFileList();
+                return true;
+            }
         }
-
 
         return false;
     }
+
+
+    @SuppressLint("WrongConstant")
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        //保存这个uri目录的访问权限
+        if (VersionTool.isAndroid11()) {
+            if (requestCode == PermissionsTools.PERMISSION_REQUEST_CODE) {
+                Uri uri;
+                if ((uri = data.getData()) != null) {
+                    mActivity.getContentResolver()
+                            .takePersistableUriPermission(uri,
+                                    data.getFlags() & (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                            );
+                }
+                //更新列表数据
+                updateCollectionFileList();
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
 }

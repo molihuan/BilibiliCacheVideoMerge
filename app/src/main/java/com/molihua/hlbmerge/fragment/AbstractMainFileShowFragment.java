@@ -9,4 +9,6 @@ import com.molihua.hlbmerge.interfaces.IMainFileShowFragment;
  * @Description:
  */
 public abstract class AbstractMainFileShowFragment extends AbstractMainFragment implements IMainFileShowFragment {
+
+
 }

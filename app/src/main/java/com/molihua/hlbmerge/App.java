@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.molihua.hlbmerge.dao.ConfigData;
 import com.molihuan.pathselector.PathSelector;
+import com.molihuan.pathselector.configs.PathSelectorConfig;
 import com.tencent.bugly.Bugly;
 import com.tencent.mmkv.MMKV;
 import com.xuexiang.xui.XUI;
@@ -32,6 +33,8 @@ public class App extends Application {
         ConfigData.init();
         //路径选择器debug
         PathSelector.setDebug(true);
+        //取消自动申请权限
+        PathSelectorConfig.setAutoGetPermission(false);
 
         super.onCreate();
     }

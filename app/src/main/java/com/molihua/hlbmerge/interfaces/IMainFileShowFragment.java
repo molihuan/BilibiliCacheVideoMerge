@@ -11,8 +11,19 @@ import java.util.List;
 public interface IMainFileShowFragment {
     List<CacheFile> updateCollectionFileList();
 
+    /**
+     * 用来刷新的
+     *
+     * @return
+     */
     List<CacheFile> updateChapterFileList();
 
+    /**
+     * 进入合集中
+     *
+     * @param collectionPath
+     * @return
+     */
     List<CacheFile> updateChapterFileList(String collectionPath);
 
     List<CacheFile> getSelectedCacheFileList();
@@ -31,8 +42,17 @@ public interface IMainFileShowFragment {
 
     boolean isMultipleSelectionMode();
 
+    /**
+     * 刷新UI
+     */
     void refreshCacheFileList();
 
+    /**
+     * 设置整体是否可见
+     *
+     * @param state
+     * @return
+     */
     List<CacheFile> setWholeVisible(boolean state);
 
 }

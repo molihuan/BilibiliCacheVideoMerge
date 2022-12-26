@@ -1,6 +1,8 @@
 package com.molihua.hlbmerge.utils;
 
+import com.blankj.molihuan.utilcode.util.ConvertUtils;
 import com.blankj.molihuan.utilcode.util.FileIOUtils;
+import com.blankj.molihuan.utilcode.util.StringUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,11 +36,16 @@ public class FileTools {
         return file.listFiles();
     }
 
+    public static String[] getCollectionChapterName(byte[] jsonByte, String[] result) {
+        //把jsonByte转换成json字符串
+        String jsonStr = ConvertUtils.bytes2String(jsonByte);
+        return getCollectionChapterNameByJsonStr(jsonStr, result);
+    }
 
     /**
      * 获取合集和章节名称
      *
-     * @param jsonPath
+     * @param jsonPath json文件路径
      * @param result
      * @return result[0]合集名称
      * result[1]章节名称
@@ -46,6 +53,22 @@ public class FileTools {
     public static String[] getCollectionChapterName(String jsonPath, String[] result) {
         //把json文件转换成json字符串
         String jsonStr = FileIOUtils.readFile2String(jsonPath, "UTF-8");
+        return getCollectionChapterNameByJsonStr(jsonStr, result);
+    }
+
+    /**
+     * 通过json字符串解析名称
+     *
+     * @param jsonStr json字符串
+     * @param result
+     * @return
+     */
+    private static String[] getCollectionChapterNameByJsonStr(String jsonStr, String[] result) {
+
+        if (StringUtils.isTrimEmpty(jsonStr)) {
+            return null;
+        }
+
         JSONObject jsonObject;
         //将json字符串转换成json对象
         try {
