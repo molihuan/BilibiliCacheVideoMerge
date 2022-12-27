@@ -29,16 +29,29 @@ public class PathCacheFileManager extends BaseCacheFileManager {
         String[] names = new String[2];
         //获取所有的合集
         File[] collectionFile = FileTools.getCollectionChapterFile(path);
-        if (collectionFile == null) {
+        if (collectionFile == null || collectionFile.length == 0) {
             return cacheFileList;
         }
+
+
         for (int i = 0; i < collectionFile.length; i++) {
+
+            if (collectionFile[i].listFiles() == null || collectionFile[i].listFiles().length == 0) {
+                return cacheFileList;
+            }
+
             //获取每一个集合中的第一个章节
-            File oneChapterPath = Objects.requireNonNull(collectionFile[i].listFiles())[0];
+            File oneChapterPath = collectionFile[i].listFiles()[0];
             //获取章节里需要的路径
             needPath = FileTools.getNeedPath(oneChapterPath, needPath);
+
             //获取合集名称和章节名称
             names = FileTools.getCollectionChapterName(needPath[2], names);
+
+            if (names == null) {
+                return cacheFileList;
+            }
+
             cacheFileList.add(
                     new CacheFile()
                             .setFlag(BaseCacheFileManager.FLAG_CACHE_FILE_COLLECTION)

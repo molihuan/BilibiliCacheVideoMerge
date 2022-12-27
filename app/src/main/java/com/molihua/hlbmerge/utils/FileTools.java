@@ -17,6 +17,8 @@ import java.util.UUID;
  * @Description:
  */
 public class FileTools {
+    
+
     /**
      * 获取所有的合集路径、获取一个合集下的所有章节路径
      *

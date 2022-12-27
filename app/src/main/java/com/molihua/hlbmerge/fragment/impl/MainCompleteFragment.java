@@ -1,8 +1,12 @@
 package com.molihua.hlbmerge.fragment.impl;
 
+import android.content.Intent;
 import android.view.View;
 
+import com.blankj.molihuan.utilcode.util.FileUtils;
+import com.blankj.molihuan.utilcode.util.ToastUtils;
 import com.molihua.hlbmerge.R;
+import com.molihua.hlbmerge.activity.impl.PlayVideoActivity;
 import com.molihua.hlbmerge.fragment.AbstractMainFragment;
 import com.molihuan.pathselector.PathSelector;
 import com.molihuan.pathselector.entity.FileBean;
@@ -11,7 +15,6 @@ import com.molihuan.pathselector.fragment.impl.PathSelectFragment;
 import com.molihuan.pathselector.listener.CommonItemListener;
 import com.molihuan.pathselector.listener.FileItemListener;
 import com.molihuan.pathselector.utils.MConstants;
-import com.molihuan.pathselector.utils.Mtools;
 
 import java.util.List;
 
@@ -69,7 +72,17 @@ public class MainCompleteFragment extends AbstractMainFragment {
                 .setFileItemListener(new FileItemListener() {
                     @Override
                     public boolean onClick(View v, FileBean file, String currentPath, BasePathSelectFragment pathSelectFragment) {
-                        Mtools.toast(file.getPath());
+                        if (!file.isDir()) {
+                            String fileExtension = file.getFileExtension();
+                            if ("mp4".equals(fileExtension) || "mp3".equals(fileExtension)) {
+                                Intent intent = new Intent(mActivity, PlayVideoActivity.class);
+                                intent.putExtra("videoPath", file.getPath());
+                                startActivity(intent);
+                            } else {
+                                ToastUtils.make().show("选择错误");
+                            }
+                        }
+
                         return false;
                     }
                 })
@@ -83,12 +96,17 @@ public class MainCompleteFragment extends AbstractMainFragment {
                         new CommonItemListener("删除") {
                             @Override
                             public boolean onClick(View v, List<FileBean> selectedFiles, String currentPath, BasePathSelectFragment pathSelectFragment) {
+                                
+                                for (FileBean selectedFile : selectedFiles) {
+                                    FileUtils.delete(selectedFile.getPath());
+                                }
+                                pathSelectFragment.updateFileList();
                                 return false;
                             }
                         }
                 )
                 .show();
-        
+
     }
 
 

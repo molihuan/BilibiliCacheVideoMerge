@@ -292,8 +292,10 @@ public class MainFileShowFragment extends AbstractMainFileShowFragment implement
                                     data.getFlags() & (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
                             );
                 }
-                //更新列表数据
+                //获取数据刷新列表
                 updateCollectionFileList();
+                refreshCacheFileList();
+
             }
         }
         super.onActivityResult(requestCode, resultCode, data);

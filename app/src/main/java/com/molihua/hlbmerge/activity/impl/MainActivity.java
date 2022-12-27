@@ -1,5 +1,6 @@
 package com.molihua.hlbmerge.activity.impl;
 
+import android.content.Intent;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -11,9 +12,12 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.hjq.permissions.OnPermissionCallback;
 import com.molihua.hlbmerge.R;
 import com.molihua.hlbmerge.activity.AbstractMainActivity;
 import com.molihua.hlbmerge.adapter.CacheFileListAdapter;
+import com.molihua.hlbmerge.dao.ConfigData;
+import com.molihua.hlbmerge.dialog.impl.StatementDialog;
 import com.molihua.hlbmerge.entity.CacheFile;
 import com.molihua.hlbmerge.fragment.AbstractMainFfmpegFragment;
 import com.molihua.hlbmerge.fragment.AbstractMainFileShowFragment;
@@ -26,10 +30,15 @@ import com.molihua.hlbmerge.fragment.impl.MainHandleFragment;
 import com.molihua.hlbmerge.fragment.impl.MainTitlebarFragment;
 import com.molihua.hlbmerge.service.ICacheFileManager;
 import com.molihua.hlbmerge.utils.FragmentTools;
+import com.molihua.hlbmerge.utils.GeneralTools;
 import com.molihua.hlbmerge.utils.LConstants;
+import com.molihuan.pathselector.utils.FileTools;
 import com.molihuan.pathselector.utils.Mtools;
 import com.molihuan.pathselector.utils.PermissionsTools;
+import com.tencent.bugly.Bugly;
 import com.xuexiang.xui.adapter.FragmentAdapter;
+import com.xuexiang.xui.widget.dialog.materialdialog.DialogAction;
+import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
 import com.xuexiang.xui.widget.searchview.MaterialSearchView;
 
 import java.util.List;
@@ -67,8 +76,44 @@ public class MainActivity extends AbstractMainActivity implements NavigationView
     @Override
     public void initData() {
 
+        //是否同意用户协议
+        if (ConfigData.isAgreeTerms()) {
+            //bugly初始化
+            Bugly.init(MainActivity.this, "ac467503ed", false);
+        } else {
+            StatementDialog.showStatementDialog(this, new StatementDialog.IButtonCallback() {
+                @Override
+                public void onClick(MaterialDialog dialog, DialogAction which) {
+                    Bugly.init(MainActivity.this, "ac467503ed", false);
+                }
+            });
+        }
+
         //申请权限
-        PermissionsTools.getStoragePermissions(this);
+        PermissionsTools.getStoragePermissions(
+                this,
+                new OnPermissionCallback() {
+                    @Override
+                    public void onGranted(@NonNull List<String> permissions, boolean all) {
+                        boolean dataUseUri = FileTools.underAndroidDataUseUri(ConfigData.getCacheFilePath());
+                        if (!dataUseUri) {
+                            //获取数据刷新列表
+                            updateCollectionFileList();
+                            refreshCacheFileList();
+                        }
+                    }
+                },
+                new OnPermissionCallback() {
+                    @Override
+                    public void onGranted(@NonNull List<String> permissions, boolean all) {
+                        boolean dataUseUri = FileTools.underAndroidDataUseUri(ConfigData.getCacheFilePath());
+                        if (!dataUseUri) {
+                            updateCollectionFileList();
+                            refreshCacheFileList();
+                        }
+                    }
+                }
+        );
 
         mainTitlebarFragment = new MainTitlebarFragment();
         mainFileShowFragment = new MainFileShowFragment();
@@ -80,8 +125,7 @@ public class MainActivity extends AbstractMainActivity implements NavigationView
 
     @Override
     public void initView() {
-
-
+        
         //加载主显示区
         FragmentAdapter<Fragment> adapter = new FragmentAdapter<>(getSupportFragmentManager());
         adapter.addFragment(mainFileShowFragment, "主页");
@@ -98,7 +142,6 @@ public class MainActivity extends AbstractMainActivity implements NavigationView
                 LConstants.TAG_FRAGMENT_MAIN_TITLEBAR,
                 true
         );
-
 
     }
 
@@ -118,6 +161,7 @@ public class MainActivity extends AbstractMainActivity implements NavigationView
      */
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        Intent intent = null;
         int id = item.getItemId();
         if (id == R.id.item_home) {
             viewPager.setCurrentItem(0, true);
@@ -126,13 +170,18 @@ public class MainActivity extends AbstractMainActivity implements NavigationView
         } else if (id == R.id.item_ffmpeg) {
             viewPager.setCurrentItem(2, true);
         } else if (id == R.id.item_setting) {
-
+            intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
         } else if (id == R.id.item_teach) {
-
+            GeneralTools.jumpBrowser(this, LConstants.URL_BILIBILI_HOMEPAGE);
         } else if (id == R.id.item_aboutus) {
-
+            intent = new Intent(this, AboutActivity.class);
+            startActivity(intent);
         } else if (id == R.id.item_updatalog) {
-
+            intent = new Intent(this, HtmlActivity.class);
+            intent.putExtra("url", "file:///android_asset/updataLog.html");
+            intent.putExtra("title", "更新日志");
+            startActivity(intent);
         } else if (id == R.id.item_exitapp) {
             finish();
             System.exit(0);

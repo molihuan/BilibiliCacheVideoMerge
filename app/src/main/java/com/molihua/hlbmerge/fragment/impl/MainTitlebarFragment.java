@@ -5,7 +5,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blankj.molihuan.utilcode.util.RegexUtils;
+import com.blankj.molihuan.utilcode.util.ToastUtils;
 import com.molihua.hlbmerge.R;
+import com.molihua.hlbmerge.dao.ConfigData;
 import com.molihua.hlbmerge.entity.CacheFile;
 import com.molihua.hlbmerge.fragment.AbstractMainTitlebarFragment;
 import com.molihua.hlbmerge.service.BaseCacheFileManager;
@@ -88,8 +90,10 @@ public class MainTitlebarFragment extends AbstractMainTitlebarFragment implement
             }
 
             List<CacheFile> allCacheFileList = abstractMainActivity.getAllCacheFileList();
-            
+
             if (allCacheFileList.size() == 0) {
+                ToastUtils.showLong("当前缓存路径为:" + ConfigData.getCacheFilePath() + "\n请检测‘设置’中缓存路径是否正确,哔哩哔哩版本是否正确,如果正确请再次刷新");
+                abstractMainActivity.updateCollectionFileList();
                 return;
             }
 

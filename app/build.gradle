@@ -10,10 +10,15 @@ android {
         applicationId "com.molihua.hlbmerge"
         minSdk 21
         targetSdk 33
-        versionCode 39
-        versionName "1.6.0"
+        versionCode 40
+        versionName "1.6.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        ndk {
+            abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+        }
+
     }
 
     buildTypes {
@@ -31,7 +36,7 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", includes: ["*.aar", "*.jar"])
     //文件选择器(包含权限请求)
-    implementation 'io.github.molihuan:pathselector:1.1.6'
+    implementation 'io.github.molihuan:pathselector:1.1.7'
     //RxFFmpeg依赖
     implementation 'com.github.microshow:RxFFmpeg:4.9.0-lite'
     //bugly依赖
@@ -41,6 +46,12 @@ dependencies {
     implementation 'com.tencent:mmkv:1.2.14'
     //DKVideoPlayer内部默认使用系统mediaplayer进行解码
     implementation 'xyz.doikki.android.dkplayer:dkplayer-java:3.3.7'
+    //bilibili弹幕组件
+    implementation 'com.github.ctiao:DanmakuFlameMaster:0.9.25'
+    implementation 'com.github.ctiao:ndkbitmap-armv7a:0.9.21'
+    implementation 'com.github.ctiao:ndkbitmap-armv5:0.9.21'
+    implementation 'com.github.ctiao:ndkbitmap-x86:0.9.21'
+    
     //XUI
     implementation 'com.github.xuexiangjys:XUI:1.2.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
@@ -55,9 +66,5 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
-    //bilibili弹幕组件
-//    implementation 'com.github.ctiao:DanmakuFlameMaster:0.9.25'
-//    implementation 'com.github.ctiao:ndkbitmap-armv7a:0.9.21'
-//    implementation 'com.github.ctiao:ndkbitmap-armv5:0.9.21'
-//    implementation 'com.github.ctiao:ndkbitmap-x86:0.9.21'
+
 }
