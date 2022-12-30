@@ -12,4 +12,7 @@
         <item>哔哩哔哩(概念版)</item>
         <item> </item>
     </string-array>
+    <string name="tip_uri_authorization_permission_content_hlb">访问%s目录需要授予权限,\n是否进行授权?</string>
+    <string name="option_confirm_hlb">确定</string>
+    <string name="option_cancel_hlb">取消</string>
 </resources>

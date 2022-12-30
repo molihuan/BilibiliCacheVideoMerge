@@ -32,6 +32,7 @@ import com.molihua.hlbmerge.service.ICacheFileManager;
 import com.molihua.hlbmerge.utils.FragmentTools;
 import com.molihua.hlbmerge.utils.GeneralTools;
 import com.molihua.hlbmerge.utils.LConstants;
+import com.molihuan.pathselector.fragment.impl.PathSelectFragment;
 import com.molihuan.pathselector.utils.FileTools;
 import com.molihuan.pathselector.utils.Mtools;
 import com.molihuan.pathselector.utils.PermissionsTools;
@@ -125,12 +126,12 @@ public class MainActivity extends AbstractMainActivity implements NavigationView
 
     @Override
     public void initView() {
-        
+
         //加载主显示区
         FragmentAdapter<Fragment> adapter = new FragmentAdapter<>(getSupportFragmentManager());
         adapter.addFragment(mainFileShowFragment, "主页");
         adapter.addFragment(mainCompleteFragment, "完成文件");
-        adapter.addFragment(mainFfmpegFragment, "ffmpeg");
+        adapter.addFragment(mainFfmpegFragment, "工具");
         viewPager.setOffscreenPageLimit(3);
         viewPager.setAdapter(adapter);
 
@@ -211,7 +212,6 @@ public class MainActivity extends AbstractMainActivity implements NavigationView
             return;
         }
 
-
         //按两次返回键退出程序
         if (System.currentTimeMillis() - firstBackTime > 2000) {
             Mtools.toast("再按一次返回键退出程序");
@@ -222,35 +222,6 @@ public class MainActivity extends AbstractMainActivity implements NavigationView
         super.onBackPressed();
     }
 
-
-    @Override
-    public BottomNavigationView getBottomNavigView() {
-        return bottomNavigView;
-    }
-
-    @Override
-    public DrawerLayout getDrawerLayout() {
-        return drawerLayout;
-    }
-
-    @Override
-    public NavigationView getNavigationView() {
-        return navigationView;
-    }
-
-    @Override
-    public AbstractMainFileShowFragment getMainFileShowFragment() {
-        return mainFileShowFragment;
-    }
-
-    @Override
-    public void showHideNavigation(boolean status) {
-        if (status) {
-            drawerLayout.openDrawer(GravityCompat.START);
-        } else {
-            drawerLayout.close();
-        }
-    }
 
     @Override
     public void handleShowHide(boolean isShow) {
@@ -264,26 +235,6 @@ public class MainActivity extends AbstractMainActivity implements NavigationView
         );
     }
 
-    @Override
-    public void setMainTitle(String text) {
-        mainTitlebarFragment.setMainTitle(text);
-    }
-
-    @Override
-    public void showHideImgView(boolean status) {
-        mainTitlebarFragment.showHideImgView(status);
-    }
-
-    @Override
-    public void showHideSearchView(boolean status) {
-        mainTitlebarFragment.showHideSearchView(status);
-    }
-
-    @Override
-    public MaterialSearchView getSearchView() {
-        return mainTitlebarFragment.getSearchView();
-    }
-
 
     @Override
     public void onPageSelected(int position) {
@@ -295,13 +246,14 @@ public class MainActivity extends AbstractMainActivity implements NavigationView
                 break;
             case 1:
                 showHideSearchView(false);
-                showHideImgView(false);
+                showTitleImgView(MainTitlebarFragment.ImgView.REFRESH);
                 handleShowHide(false);
                 break;
             case 2:
                 showHideSearchView(false);
                 showHideImgView(false);
                 handleShowHide(false);
+
                 break;
             default:
         }
@@ -319,6 +271,96 @@ public class MainActivity extends AbstractMainActivity implements NavigationView
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    @Override
+    public BottomNavigationView getBottomNavigView() {
+        return bottomNavigView;
+    }
+
+    @Override
+    public DrawerLayout getDrawerLayout() {
+        return drawerLayout;
+    }
+
+    @Override
+    public NavigationView getNavigationView() {
+        return navigationView;
+    }
+
+    @Override
+    public ViewPager getViewPager() {
+        return viewPager;
+    }
+
+    @Override
+    public AbstractMainFileShowFragment getMainFileShowFragment() {
+        return mainFileShowFragment;
+    }
+
+    @Override
+    public AbstractMainTitlebarFragment getMainTitlebarFragment() {
+        return mainTitlebarFragment;
+    }
+
+    @Override
+    public AbstractMainFfmpegFragment getMainFfmpegFragment() {
+        return mainFfmpegFragment;
+    }
+
+    @Override
+    public MainCompleteFragment getMainCompleteFragment() {
+        return mainCompleteFragment;
+    }
+
+    @Override
+    public AbstractMainHandleFragment getMainHandleFragment() {
+        return mainHandleFragment;
+    }
+
+    @Override
+    public PathSelectFragment getCompletePathSelectFragment() {
+        return mainCompleteFragment.getPathSelectFragment();
+    }
+
+    @Override
+    public void refreshCompleteFileList() {
+        mainCompleteFragment.refreshFileList();
+    }
+
+    @Override
+    public void showHideNavigation(boolean status) {
+        if (status) {
+            drawerLayout.openDrawer(GravityCompat.START);
+        } else {
+            drawerLayout.close();
+        }
+    }
+
+    @Override
+    public void setMainTitle(String text) {
+        mainTitlebarFragment.setMainTitle(text);
+    }
+
+    @Override
+    public void showHideImgView(boolean status) {
+        mainTitlebarFragment.showHideImgView(status);
+    }
+
+    @Override
+    public void showTitleImgView(MainTitlebarFragment.ImgView showImg) {
+        mainTitlebarFragment.showTitleImgView(showImg);
+    }
+
+
+    @Override
+    public void showHideSearchView(boolean status) {
+        mainTitlebarFragment.showHideSearchView(status);
+    }
+
+    @Override
+    public MaterialSearchView getSearchView() {
+        return mainTitlebarFragment.getSearchView();
     }
 
     @Override

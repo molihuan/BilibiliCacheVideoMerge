@@ -212,7 +212,13 @@ public class MergeProgressDialog {
             String videoTemp = ConfigData.TYPE_OUTPUT_FILE_PATH_TEMP + "/video.mp4";
             String danmakuTemp = ConfigData.TYPE_OUTPUT_FILE_PATH_TEMP + "/danmaku.xml";
 
-            dialog.setContent("正在为你复制缓存文件,\n" + ConfigData.getCacheFilePath() + "--->" + ConfigData.TYPE_OUTPUT_FILE_PATH_TEMP);
+            XTask.postToMain(new Runnable() {
+                @Override
+                public void run() {
+                    dialog.setContent("正在为你复制缓存文件,\n" + ConfigData.getCacheFilePath() + "--->" + ConfigData.TYPE_OUTPUT_FILE_PATH_TEMP);
+                }
+            });
+
 
             //uri转byte
             byte[] bytesAudio = UriUtils.uri2Bytes(Uri.parse(cacheFile.getAudioPath()));

@@ -29,6 +29,8 @@ public class PathCacheFileManager extends BaseCacheFileManager {
         String[] names = new String[2];
         //获取所有的合集
         File[] collectionFile = FileTools.getCollectionChapterFile(path);
+
+
         if (collectionFile == null || collectionFile.length == 0) {
             return cacheFileList;
         }

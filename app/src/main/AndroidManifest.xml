@@ -29,7 +29,9 @@
         <activity android:name=".activity.impl.SettingsActivity" />
         <activity android:name=".activity.impl.AboutActivity" />
         <activity android:name=".activity.impl.HtmlActivity" />
-        <activity android:name=".activity.impl.PlayVideoActivity" />
+        <activity
+            android:name=".activity.impl.PlayVideoActivity"
+            android:configChanges="orientation|screenSize" />
     </application>
 
 </manifest>

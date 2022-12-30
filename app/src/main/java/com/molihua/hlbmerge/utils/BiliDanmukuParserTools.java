@@ -29,20 +29,27 @@ import master.flame.danmaku.danmaku.parser.BaseDanmakuParser;
 import master.flame.danmaku.danmaku.parser.android.AndroidFileSource;
 import master.flame.danmaku.danmaku.util.DanmakuUtils;
 
+
 /**
- * xml弹幕解析类
+ * @ClassName: BiliDanmukuParserTools
+ * @Author: molihuan
+ * @Date: 2022/12/29/20:25
+ * @Description: xml弹幕解析类
  */
 public class BiliDanmukuParserTools extends BaseDanmakuParser {
-    public BiliDanmukuParserTools(Context context) {
-    }
+
+    protected float mDispScaleX;
+    protected float mDispScaleY;
+
+    //网络弹幕xml文件id
+    public String chatId;
 
     static {//指定包
         System.setProperty("org.xml.sax.driver", "org.xmlpull.v1.sax2.Driver");
     }
 
-    protected float mDispScaleX;
-    protected float mDispScaleY;
-    public String chatId;
+    public BiliDanmukuParserTools(Context context) {
+    }
 
     /**
      * 获取网络弹幕xml文件id
@@ -69,31 +76,22 @@ public class BiliDanmukuParserTools extends BaseDanmakuParser {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
-
         return null;
     }
 
     public class XmlContentHandler extends DefaultHandler {
 
         private static final String TRUE_STRING = "true";
-
         public Danmakus result;
-
         public BaseDanmaku item = null;
-
         public boolean completed = false;
-
         public int index = 0;
-
-
         public String localTag = new String();
 
         public Danmakus getResult() {
             return result;
         }
-
 
         @Override
         public void startDocument() throws SAXException {
@@ -112,12 +110,11 @@ public class BiliDanmukuParserTools extends BaseDanmakuParser {
 
             //自己的解析---解析网络弹幕xml文件id
             if (tagName.equals("chatid")) {
-                localTag = tagName;//保存标签名，方便接下来处理内容字符串。
+                //保存标签名，方便接下来处理内容字符串。
+                localTag = tagName;
             }
-            //
 
             tagName = tagName.toLowerCase(Locale.getDefault()).trim();
-
             if (tagName.equals("d")) {
                 // <d p="23.826000213623,1,25,16777215,1422201084,0,057075e9,757076900">我从未见过如此厚颜无耻之猴</d>
                 // 0:时间(弹幕出现时间)
@@ -155,7 +152,6 @@ public class BiliDanmukuParserTools extends BaseDanmakuParser {
             if (localTag.equals("chatid")) {
                 localTag = "";
             }
-            //
 
             if (item != null && item.text != null) {
                 if (item.duration != null) {
@@ -179,7 +175,7 @@ public class BiliDanmukuParserTools extends BaseDanmakuParser {
             if (localTag.equals("chatid")) {
                 chatId = new String(ch, start, length);
             }
-            //
+
             if (item != null) {
                 DanmakuUtils.fillText(item, decodeXmlString(new String(ch, start, length)));
                 item.index = index++;

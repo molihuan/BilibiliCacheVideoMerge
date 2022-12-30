@@ -67,7 +67,6 @@ public class MainFileShowFragment extends AbstractMainFileShowFragment implement
         //权限申请
 //        UriTool.grantedUriPermission(ConfigData.getCacheFilePath(), this);
 
-
         pathCacheFileManager = new PathCacheFileManager();
         uriCacheFileManager = new UriCacheFileManager(this);
 

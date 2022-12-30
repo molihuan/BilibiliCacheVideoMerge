@@ -128,7 +128,7 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
                     .setHandleItemListeners(
                             new CommonItemListener("选择") {
                                 @Override
-                                public boolean onClick(View v, List<FileBean> selectedFiles, String currentPath, BasePathSelectFragment pathSelectFragment) {
+                                public boolean onClick(View v, TextView tv, List<FileBean> selectedFiles, String currentPath, BasePathSelectFragment pathSelectFragment) {
                                     if (selectedFiles == null || selectedFiles.size() == 0) {
                                         Mtools.toast("你还没有选择捏!请长按文件夹进行选择!");
                                     } else {
@@ -160,7 +160,7 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
                     .setHandleItemListeners(
                             new CommonItemListener("选择") {
                                 @Override
-                                public boolean onClick(View v, List<FileBean> selectedFiles, String currentPath, BasePathSelectFragment pathSelectFragment) {
+                                public boolean onClick(View v, TextView tv, List<FileBean> selectedFiles, String currentPath, BasePathSelectFragment pathSelectFragment) {
                                     if (selectedFiles == null || selectedFiles.size() == 0) {
                                         Mtools.toast("你还没有选择捏!请长按文件夹进行选择!");
                                     } else {

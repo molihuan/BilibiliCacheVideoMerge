@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.util.UUID;
 
 /**
@@ -17,7 +18,7 @@ import java.util.UUID;
  * @Description:
  */
 public class FileTools {
-    
+
 
     /**
      * 获取所有的合集路径、获取一个合集下的所有章节路径
@@ -35,7 +36,16 @@ public class FileTools {
 
     public static File[] getCollectionChapterFile(String path) {
         File file = new File(path);
-        return file.listFiles();
+
+        return file.listFiles(new FileFilter() {
+            @Override
+            public boolean accept(File pathname) {
+                if (pathname.isDirectory()) {
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     public static String[] getCollectionChapterName(byte[] jsonByte, String[] result) {

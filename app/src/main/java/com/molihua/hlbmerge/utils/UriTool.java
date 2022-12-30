@@ -2,18 +2,28 @@ package com.molihua.hlbmerge.utils;
 
 import android.content.Context;
 import android.net.Uri;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.documentfile.provider.DocumentFile;
 import androidx.fragment.app.Fragment;
 
+import com.blankj.molihuan.utilcode.util.FileIOUtils;
+import com.blankj.molihuan.utilcode.util.FileUtils;
 import com.blankj.molihuan.utilcode.util.UriUtils;
+import com.molihua.hlbmerge.R;
+import com.molihuan.pathselector.dialog.BaseDialog;
+import com.molihuan.pathselector.dialog.impl.MessageDialog;
+import com.molihuan.pathselector.entity.FontBean;
 import com.molihuan.pathselector.utils.PermissionsTools;
 import com.molihuan.pathselector.utils.UriTools;
 import com.xuexiang.xtask.XTask;
 import com.xuexiang.xui.widget.dialog.materialdialog.DialogAction;
 import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -23,6 +33,89 @@ import java.util.Objects;
  * @Description:
  */
 public class UriTool {
+
+    public static String tempPath;
+
+    /**
+     * 复制DocumentFile
+     *
+     * @param fragment
+     * @param srcParentPath
+     * @param srcPath
+     * @param destPath
+     */
+    public static void copyDocumentFile(Fragment fragment, String srcParentPath, String srcPath, String destPath) {
+
+        Context context = fragment.getContext();
+
+        Uri uri = UriTools.path2Uri(srcPath, false);
+
+        String existsPermission = PermissionsTools.existsGrantedUriPermission(uri, fragment);
+
+        if (existsPermission == null) {
+
+            //没有权限申请权限
+            XTask.postToMain(new Runnable() {
+                @Override
+                public void run() {
+                    //申请权限弹窗
+                    new MessageDialog(context)
+                            .setContent(new FontBean(String.format(context.getString(R.string.tip_uri_authorization_permission_content_hlb), srcPath)))
+                            .setConfirm(new FontBean(context.getString(R.string.option_confirm_hlb), 15), new BaseDialog.IOnConfirmListener() {
+                                @Override
+                                public boolean onClick(View v, BaseDialog dialog) {
+                                    //申请权限
+                                    PermissionsTools.goApplyUriPermissionPage(uri, fragment);
+                                    dialog.dismiss();
+                                    return false;
+                                }
+                            })
+                            .setCancel(new FontBean(context.getString(R.string.option_cancel_hlb), 15), new BaseDialog.IOnCancelListener() {
+                                @Override
+                                public boolean onClick(View v, BaseDialog dialog) {
+                                    dialog.dismiss();
+                                    return false;
+                                }
+                            })
+                            .show();
+                }
+            });
+
+            return;
+        }
+
+        Uri targetUri = Uri.parse(existsPermission + uri.toString().replaceFirst(UriTools.URI_PERMISSION_REQUEST_COMPLETE_PREFIX, ""));
+
+        //Mtools.log(targetUri);
+
+        DocumentFile rootDocumentFile = DocumentFile.fromSingleUri(context, targetUri);
+        Objects.requireNonNull(rootDocumentFile, "rootDocumentFile is null");
+
+        //创建一个 DocumentFile表示以给定的 Uri根的文档树。其实就是获取子目录的权限
+        DocumentFile pickedDir = rootDocumentFile.fromTreeUri(context, targetUri);
+        Objects.requireNonNull(pickedDir, "pickedDir is null");
+
+        DocumentFile[] documentFiles = pickedDir.listFiles();
+
+        if (documentFiles != null) {
+            for (int i = 0; i < documentFiles.length; i++) {
+
+                tempPath = srcPath + File.separator + documentFiles[i].getName();
+
+                if (documentFiles[i].isDirectory()) {
+//                    LogUtils.w(documentFiles[i].getUri() + "\n夹夹夹夹夹夹夹夹夹夹" + tempPath.replace(srcParentPath, destPath));
+                    FileUtils.createOrExistsDir(tempPath.replace(srcParentPath, destPath));
+                    copyDocumentFile(fragment, srcParentPath, tempPath, destPath);
+                } else {
+//                    LogUtils.w(documentFiles[i].getUri() + "\n文件文件文件文件文件" + tempPath.replace(srcParentPath, destPath));
+                    byte[] srcBytes = UriUtils.uri2Bytes(documentFiles[i].getUri());
+                    FileIOUtils.writeFileFromBytesByChannel(tempPath.replace(srcParentPath, destPath), srcBytes, true);
+                }
+            }
+        }
+
+
+    }
 
     public static void grantedUriPermission(String path, Fragment fragment) {
         //获取上下文
@@ -59,7 +152,7 @@ public class UriTool {
         }
     }
 
-    public static DocumentFile[] getCollectionChapterFile(Fragment fragment, String currentPath) {
+    public static List<DocumentFile> getCollectionChapterFile(Fragment fragment, String currentPath) {
         //获取上下文
         Context context = fragment.getContext();
         Objects.requireNonNull(context, "context is null");
@@ -110,7 +203,17 @@ public class UriTool {
         Objects.requireNonNull(pickedDir, "pickedDir is null");
         DocumentFile[] documentFiles = pickedDir.listFiles();
 
-        return documentFiles;
+        //TODO 去除不是文件夹的item
+        if (documentFiles == null) {
+            return null;
+        }
+        List<DocumentFile> fileList = new ArrayList<>();
+        for (DocumentFile documentFile : documentFiles) {
+            if (documentFile.isDirectory()) {
+                fileList.add(documentFile);
+            }
+        }
+        return fileList;
     }
 
     public static Uri[] getNeedUri(DocumentFile chapterFile, Uri[] result) {

@@ -32,9 +32,9 @@ public class ConfigData {
     public final static String TYPE_CACHE_FILE_PATH_CONCEPT = File.separator + PKGNAME_BILIBILI_CONCEPT + File.separator + "download";
 
     //完成文件路径
-    public final static String TYPE_OUTPUT_FILE_PATH_COMPLETE = "/bilibili缓存合并/complete";
+    public final static String TYPE_OUTPUT_FILE_PATH_COMPLETE = "/bilibili视频合并/complete";
     //临时文件路径
-    public final static String TYPE_OUTPUT_FILE_PATH_TEMP = MConstants.DEFAULT_ROOTPATH + "/bilibili缓存合并/temp";
+    public final static String TYPE_OUTPUT_FILE_PATH_TEMP = MConstants.DEFAULT_ROOTPATH + "/bilibili视频合并/temp";
 
     private final static MMKV kv = MMKV.defaultMMKV();
 
@@ -57,18 +57,18 @@ public class ConfigData {
      */
     public static void init() {
         //不存在配置版本号为0则
-        if (!kv.containsKey("configDataVersion0")) {
-            kv.encode("configDataVersion0", true);
+        if (!kv.containsKey("configDataVersion")) {
+            kv.encode("configDataVersion", true);
             setCacheFilePathByInstalledBili();
             setOutputFilePath(MConstants.DEFAULT_ROOTPATH + TYPE_OUTPUT_FILE_PATH_COMPLETE);
             setExportDanmaku(false);
             setExportType(0);
             setAgreeTerms(false);
-            setOpenBarrage(false);
+            setOpenBarrage(true);
         }
         //新增配置1
-//        if (!kv.containsKey("configDataVersion1")) {
-//            kv.encode("configDataVersion1", true);
+//        if (!kv.containsKey("ffmpegVersion")) {
+//            kv.encode("ffmpegVersion", 0);
 //        }
 
     }

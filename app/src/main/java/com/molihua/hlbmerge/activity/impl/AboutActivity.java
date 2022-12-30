@@ -1,5 +1,6 @@
 package com.molihua.hlbmerge.activity.impl;
 
+import android.content.Intent;
 import android.widget.TextView;
 
 import com.blankj.molihuan.utilcode.util.AppUtils;
@@ -60,6 +61,12 @@ public class AboutActivity extends BaseActivity {
                 .addItemView(mAboutGroupListView.createItemView("用户协议"), v -> StatementDialog.showStatementDialog(this))
                 .addItemView(mAboutGroupListView.createItemView("视频教程"), v -> {
                     GeneralTools.jumpBrowser(this, LConstants.URL_BILIBILI_HOMEPAGE);
+                })
+                .addItemView(mAboutGroupListView.createItemView("开源许可"), v -> {
+                    Intent intent = new Intent(this, HtmlActivity.class);
+                    intent.putExtra("url", "file:///android_asset/openSourceLicense.html");
+                    intent.putExtra("title", "开源许可");
+                    startActivity(intent);
                 })
                 .addItemView(mAboutGroupListView.createItemView("检查更新"), v -> GeneralTools.checkUpdata())
                 .addTo(mAboutGroupListView);
