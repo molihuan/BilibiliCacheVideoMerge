@@ -10,18 +10,18 @@ public class LConstants {
 
     //去除一些特殊的字符的正则表达式 /r去换行
     public static final String SPECIAL_CHARACTERS_REGULAR_RULE = "[\t\r\n`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】\"‘；：”“’。， 、？-]*";
+    //bilibili主页url
+    public static final String URL_BILIBILI_HOMEPAGE = "https://space.bilibili.com/454222981";
 
     //**************************    Fragment Tag标志    ****************************
     public static final String TAG_FRAGMENT_MAIN_TITLEBAR = "frameLayout_main_titlebar_area_mlh";
     public static final String TAG_FRAGMENT_MAIN_HANDLE = "frameLayout_main_handle_area_mlh";
     public static final String TAG_FRAGMENT_MAIN_FILE_SHOW = "frameLayout_main_file_show_area_mlh";
     public static final String TAG_FRAGMENT_MAIN_FFMPEG = "frameLayout_main_ffmpeg_area_mlh";
-
-
-    public static final String TAG_ACTIVITY_FRAGMENT = "framelayout_show_body_mlh";
-    public static final String TAG_FRAGMENT_TABBAR = "frameLayout_tabbar_area_mlh";
-    public static final String TAG_FRAGMENT_FILE_SHOW = "frameLayout_file_show_area_mlh";
-    public static final String TAG_FRAGMENT_HANDLE = "frameLayout_handle_area_mlh";
-    public static final String TAG_DIALOG_FRAGMENT = "framelayout_dialog_show_body_mlh";
+    //**************************    更新url    ****************************
+    //默认更新url(gitee)
+    public static final String DEFAULT_UPDATE_URL = "https://gitee.com/molihuan/BilibiliCacheVideoMergeAndroid/tree/master/jsonapi/update_release.json";
+    //备份更新url(github)
+    public static final String BACKUPS_UPDATE_URL = "https://github.com/molihuan/BilibiliCacheVideoMerge/tree/master/jsonapi/update_release.json";
 
 }

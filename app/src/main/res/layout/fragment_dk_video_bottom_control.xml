@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rela_bottom_control_panel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="10dp"
+        android:background="@drawable/dkplayer_shape_stardard_controller_bottom_bg">
+
+        <ImageView
+            android:id="@+id/iv_play"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_centerVertical="true"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_video_play"
+            android:background="@drawable/style_click_round_transp_gray_mlh" />
+
+        <ImageView
+            android:id="@+id/iv_barrage"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toEndOf="@id/iv_play"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_barrage_open"
+            android:background="@drawable/style_click_round_transp_gray_mlh" />
+
+        <TextView
+            android:id="@+id/curr_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@id/iv_barrage"
+            android:textColor="#ffffff" />
+
+        <SeekBar
+            android:id="@+id/sb_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@id/total_time"
+            android:layout_toEndOf="@id/curr_time" />
+
+        <TextView
+            android:id="@+id/total_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:layout_toStartOf="@id/iv_full_screen"
+            android:textColor="#ffffff" />
+
+
+        <ImageView
+            android:id="@+id/iv_full_screen"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="0dp"
+            android:src="@drawable/ic_video_view_biggest"
+            android:background="@drawable/style_click_round_transp_gray_mlh" />
+
+    </RelativeLayout>
+
+
+</FrameLayout>

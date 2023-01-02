@@ -1,13 +1,19 @@
 package com.molihua.hlbmerge;
 
+
 import android.app.Application;
+import android.widget.Toast;
 
 import com.molihua.hlbmerge.dao.ConfigData;
 import com.molihuan.pathselector.PathSelector;
 import com.molihuan.pathselector.configs.PathSelectorConfig;
-import com.tencent.bugly.Bugly;
+import com.molihuan.pathselector.utils.Mtools;
 import com.tencent.mmkv.MMKV;
 import com.xuexiang.xui.XUI;
+import com.xuexiang.xupdate.XUpdate;
+import com.xuexiang.xupdate.entity.UpdateError;
+import com.xuexiang.xupdate.listener.OnUpdateFailureListener;
+import com.xuexiang.xupdate.utils.UpdateUtils;
 
 import io.microshow.rxffmpeg.RxFFmpegInvoke;
 
@@ -20,22 +26,47 @@ import io.microshow.rxffmpeg.RxFFmpegInvoke;
 public class App extends Application {
     @Override
     public void onCreate() {
+        //腾讯的键值对存储mmkv初始化
+        MMKV.initialize(this);
+        //配置初始化
+        ConfigData.init();
         //初始化XUI
         XUI.init(this);
         XUI.debug(false);
-        //腾讯的键值对存储mmkv初始化
-        MMKV.initialize(this);
         //ffmpeg debug
         RxFFmpegInvoke.getInstance().setDebug(false);
-        //bugly初始化
-        Bugly.init(getApplicationContext(), "ac467503ed", false);
-        //配置初始化
-        ConfigData.init();
         //路径选择器debug
         PathSelector.setDebug(true);
         //取消自动申请权限
         PathSelectorConfig.setAutoGetPermission(false);
 
+        initXUpdate();
+
         super.onCreate();
     }
+
+    private void initXUpdate() {
+        XUpdate.get()
+                .debug(true)
+                .isWifiOnly(true)                                               //默认设置只在wifi下检查版本更新
+                .isGet(true)                                                    //默认设置使用get请求检查版本
+                .isAutoMode(false)                                              //默认设置非自动模式，可根据具体使用配置
+                .param("versionCode", UpdateUtils.getVersionCode(this))         //设置默认公共请求参数
+                .param("appKey", getPackageName())
+                .setOnUpdateFailureListener(new OnUpdateFailureListener() {     //设置版本更新出错的监听
+                    @Override
+                    public void onFailure(UpdateError error) {
+                        int errorCode = error.getCode();
+                        if (errorCode == UpdateError.ERROR.CHECK_NO_NEW_VERSION) {
+                            Mtools.toast("未发现新版本!");
+                        } else {
+                            Mtools.toast("更新失败!请自行进入下载:https://gitee.com/molihuan/BilibiliCacheVideoMergeAndroid", Toast.LENGTH_LONG);
+                        }
+                    }
+                })
+                .supportSilentInstall(true)                                     //设置是否支持静默安装，默认是true
+        ;
+    }
+
+
 }

@@ -1,8 +1,18 @@
 <resources>
-    <string name="app_name">hlbmerge2</string>
+    <string name="app_name">HLB站缓存合并</string>
     <string-array name="judge_merge_dialog_export_type">
         <item>有声音视频</item>
         <item>无声音视频</item>
         <item>仅音频</item>
     </string-array>
+    <string-array name="bilibili_app_version_string_array">
+        <item>哔哩哔哩(国内版)</item>
+        <item>bilibili(国际版)</item>
+        <item>哔哩哔哩HD(平板)</item>
+        <item>哔哩哔哩(概念版)</item>
+        <item> </item>
+    </string-array>
+    <string name="tip_uri_authorization_permission_content_hlb">访问%s目录需要授予权限,\n是否进行授权?</string>
+    <string name="option_confirm_hlb">确定</string>
+    <string name="option_cancel_hlb">取消</string>
 </resources>

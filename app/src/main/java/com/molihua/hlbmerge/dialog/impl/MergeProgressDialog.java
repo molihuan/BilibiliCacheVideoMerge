@@ -40,6 +40,8 @@ public class MergeProgressDialog {
 
     //用户是否选择的标志位
     public static boolean FLAG_USER_HANDLE = false;
+    //退出执行ffmpeg命令
+    public static boolean FLAG_EXIT_RUN_COMMAND = false;
     public static final String CMD_TEMPLATE = "ffmpeg -i %s -i %s -c copy %s";
 
     /**
@@ -49,6 +51,8 @@ public class MergeProgressDialog {
      * @return
      */
     public static MaterialDialog showMergeProgressDialog(List<CacheFile> cacheFileList, Fragment fragment) {
+        //初始化
+        FLAG_EXIT_RUN_COMMAND = false;
         Context context = fragment.getContext();
         Objects.requireNonNull(context, "context is null");
 
@@ -74,6 +78,9 @@ public class MergeProgressDialog {
                 .onNegative(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        RxFfmpegTools.exitRunCommand();
+                        MergeProgressDialog.FLAG_EXIT_RUN_COMMAND = true;
+                        RxFfmpegTools.exitRunCommand();
                         dialog.dismiss();
                     }
                 })
@@ -116,10 +123,15 @@ public class MergeProgressDialog {
                         String completeOutPathSuf;
 
                         for (int i = 0; i < cacheFileList.size(); i++) {
+                            //是否退出命令的执行
+                            if (MergeProgressDialog.FLAG_EXIT_RUN_COMMAND) {
+                                break;
+                            }
+
                             srcCacheFile = cacheFileList.get(i);
 
                             //将uri转换为file并把路径返回存入CacheFile中
-                            cacheFile = MergeProgressDialog.cacheFileUri2File(srcCacheFile);
+                            cacheFile = MergeProgressDialog.cacheFileUri2File(srcCacheFile, dialog);
 
                             //创建输出目录
                             subOutPath = outRoot + File.separator + cacheFile.getCollectionName();
@@ -180,6 +192,7 @@ public class MergeProgressDialog {
                     public void onTaskChainCompleted(@NonNull ITaskChainEngine engine, @NonNull ITaskResult result) {
                         //更新ui
                         dialog.setContent(String.format("成功数:%s,失败数:%s,\n合并文件保存在%s目录下", ffmpegCallback.getSuccessNum(), ffmpegCallback.getFailNum(), outRoot));
+                        dialog.setActionButton(DialogAction.NEGATIVE, "关闭");
                     }
                 })
                 .start();
@@ -192,16 +205,26 @@ public class MergeProgressDialog {
      * @param cacheFile
      * @return 转换成功或不是Android11返回true
      */
-    public static CacheFile cacheFileUri2File(CacheFile cacheFile) {
+    public static CacheFile cacheFileUri2File(CacheFile cacheFile, MaterialDialog dialog) {
         if (cacheFile.getUseUri()) {
-            //uri转byte
-            byte[] bytesAudio = UriUtils.uri2Bytes(Uri.parse(cacheFile.getAudioPath()));
-            byte[] bytesVideo = UriUtils.uri2Bytes(Uri.parse(cacheFile.getVideoPath()));
-            byte[] bytesDanmaku = UriUtils.uri2Bytes(Uri.parse(cacheFile.getDanmakuPath()));
             //获取临时文件名
             String audioTemp = ConfigData.TYPE_OUTPUT_FILE_PATH_TEMP + "/audio.mp3";
             String videoTemp = ConfigData.TYPE_OUTPUT_FILE_PATH_TEMP + "/video.mp4";
             String danmakuTemp = ConfigData.TYPE_OUTPUT_FILE_PATH_TEMP + "/danmaku.xml";
+
+            XTask.postToMain(new Runnable() {
+                @Override
+                public void run() {
+                    dialog.setContent("正在为你复制缓存文件,\n" + ConfigData.getCacheFilePath() + "--->" + ConfigData.TYPE_OUTPUT_FILE_PATH_TEMP);
+                }
+            });
+
+
+            //uri转byte
+            byte[] bytesAudio = UriUtils.uri2Bytes(Uri.parse(cacheFile.getAudioPath()));
+            byte[] bytesVideo = UriUtils.uri2Bytes(Uri.parse(cacheFile.getVideoPath()));
+            byte[] bytesDanmaku = UriUtils.uri2Bytes(Uri.parse(cacheFile.getDanmakuPath()));
+
             //删除已经存在的临时文件名
             FileUtils.delete(audioTemp);
             FileUtils.delete(videoTemp);
@@ -224,7 +247,7 @@ public class MergeProgressDialog {
                 tempCacheFile.setVideoPath(videoTemp);
                 tempCacheFile.setDanmakuPath(danmakuTemp);
             }
-            
+
             return tempCacheFile;
         } else {
             return cacheFile;

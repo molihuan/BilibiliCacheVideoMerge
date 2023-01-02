@@ -37,14 +37,14 @@ public class UriCacheFileManager extends BaseCacheFileManager {
         Uri[] needUri = new Uri[4];
         String[] names = new String[2];
         //获取所有的合集路径
-        DocumentFile[] collectionFiles = UriTool.getCollectionChapterFile(fragment, path);
+        List<DocumentFile> collectionFiles = UriTool.getCollectionChapterFile(fragment, path);
 
         if (collectionFiles == null) {
             return cacheFileList;
         }
-        for (int i = 0; i < collectionFiles.length; i++) {
+        for (int i = 0; i < collectionFiles.size(); i++) {
             //获取每一个集合中的第一个章节路径
-            DocumentFile oneChapterPath = Objects.requireNonNull(collectionFiles[i].listFiles())[0];
+            DocumentFile oneChapterPath = Objects.requireNonNull(collectionFiles.get(i).listFiles())[0];
 
             //获取章节里需要的Uri
             needUri = UriTool.getNeedUri(oneChapterPath, needUri);
@@ -56,7 +56,7 @@ public class UriCacheFileManager extends BaseCacheFileManager {
                     new CacheFile()
                             .setFlag(BaseCacheFileManager.FLAG_CACHE_FILE_COLLECTION)
                             .setWholeVisibility(View.VISIBLE)
-                            .setCollectionPath(path + File.separator + collectionFiles[i].getName())
+                            .setCollectionPath(path + File.separator + collectionFiles.get(i).getName())
                             .setCollectionName(names[0])
                             .setChapterName(names[1])
                             .setAudioPath(needUri[0].toString())
@@ -101,16 +101,16 @@ public class UriCacheFileManager extends BaseCacheFileManager {
         Uri[] needUri = new Uri[4];
         String[] names = new String[2];
         //获取一个合集下面所有的章节
-        DocumentFile[] chapterFile = UriTool.getCollectionChapterFile(fragment, collectionPath);
+        List<DocumentFile> chapterFile = UriTool.getCollectionChapterFile(fragment, collectionPath);
 
         if (chapterFile == null) {
             return cacheFileList;
         }
 
-        for (int i = 0; i < chapterFile.length; i++) {
+        for (int i = 0; i < chapterFile.size(); i++) {
 
             //获取章节里需要的Uri
-            needUri = UriTool.getNeedUri(chapterFile[i], needUri);
+            needUri = UriTool.getNeedUri(chapterFile.get(i), needUri);
 
             //获取合集名称和章节名称
             names = UriTool.getCollectionChapterName(needUri[2], names);
@@ -121,7 +121,7 @@ public class UriCacheFileManager extends BaseCacheFileManager {
                             .setWholeVisibility(View.VISIBLE)
                             .setCollectionPath(collectionPath)
                             .setCollectionName(names[0])
-                            .setChapterPath(collectionPath + File.separator + chapterFile[i].getName())
+                            .setChapterPath(collectionPath + File.separator + chapterFile.get(i).getName())
                             .setChapterName(names[1])
                             .setAudioPath(needUri[0].toString())
                             .setVideoPath(needUri[1].toString())
@@ -161,11 +161,11 @@ public class UriCacheFileManager extends BaseCacheFileManager {
             //获取一个合集路径
             collectionPath = collectionCacheFileList.get(n).getCollectionPath();
             //获取一个合集下面所有的章节
-            DocumentFile[] chapterFile = UriTool.getCollectionChapterFile(fragment, collectionPath);
-            for (int i = 0; i < chapterFile.length; i++) {
+            List<DocumentFile> chapterFile = UriTool.getCollectionChapterFile(fragment, collectionPath);
+            for (int i = 0; i < chapterFile.size(); i++) {
 
                 //获取章节里需要的Uri
-                needUri = UriTool.getNeedUri(chapterFile[i], needUri);
+                needUri = UriTool.getNeedUri(chapterFile.get(i), needUri);
 
                 //获取合集名称和章节名称
                 names = UriTool.getCollectionChapterName(needUri[2], names);
@@ -176,7 +176,7 @@ public class UriCacheFileManager extends BaseCacheFileManager {
                                 .setWholeVisibility(View.VISIBLE)
                                 .setCollectionPath(collectionPath)
                                 .setCollectionName(names[0])
-                                .setChapterPath(collectionPath + File.separator + chapterFile[i].getName())
+                                .setChapterPath(collectionPath + File.separator + chapterFile.get(i).getName())
                                 .setChapterName(names[1])
                                 .setAudioPath(needUri[0].toString())
                                 .setVideoPath(needUri[1].toString())

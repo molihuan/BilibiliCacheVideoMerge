@@ -4,8 +4,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.viewpager.widget.ViewPager;
+
 import com.blankj.molihuan.utilcode.util.RegexUtils;
+import com.blankj.molihuan.utilcode.util.ToastUtils;
 import com.molihua.hlbmerge.R;
+import com.molihua.hlbmerge.dao.ConfigData;
 import com.molihua.hlbmerge.entity.CacheFile;
 import com.molihua.hlbmerge.fragment.AbstractMainTitlebarFragment;
 import com.molihua.hlbmerge.service.BaseCacheFileManager;
@@ -29,6 +33,12 @@ public class MainTitlebarFragment extends AbstractMainTitlebarFragment implement
 
     private MaterialSearchView searchView;
 
+    private ViewPager viewPager;
+
+    public enum ImgView {
+        REFRESH, SEARCH
+    }
+
 
     @Override
     public int setFragmentViewId() {
@@ -46,7 +56,7 @@ public class MainTitlebarFragment extends AbstractMainTitlebarFragment implement
 
     @Override
     public void initData() {
-
+        viewPager = abstractMainActivity.getViewPager();
     }
 
     @Override
@@ -82,25 +92,39 @@ public class MainTitlebarFragment extends AbstractMainTitlebarFragment implement
             abstractMainActivity.showHideNavigation(true);
         } else if (id == R.id.imgv_refresh_titlebar) {
 
-            //多选模式不允许刷新
-            if (abstractMainActivity.isMultipleSelectionMode()) {
-                return;
+
+            switch (viewPager.getCurrentItem()) {
+                case 0:
+
+                    //多选模式不允许刷新
+                    if (abstractMainActivity.isMultipleSelectionMode()) {
+                        return;
+                    }
+
+                    List<CacheFile> allCacheFileList = abstractMainActivity.getAllCacheFileList();
+
+                    if (allCacheFileList.size() == 0) {
+                        ToastUtils.showLong("当前缓存路径为:" + ConfigData.getCacheFilePath() + "\n请检测‘设置’中缓存路径是否正确,哔哩哔哩版本是否正确,如果正确请再次刷新");
+                        abstractMainActivity.updateCollectionFileList();
+                        return;
+                    }
+
+                    CacheFile cacheFile = allCacheFileList.get(0);
+                    if (cacheFile.getFlag() == BaseCacheFileManager.FLAG_CACHE_FILE_COLLECTION) {
+                        abstractMainActivity.updateCollectionFileList();
+                    } else {
+                        abstractMainActivity.updateChapterFileList();
+                    }
+
+                    abstractMainActivity.refreshCacheFileList();
+
+                    break;
+                case 1:
+                    abstractMainActivity.refreshCompleteFileList();
+                    break;
+                default:
             }
 
-            List<CacheFile> allCacheFileList = abstractMainActivity.getAllCacheFileList();
-            
-            if (allCacheFileList.size() == 0) {
-                return;
-            }
-
-            CacheFile cacheFile = allCacheFileList.get(0);
-            if (cacheFile.getFlag() == BaseCacheFileManager.FLAG_CACHE_FILE_COLLECTION) {
-                abstractMainActivity.updateCollectionFileList();
-            } else {
-                abstractMainActivity.updateChapterFileList();
-            }
-
-            abstractMainActivity.refreshCacheFileList();
 
         } else if (id == R.id.imgv_seach_titlebar) {
 
@@ -220,6 +244,20 @@ public class MainTitlebarFragment extends AbstractMainTitlebarFragment implement
         } else {
             refreshImgView.setVisibility(View.INVISIBLE);
             searchImgView.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    @Override
+    public void showTitleImgView(ImgView showImg) {
+        showHideImgView(false);
+        switch (showImg) {
+            case REFRESH:
+                refreshImgView.setVisibility(View.VISIBLE);
+                break;
+            case SEARCH:
+                searchImgView.setVisibility(View.VISIBLE);
+                break;
+            default:
         }
     }
 

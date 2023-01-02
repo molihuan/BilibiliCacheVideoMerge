@@ -67,7 +67,6 @@ public class MainFileShowFragment extends AbstractMainFileShowFragment implement
         //权限申请
 //        UriTool.grantedUriPermission(ConfigData.getCacheFilePath(), this);
 
-
         pathCacheFileManager = new PathCacheFileManager();
         uriCacheFileManager = new UriCacheFileManager(this);
 
@@ -285,15 +284,19 @@ public class MainFileShowFragment extends AbstractMainFileShowFragment implement
         //保存这个uri目录的访问权限
         if (VersionTool.isAndroid11()) {
             if (requestCode == PermissionsTools.PERMISSION_REQUEST_CODE) {
-                Uri uri;
-                if ((uri = data.getData()) != null) {
-                    mActivity.getContentResolver()
-                            .takePersistableUriPermission(uri,
-                                    data.getFlags() & (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-                            );
+                if (data != null) {
+                    Uri uri;
+                    if ((uri = data.getData()) != null) {
+                        mActivity.getContentResolver()
+                                .takePersistableUriPermission(uri,
+                                        data.getFlags() & (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                                );
+                    }
+                    //获取数据刷新列表
+                    updateCollectionFileList();
+                    refreshCacheFileList();
                 }
-                //更新列表数据
-                updateCollectionFileList();
+
             }
         }
         super.onActivityResult(requestCode, resultCode, data);

@@ -1,5 +1,6 @@
 package com.molihua.hlbmerge.service.impl;
 
+import com.xuexiang.xtask.XTask;
 import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
 
 import io.microshow.rxffmpeg.RxFFmpegSubscriber;
@@ -27,7 +28,12 @@ public class RxFFmpegCallback extends RxFFmpegSubscriber {
 
     @Override
     public void onProgress(int progress, long progressTime) {
-        dialog.setContent("已处理progressTime=" + (double) progressTime / 1000000 + "秒");
+        XTask.postToMain(new Runnable() {
+            @Override
+            public void run() {
+                dialog.setContent("已处理progressTime=" + (double) progressTime / 1000000 + "秒");
+            }
+        });
     }
 
     @Override
