@@ -64,10 +64,11 @@ public class BiliDanmukuParserTools extends BaseDanmakuParser {
     public Danmakus parse() {
 
         if (mDataSource != null) {
-            AndroidFileSource source = (AndroidFileSource) mDataSource;//获取弹幕文件
+            //获取弹幕文件数据源
+            AndroidFileSource source = (AndroidFileSource) mDataSource;
             try {
                 XMLReader xmlReader = XMLReaderFactory.createXMLReader();
-                XmlContentHandler contentHandler = new XmlContentHandler();//解析类
+                XmlContentHandler contentHandler = new XmlContentHandler();
                 xmlReader.setContentHandler(contentHandler);
                 xmlReader.parse(new InputSource(source.data()));
                 return contentHandler.getResult();
@@ -104,8 +105,8 @@ public class BiliDanmukuParserTools extends BaseDanmakuParser {
         }
 
         @Override
-        public void startElement(String uri, String localName, String qName, Attributes attributes)
-                throws SAXException {
+        public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+
             String tagName = localName.length() != 0 ? localName : qName;
 
             //自己的解析---解析网络弹幕xml文件id

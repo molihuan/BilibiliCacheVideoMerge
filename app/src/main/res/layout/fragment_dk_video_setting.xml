@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <View
+        android:id="@+id/empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginRight="200dp" />
+
+
+    <com.xuexiang.xui.widget.layout.ExpandableLayout
+        android:id="@+id/el_setting"
+        android:layout_width="200dp"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_gravity="end"
+        app:el_duration="1000"
+        app:el_expanded="false">
+
+        <LinearLayout
+            android:id="@+id/linl_setting"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="#BF000000"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="弹幕设置"
+                android:textColor="@color/grey500_mlh"
+                android:textSize="15sp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="弹幕字号"
+                    android:textColor="@color/white_mlh"
+                    android:layout_gravity="center_vertical" />
+
+                <com.xuexiang.xui.widget.picker.XSeekBar
+                    android:id="@+id/xsb_danmaku_size"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="不透明度"
+                    android:textColor="@color/white_mlh"
+                    android:layout_gravity="center_vertical" />
+
+                <com.xuexiang.xui.widget.picker.XSeekBar
+                    android:id="@+id/xsb_danmaku_alpha"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="弹幕速度"
+                    android:textColor="@color/white_mlh"
+                    android:layout_gravity="center_vertical" />
+
+                <com.xuexiang.xui.widget.picker.XSeekBar
+                    android:id="@+id/xsb_danmaku_speed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="显示区域"
+                    android:textColor="@color/white_mlh"
+                    android:layout_gravity="center_vertical" />
+
+                <com.xuexiang.xui.widget.picker.XSeekBar
+                    android:id="@+id/xsb_danmaku_show_area"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+    </com.xuexiang.xui.widget.layout.ExpandableLayout>
+
+
+</FrameLayout>

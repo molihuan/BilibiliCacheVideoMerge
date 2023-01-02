@@ -2,6 +2,7 @@ package com.molihua.hlbmerge.activity.impl;
 
 import android.content.Intent;
 import android.view.MenuItem;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,7 +37,6 @@ import com.molihuan.pathselector.fragment.impl.PathSelectFragment;
 import com.molihuan.pathselector.utils.FileTools;
 import com.molihuan.pathselector.utils.Mtools;
 import com.molihuan.pathselector.utils.PermissionsTools;
-import com.tencent.bugly.Bugly;
 import com.xuexiang.xui.adapter.FragmentAdapter;
 import com.xuexiang.xui.widget.dialog.materialdialog.DialogAction;
 import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
@@ -62,6 +62,8 @@ public class MainActivity extends AbstractMainActivity implements NavigationView
 
     @Override
     public int setContentViewID() {
+        //防止键盘的弹出将布局顶上去
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         return R.layout.activity_main;
     }
 
@@ -74,47 +76,47 @@ public class MainActivity extends AbstractMainActivity implements NavigationView
 
     }
 
+
     @Override
     public void initData() {
 
         //是否同意用户协议
         if (ConfigData.isAgreeTerms()) {
-            //bugly初始化
-            Bugly.init(MainActivity.this, "ac467503ed", false);
+            //友盟初始化
+
         } else {
             StatementDialog.showStatementDialog(this, new StatementDialog.IButtonCallback() {
                 @Override
                 public void onClick(MaterialDialog dialog, DialogAction which) {
-                    Bugly.init(MainActivity.this, "ac467503ed", false);
+
                 }
             });
         }
 
-        //申请权限
-        PermissionsTools.getStoragePermissions(
-                this,
-                new OnPermissionCallback() {
-                    @Override
-                    public void onGranted(@NonNull List<String> permissions, boolean all) {
-                        boolean dataUseUri = FileTools.underAndroidDataUseUri(ConfigData.getCacheFilePath());
-                        if (!dataUseUri) {
-                            //获取数据刷新列表
-                            updateCollectionFileList();
-                            refreshCacheFileList();
-                        }
-                    }
-                },
-                new OnPermissionCallback() {
-                    @Override
-                    public void onGranted(@NonNull List<String> permissions, boolean all) {
-                        boolean dataUseUri = FileTools.underAndroidDataUseUri(ConfigData.getCacheFilePath());
-                        if (!dataUseUri) {
-                            updateCollectionFileList();
-                            refreshCacheFileList();
-                        }
-                    }
+        //存储权限的申请
+        PermissionsTools.generalPermissionsOfStorage(this, new OnPermissionCallback() {
+            @Override
+            public void onGranted(@NonNull List<String> permissions, boolean all) {
+                boolean dataUseUri = FileTools.underAndroidDataUseUri(ConfigData.getCacheFilePath());
+                if (!dataUseUri) {
+                    //获取数据刷新列表
+                    updateCollectionFileList();
+                    refreshCacheFileList();
                 }
-        );
+            }
+        });
+
+        PermissionsTools.specialPermissionsOfStorageWithDialog(this, true, new OnPermissionCallback() {
+            @Override
+            public void onGranted(@NonNull List<String> permissions, boolean all) {
+                boolean dataUseUri = FileTools.underAndroidDataUseUri(ConfigData.getCacheFilePath());
+                if (!dataUseUri) {
+                    //获取数据刷新列表
+                    updateCollectionFileList();
+                    refreshCacheFileList();
+                }
+            }
+        });
 
         mainTitlebarFragment = new MainTitlebarFragment();
         mainFileShowFragment = new MainFileShowFragment();
@@ -184,8 +186,9 @@ public class MainActivity extends AbstractMainActivity implements NavigationView
             intent.putExtra("title", "更新日志");
             startActivity(intent);
         } else if (id == R.id.item_exitapp) {
-            finish();
-            System.exit(0);
+//            finish();
+//            System.exit(0);
+            //EasyUpdate.checkUpdate(this, DEFAULT_UPDATE_URL);
         }
         //侧滑菜单关闭
         drawerLayout.closeDrawers();

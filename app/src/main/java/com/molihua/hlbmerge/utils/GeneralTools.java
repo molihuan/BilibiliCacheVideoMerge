@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.widget.Toast;
 
-import com.tencent.bugly.beta.Beta;
 
 /**
  * @ClassName: GeneralTools
@@ -36,7 +35,7 @@ public class GeneralTools {
      * 检查更新
      */
     public static void checkUpdata() {
-        Beta.checkUpgrade();
+        
     }
 
 }

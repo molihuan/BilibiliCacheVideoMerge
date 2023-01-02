@@ -7,122 +7,15 @@
     android:background="@android:color/transparent">
 
 
-    <RelativeLayout
-        android:id="@+id/rela_titlebar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:padding="5dp"
-        android:background="#56000000">
-
-        <ImageView
-            android:id="@+id/iv_back"
-            android:layout_width="27dp"
-            android:layout_height="27dp"
-            android:layout_centerVertical="true"
-            android:contentDescription="@null"
-            android:src="@drawable/ic_title_bar_back"
-            android:background="@drawable/style_click_round_transp_gray_mlh" />
-
-        <TextView
-            android:id="@+id/tv_video_name_titlebar"
-            android:layout_width="180dp"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:textColor="@color/white"
-            android:layout_toRightOf="@id/iv_back"
-            android:layout_marginLeft="15dp"
-            android:singleLine="true"
-            android:ellipsize="marquee"
-            android:marqueeRepeatLimit="marquee_forever"
-            android:focusableInTouchMode="true"
-            android:focusable="true" />
-
-    </RelativeLayout>
-
-    <master.flame.danmaku.ui.widget.DanmakuView
-        android:id="@+id/danmaku_show_area"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/rela_bottom_control_panel"
-        android:layout_below="@id/rela_titlebar" />
-
-    <RelativeLayout
-        android:id="@+id/rela_bottom_control_panel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:clickable="true"
-        android:focusable="true"
-        android:padding="10dp"
-        android:background="#56000000">
-
-        <ImageView
-            android:id="@+id/iv_play"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:layout_centerVertical="true"
-            android:contentDescription="@null"
-            android:src="@drawable/ic_video_play"
-            android:background="@drawable/style_click_round_transp_gray_mlh" />
-
-        <ImageView
-            android:id="@+id/iv_barrage"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:layout_toEndOf="@id/iv_play"
-            android:contentDescription="@null"
-            android:src="@drawable/ic_barrage_open"
-            android:background="@drawable/style_click_round_transp_gray_mlh" />
-
-        <TextView
-            android:id="@+id/tv_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="10dp"
-            android:layout_toEndOf="@id/iv_barrage"
-            android:textColor="#ffffff" />
-
-        <SeekBar
-            android:id="@+id/sb_progress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toStartOf="@id/iv_sound"
-            android:layout_toEndOf="@id/tv_time" />
-
-        <ImageView
-            android:id="@+id/iv_sound"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:layout_toLeftOf="@id/iv_full_screen"
-            android:layout_marginHorizontal="10dp"
-            android:layout_centerVertical="true"
-            android:contentDescription="@null"
-            android:src="@drawable/ic_volume_open"
-            android:background="@drawable/style_click_round_transp_gray_mlh" />
-
-        <ImageView
-            android:id="@+id/iv_full_screen"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="0dp"
-            android:src="@drawable/ic_video_view_biggest"
-            android:background="@drawable/style_click_round_transp_gray_mlh" />
-
-    </RelativeLayout>
-
-
     <ImageView
         android:id="@+id/iv_lock"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_centerVertical="true"
-        android:layout_margin="24dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
         android:background="@drawable/style_common_shadow_bg"
         android:padding="10dp"
         android:src="@drawable/ic_player_screen_lock"

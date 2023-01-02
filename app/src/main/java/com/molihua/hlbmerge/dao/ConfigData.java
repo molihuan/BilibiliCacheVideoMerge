@@ -50,6 +50,12 @@ public class ConfigData {
     private boolean agreeTerms;
     //是否开启弹幕
     private boolean openBarrage;
+    //弹幕大小
+    private int danmakuSize;
+    //弹幕不透明度
+    private int danmakuAlpha;
+    //弹幕速度
+    private int danmakuSpeed;
 
     /**
      * 每当需要新增配置就
@@ -70,6 +76,13 @@ public class ConfigData {
 //        if (!kv.containsKey("ffmpegVersion")) {
 //            kv.encode("ffmpegVersion", 0);
 //        }
+
+        if (!kv.containsKey("danmakuSize")) {
+            setDanmakuSize(100);
+            setDanmakuAlpha(100);
+            setDanmakuSpeed(100);
+        }
+
 
     }
 
@@ -142,5 +155,30 @@ public class ConfigData {
 
     public static boolean setOpenBarrage(boolean openBarrage) {
         return kv.encode("openBarrage", openBarrage);
+    }
+
+
+    public static int getDanmakuSize() {
+        return kv.decodeInt("danmakuSize");
+    }
+
+    public static boolean setDanmakuSize(int danmakuSize) {
+        return kv.encode("danmakuSize", danmakuSize);
+    }
+
+    public static int getDanmakuAlpha() {
+        return kv.decodeInt("danmakuAlpha");
+    }
+
+    public static boolean setDanmakuAlpha(int danmakuAlpha) {
+        return kv.encode("danmakuAlpha", danmakuAlpha);
+    }
+
+    public static int getDanmakuSpeed() {
+        return kv.decodeInt("danmakuSpeed");
+    }
+
+    public static boolean setDanmakuSpeed(int danmakuSpeed) {
+        return kv.encode("danmakuSpeed", danmakuSpeed);
     }
 }

@@ -18,5 +18,10 @@ public class LConstants {
     public static final String TAG_FRAGMENT_MAIN_HANDLE = "frameLayout_main_handle_area_mlh";
     public static final String TAG_FRAGMENT_MAIN_FILE_SHOW = "frameLayout_main_file_show_area_mlh";
     public static final String TAG_FRAGMENT_MAIN_FFMPEG = "frameLayout_main_ffmpeg_area_mlh";
+    //**************************    更新url    ****************************
+    //默认更新url(gitee)
+    public static final String DEFAULT_UPDATE_URL = "https://gitee.com/molihuan/BilibiliCacheVideoMergeAndroid/tree/master/jsonapi/update_release.json";
+    //备份更新url(github)
+    public static final String BACKUPS_UPDATE_URL = "https://github.com/molihuan/BilibiliCacheVideoMerge/tree/master/jsonapi/update_release.json";
 
 }

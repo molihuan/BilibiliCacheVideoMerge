@@ -95,7 +95,7 @@ public class MainCompleteFragment extends AbstractMainFragment {
                                 intent.putExtra("videoPath", file.getPath());
                                 startActivity(intent);
                             } else {
-                                ToastUtils.make().show("选择错误");
+                                ToastUtils.make().show("此文件不支持播放");
                             }
                         }
 

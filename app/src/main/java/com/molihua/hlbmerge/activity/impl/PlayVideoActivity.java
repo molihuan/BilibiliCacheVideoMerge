@@ -5,7 +5,6 @@ import android.view.View;
 import android.widget.Button;
 
 import com.blankj.molihuan.utilcode.util.ClipboardUtils;
-import com.blankj.molihuan.utilcode.util.ScreenUtils;
 import com.molihua.hlbmerge.R;
 import com.molihua.hlbmerge.activity.BaseActivity;
 import com.molihua.hlbmerge.controller.videocontroller.DKVideoController;
@@ -56,7 +55,7 @@ public class PlayVideoActivity extends BaseActivity implements View.OnClickListe
         //获取播放视频的路径
         videoPath = intent.getStringExtra("videoPath");
         //全屏模式
-        ScreenUtils.setFullScreen(this);
+        //ScreenUtils.setFullScreen(this);
         //设置视频地址
         videoView.setUrl(videoPath);
         //初始化视频控制器
