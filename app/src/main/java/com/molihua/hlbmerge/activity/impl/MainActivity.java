@@ -18,7 +18,6 @@ import com.molihua.hlbmerge.R;
 import com.molihua.hlbmerge.activity.AbstractMainActivity;
 import com.molihua.hlbmerge.adapter.CacheFileListAdapter;
 import com.molihua.hlbmerge.dao.ConfigData;
-import com.molihua.hlbmerge.dialog.impl.StatementDialog;
 import com.molihua.hlbmerge.entity.CacheFile;
 import com.molihua.hlbmerge.fragment.AbstractMainFfmpegFragment;
 import com.molihua.hlbmerge.fragment.AbstractMainFileShowFragment;
@@ -33,13 +32,14 @@ import com.molihua.hlbmerge.service.ICacheFileManager;
 import com.molihua.hlbmerge.utils.FragmentTools;
 import com.molihua.hlbmerge.utils.GeneralTools;
 import com.molihua.hlbmerge.utils.LConstants;
+import com.molihua.hlbmerge.utils.UMTools;
+import com.molihua.hlbmerge.utils.UpdataTools;
 import com.molihuan.pathselector.fragment.impl.PathSelectFragment;
 import com.molihuan.pathselector.utils.FileTools;
 import com.molihuan.pathselector.utils.Mtools;
 import com.molihuan.pathselector.utils.PermissionsTools;
+import com.umeng.analytics.MobclickAgent;
 import com.xuexiang.xui.adapter.FragmentAdapter;
-import com.xuexiang.xui.widget.dialog.materialdialog.DialogAction;
-import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
 import com.xuexiang.xui.widget.searchview.MaterialSearchView;
 
 import java.util.List;
@@ -79,20 +79,10 @@ public class MainActivity extends AbstractMainActivity implements NavigationView
 
     @Override
     public void initData() {
-
-        //是否同意用户协议
-        if (ConfigData.isAgreeTerms()) {
-            //友盟初始化
-
-        } else {
-            StatementDialog.showStatementDialog(this, new StatementDialog.IButtonCallback() {
-                @Override
-                public void onClick(MaterialDialog dialog, DialogAction which) {
-
-                }
-            });
-        }
-
+        //友盟初始化
+        UMTools.init(this);
+        //自动周期检测更新
+        UpdataTools.autoCheckUpdata(this);
         //存储权限的申请
         PermissionsTools.generalPermissionsOfStorage(this, new OnPermissionCallback() {
             @Override
@@ -186,9 +176,9 @@ public class MainActivity extends AbstractMainActivity implements NavigationView
             intent.putExtra("title", "更新日志");
             startActivity(intent);
         } else if (id == R.id.item_exitapp) {
-//            finish();
-//            System.exit(0);
-            //EasyUpdate.checkUpdate(this, DEFAULT_UPDATE_URL);
+            MobclickAgent.onKillProcess(this);
+            finish();
+            System.exit(0);
         }
         //侧滑菜单关闭
         drawerLayout.closeDrawers();
@@ -225,6 +215,11 @@ public class MainActivity extends AbstractMainActivity implements NavigationView
         super.onBackPressed();
     }
 
+    @Override
+    protected void onDestroy() {
+        MobclickAgent.onKillProcess(this);
+        super.onDestroy();
+    }
 
     @Override
     public void handleShowHide(boolean isShow) {

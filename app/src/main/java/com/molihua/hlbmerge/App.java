@@ -5,6 +5,9 @@ import android.app.Application;
 import android.widget.Toast;
 
 import com.molihua.hlbmerge.dao.ConfigData;
+import com.molihua.hlbmerge.utils.LConstants;
+import com.molihua.hlbmerge.utils.UMTools;
+import com.molihua.hlbmerge.utils.UpdataTools;
 import com.molihuan.pathselector.PathSelector;
 import com.molihuan.pathselector.configs.PathSelectorConfig;
 import com.molihuan.pathselector.utils.Mtools;
@@ -36,11 +39,15 @@ public class App extends Application {
         //ffmpeg debug
         RxFFmpegInvoke.getInstance().setDebug(false);
         //路径选择器debug
-        PathSelector.setDebug(true);
+        PathSelector.setDebug(false);
         //取消自动申请权限
         PathSelectorConfig.setAutoGetPermission(false);
-
+        //XUpdate初始化
         initXUpdate();
+        //友盟预初始化
+        UMTools.setDebug(false);
+        UMTools.setChannel(UMTools.CHANNEL_RELEASE);
+        UMTools.preInit(this);
 
         super.onCreate();
     }
@@ -56,12 +63,16 @@ public class App extends Application {
                 .setOnUpdateFailureListener(new OnUpdateFailureListener() {     //设置版本更新出错的监听
                     @Override
                     public void onFailure(UpdateError error) {
+
                         int errorCode = error.getCode();
                         if (errorCode == UpdateError.ERROR.CHECK_NO_NEW_VERSION) {
                             Mtools.toast("未发现新版本!");
                         } else {
-                            Mtools.toast("更新失败!请自行进入下载:https://gitee.com/molihuan/BilibiliCacheVideoMergeAndroid", Toast.LENGTH_LONG);
+                            Mtools.toast("更新失败!正在尝试使用备用链接 或 自行进入下载:" + LConstants.PROJECT_ADDRESS, Toast.LENGTH_LONG);
+                            //启用备用检测更新
+                            UpdataTools.checkUpdataByGitlink(getApplicationContext());
                         }
+
                     }
                 })
                 .supportSilentInstall(true)                                     //设置是否支持静默安装，默认是true

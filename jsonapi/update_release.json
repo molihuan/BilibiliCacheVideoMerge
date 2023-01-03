@@ -2,11 +2,11 @@
   "Code": 0,
   "Msg": "",
   "UpdateStatus": 1,
-  "VersionCode": 50,
-  "VersionName": "1.6.3",
-  "UploadTime": "2018-07-10 17:28:41",
-  "ModifyContent": "\r\n1、优化api接口666。\r\n2、添加使用demo演示。\r\n3、新增自定义更新服务API接口。\r\n4、优化更新提示界面。",
-  "DownloadUrl": "https://xuexiangjys.oss-cn-shanghai.aliyuncs.com/apk/xupdate_demo_1.0.2.apk",
-  "ApkSize": 2048,
+  "VersionCode": 44,
+  "VersionName": "1.6.4beta",
+  "UploadTime": "2023-01-3",
+  "ModifyContent": "\r\n1、增加稳定性。\r\n2、优化播放器。",
+  "DownloadUrl": "https://gitee.com/molihuan/BilibiliCacheVideoMergeAndroid/raw/master/app/release/app-release.apk",
+  "ApkSize": 23460,
   "ApkMd5": ""
 }

@@ -5,11 +5,13 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.blankj.molihuan.utilcode.util.TimeUtils;
 import com.molihua.hlbmerge.R;
 import com.molihua.hlbmerge.activity.BaseActivity;
 import com.molihua.hlbmerge.dao.ConfigData;
 import com.molihua.hlbmerge.fragment.impl.BackTitlebarFragment;
 import com.molihua.hlbmerge.utils.FragmentTools;
+import com.molihua.hlbmerge.utils.UpdataTools;
 import com.molihuan.pathselector.PathSelector;
 import com.molihuan.pathselector.entity.FileBean;
 import com.molihuan.pathselector.entity.FontBean;
@@ -35,6 +37,8 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
     private RelativeLayout customOutputPathRela;
     private LinearLayout biliVersionLine;
 
+    private MaterialSpinner autoUpdataFrequencyMs;
+
 
     @Override
     public int setContentViewID() {
@@ -49,6 +53,7 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
         outputPathShowTv = findViewById(R.id.tv_output_path_show);
         customOutputPathRela = findViewById(R.id.rela_custom_output_path);
         biliVersionLine = findViewById(R.id.line_switch_bilibili_app_version);
+        autoUpdataFrequencyMs = findViewById(R.id.ms_auto_updata);
     }
 
     @Override
@@ -58,9 +63,13 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     public void initView() {
+        //显示路径配置
         String cacheFilePath = ConfigData.getCacheFilePath();
+        int updateFrequency = ConfigData.getUpdateFrequency();
         cachePathShowTv.setText(cacheFilePath);
         outputPathShowTv.setText(ConfigData.getOutputFilePath());
+
+        autoUpdataFrequencyMs.setSelectedIndex(updateFrequency);
 
         if (cacheFilePath.equals(MConstants.PATH_ANRROID_DATA + ConfigData.TYPE_CACHE_FILE_PATH_INTERNAL)) {
             biliVersionMs.setSelectedIndex(0);
@@ -114,6 +123,7 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
         customCachePathRela.setOnClickListener(this);
         customOutputPathRela.setOnClickListener(this);
         biliVersionMs.setOnItemSelectedListener(this);
+        autoUpdataFrequencyMs.setOnItemSelectedListener(this);
     }
 
     @Override
@@ -209,6 +219,23 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
             cachePathShowTv.setText(cachePath);
             customCachePathRela.setAlpha(0.2f);
             biliVersionLine.setAlpha(1f);
+
+        } else if (msid == R.id.ms_auto_updata) {
+            long nowMills = TimeUtils.getNowMills();
+            long updateMills;
+            switch (position) {
+                case 0://一天
+                    updateMills = nowMills + UpdataTools.TIMESTAMP_DAY;
+                    break;
+                case 2://一月
+                    updateMills = nowMills + UpdataTools.TIMESTAMP_MONTH;
+                    break;
+                case 1://一周
+                default:
+                    updateMills = nowMills + UpdataTools.TIMESTAMP_WEEK;
+            }
+            ConfigData.setUpdateMills(updateMills);
+            ConfigData.setUpdateFrequency(position);
 
         }
 

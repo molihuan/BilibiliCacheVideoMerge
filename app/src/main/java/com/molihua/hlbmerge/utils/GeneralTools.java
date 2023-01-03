@@ -31,11 +31,5 @@ public class GeneralTools {
         }
     }
 
-    /**
-     * 检查更新
-     */
-    public static void checkUpdata() {
-        
-    }
 
 }
