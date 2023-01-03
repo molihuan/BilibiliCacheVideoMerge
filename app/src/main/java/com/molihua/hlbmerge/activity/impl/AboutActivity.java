@@ -11,6 +11,7 @@ import com.molihua.hlbmerge.fragment.impl.BackTitlebarFragment;
 import com.molihua.hlbmerge.utils.FragmentTools;
 import com.molihua.hlbmerge.utils.GeneralTools;
 import com.molihua.hlbmerge.utils.LConstants;
+import com.molihua.hlbmerge.utils.UpdataTools;
 import com.xuexiang.xui.widget.grouplist.XUIGroupListView;
 
 import java.text.SimpleDateFormat;
@@ -68,7 +69,7 @@ public class AboutActivity extends BaseActivity {
                     intent.putExtra("title", "开源许可");
                     startActivity(intent);
                 })
-                .addItemView(mAboutGroupListView.createItemView("检查更新"), v -> GeneralTools.checkUpdata())
+                .addItemView(mAboutGroupListView.createItemView("检查更新"), v -> UpdataTools.limitClickCheckUpdata(this))
                 .addTo(mAboutGroupListView);
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy", Locale.CHINA);

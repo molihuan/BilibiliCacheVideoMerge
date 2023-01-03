@@ -1,6 +1,7 @@
 package com.molihua.hlbmerge.dao;
 
 import com.blankj.molihuan.utilcode.util.AppUtils;
+import com.blankj.molihuan.utilcode.util.TimeUtils;
 import com.molihuan.pathselector.utils.MConstants;
 import com.tencent.mmkv.MMKV;
 
@@ -57,6 +58,12 @@ public class ConfigData {
     //弹幕速度
     private int danmakuSpeed;
 
+    //更新日期毫秒时间戳(当前时间戳只有在这个时间戳后才会自动检测更新)
+    private long updateMills;
+    //自动检测更新频率(0:一天    1:一周    2:一月   3:永不)
+    private int updateFrequency;
+
+
     /**
      * 每当需要新增配置就
      * 新增一个判断
@@ -81,6 +88,11 @@ public class ConfigData {
             setDanmakuSize(100);
             setDanmakuAlpha(100);
             setDanmakuSpeed(100);
+        }
+
+        if (!kv.containsKey("updateMills")) {
+            setUpdateMills(TimeUtils.getNowMills());
+            setUpdateFrequency(1);
         }
 
 
@@ -181,4 +193,24 @@ public class ConfigData {
     public static boolean setDanmakuSpeed(int danmakuSpeed) {
         return kv.encode("danmakuSpeed", danmakuSpeed);
     }
+
+
+    public static long getUpdateMills() {
+        return kv.decodeLong("updateMills");
+    }
+
+    public static boolean setUpdateMills(long updateMills) {
+        return kv.encode("updateMills", updateMills);
+    }
+
+
+    public static int getUpdateFrequency() {
+        return kv.decodeInt("updateFrequency");
+    }
+
+    public static boolean setUpdateFrequency(int updateFrequency) {
+        return kv.encode("updateFrequency", updateFrequency);
+    }
+
+
 }

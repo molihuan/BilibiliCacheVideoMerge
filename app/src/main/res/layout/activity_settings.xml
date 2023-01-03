@@ -188,4 +188,35 @@
     </LinearLayout>
 
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="更新设置"
+        android:textColor="@color/orange_mlh"
+        android:paddingHorizontal="15dp"
+        android:paddingTop="15dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:descendantFocusability="blocksDescendants"
+        android:padding="15dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="自动检测更新频率"
+            android:textColor="@color/black_mlh"
+            android:textSize="16dp" />
+
+        <com.xuexiang.xui.widget.spinner.materialspinner.MaterialSpinner
+            android:id="@+id/ms_auto_updata"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:ms_entries="@array/auto_updata_frequency_string_array" />
+
+    </LinearLayout>
+
+
 </LinearLayout>

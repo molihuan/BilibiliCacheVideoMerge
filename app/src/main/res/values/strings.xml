@@ -12,6 +12,12 @@
         <item>哔哩哔哩(概念版)</item>
         <item> </item>
     </string-array>
+    <string-array name="auto_updata_frequency_string_array">
+        <item>每天</item>
+        <item>每周</item>
+        <item>每月</item>
+        <item>永不</item>
+    </string-array>
     <string name="tip_uri_authorization_permission_content_hlb">访问%s目录需要授予权限,\n是否进行授权?</string>
     <string name="option_confirm_hlb">确定</string>
     <string name="option_cancel_hlb">取消</string>
