@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="authorDialog" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowBackground">#00000000</item>
+        <!--弹窗背景是否变暗-->
+        <item name="android:backgroundDimEnabled">false</item>
+
+    </style>
+
+</resources>

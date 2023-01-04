@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/author_TC"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/bg_alertdialog_alldelete"
+    android:layout_gravity="start"
+    android:paddingHorizontal="15dp"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:gravity="center"
+        >
+        <TextView
+            android:id="@+id/textview_author_sm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="用户须知《声明》"
+            android:textColor="@color/black"
+            android:textSize="18dp"
+            />
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/scrollview_author"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="55dp"
+        android:layout_marginBottom="55dp"
+        android:background="@drawable/bg_black_stroke"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/sc_layout"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:id="@+id/textview_author"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="    本《声明》包括:特别鸣谢和《软件协议》。\n    一、特别鸣谢\n     为本软件开发提供重要帮助的开源项目和用户:\n    【ffmpeg开源项目】:此软件是基于ffmpeg进行开发的。\n    【CSDN网站】:作者从网站上查找了大量的资料，解决了许多的问题。\n    【云注入】:感谢云注入提供的网络弹窗技术支持。\n    【@B站:wtybilibiliwty】【@B站:会飞的梧鼠】【@B站:Link_bbj】【@基安:神马都是神马】【@基安:dreampjk】【@大灰辉】【@B站:兵封千里】【@B站:残情义梦】【@B站:Cugires】【@B站:时光流逝124】【@B站:HAPPY-YIFAN】【@基安:qazplmqwe】:帮助测试反馈Bug并提出建议。\n    【@HL】:帮助测试并反馈Bug。\n    【@欣】:提供部分设计思路，帮助测试反馈了大量的bug并提出建议。\n    【@娜】:设计软件图标，提供部分图片资源支持。\n  《软件协议》描述我们与您之间关于本软件许可使用及相关方面的权利义务。请您务必审慎阅读、充分理解各条款内容，并选择接受或不接受（未成年人应在法定监护人陪同下审阅）。除非您接受本《软件协议》条款，否则您无权下载、安装或使用本软件及其相关服务。您的安装、使用行为将视为对本《协议》的接受，并同意接受本《协议》各项条款的约束。\n\n  二、《软件协议》\n    【关于本软件】此软件是由我们开发的一款将B站缓存进行合并的工具，使用了自己蹩脚的编程能力做的。\n    【用户禁止行为】除非我们书面许可，您不得从事下列行为：\n      （1）删除本软件及其副本上关于原作者著作权的信息。\n      （2）用于商业用途。\n    【法律责任与免责】\n      （1）本软件仅用于学习和技术交流，不可用于商业用途，造成的损失原作者不承担任何责任。\n      （2）可以进行二次修改，但不可删除本软件及其副本上关于原作者著作权的信息，二次修改后的软件造成您的损失原作者不承担任何责任。\n      （3）如此软件侵犯到您的权益请联系我QQ：1492906929，我会进行处理，给您的不便我深感抱歉。\n    【其他条款】\n      （1）电子文本形式的授权协议如同双方书面签署的协议一样，具有完全的和等同的法律效力。您使用本软件或本服务即视为您已阅读并同意受本协议的约束。协议许可范围以外的行为，将直接违反本授权协议并构成侵权，我们有权随时终止授权，责令停止损害，并保留追究相关责任的权力。\n      （2）我们有权在必要时修改本协议条款。您可以在本软件的最新版本中查阅相关协议条款。本协议条款变更后，如果您继续使用本软件，即视为您已接受修改后的协议。如果您不接受修改后的协议，应当停止使用本软件。\n      （3）我们保留对本协议的最终解释权。"
+                android:textSize="15sp"
+                android:textColor="#272727"
+                />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        >
+        <Button
+            android:id="@+id/yes_author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@drawable/bg_buttonmain"
+            android:layout_centerInParent="true"
+            android:text="朕已阅"
+            />
+    </RelativeLayout>
+</RelativeLayout>

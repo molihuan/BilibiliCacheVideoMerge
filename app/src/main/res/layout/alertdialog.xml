@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="15dp"
+    android:orientation="vertical"
+    android:background="@drawable/bg_alertdialog_alldelete"
+
+    android:gravity="center"
+    >
+    <TextView
+        android:id="@+id/alertdialog_alldelete_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="    你确定要转换该视频或者合集吗？（注意：第一打开使用功能可能会闪退,之后应该就不会了）"
+        android:drawableLeft="@drawable/warning"
+        android:drawablePadding="5dp"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        />
+    <Switch
+        android:id="@+id/TM_xml"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="导出弹幕(xml)"
+        android:layout_below="@id/alertdialog_alldelete_text"
+        android:layout_centerHorizontal="true"
+        />
+
+
+    <Button
+        android:id="@+id/alertdialog_yes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/TM_xml"
+        android:layout_marginLeft="8dp"
+        android:text="是"
+        />
+    <Button
+        android:id="@+id/alertdialog_no"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/TM_xml"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="8dp"
+        android:text="否"
+        />
+
+</RelativeLayout>

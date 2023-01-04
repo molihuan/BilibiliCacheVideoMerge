@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="5dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+
+<!--    <TextView-->
+<!--        android:id="@+id/tv_ts"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentStart="true"-->
+<!--        android:layout_marginStart="0dp"-->
+<!--        android:layout_marginTop="13dp"-->
+<!--        android:layout_centerVertical="true"-->
+<!--        android:layout_toLeftOf="@id/choose"-->
+<!--        android:text="请选择要合成视频目录"-->
+<!--        android:textSize="15sp" />-->
+<!--    <Button-->
+<!--        android:id="@+id/ref"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentRight="true"-->
+<!--        android:layout_centerVertical="true"-->
+<!--        android:onClick="onClic_button"-->
+<!--        android:text="刷新"/>-->
+<!--    <Button-->
+<!--        android:id="@+id/choose"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="选择合并目录"-->
+<!--        android:layout_centerVertical="true"-->
+<!--        android:onClick="onClic_button"-->
+<!--        android:layout_toLeftOf="@id/ref"-->
+<!--        android:layout_marginRight="5dp"/>-->
+</RelativeLayout>

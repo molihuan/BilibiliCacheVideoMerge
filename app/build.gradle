@@ -1,0 +1,141 @@
+plugins {
+    id 'com.android.application'
+}
+
+
+
+
+android {
+    compileSdkVersion 30
+    buildToolsVersion '30.0.3'
+
+    defaultConfig {
+        applicationId "com.coder.ffmpeg"
+        minSdkVersion 21
+        targetSdkVersion 29
+        versionCode 17
+        versionName "1.4.5"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        externalNativeBuild {
+            cmake {
+                cppFlags ""
+            }
+        }
+        ndk {
+            //目前已支持 "armeabi-v7a","arm64-v8a","x86","x86_64" 平台架构
+            abiFilters "armeabi-v7a","arm64-v8a","x86","x86_64"
+        }
+    }
+
+//签名配置
+    signingConfigs {
+        release{
+            keyAlias 'key0'
+            keyPassword 'qq199912200126'
+            storeFile file('D:\\apk\\签名文件\\keys.jks')
+            storePassword 'qq199912200126'
+        }
+    }
+
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release//启用签名
+            minifyEnabled true //代码混淆
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    externalNativeBuild {
+        cmake {
+            path "src/main/cpp/CMakeLists.txt"
+            version "3.10.2"
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+
+    implementation 'com.github.microshow:RxFFmpeg:4.9.0-lite'//RxFFmpeg依赖
+
+    implementation 'com.tencent.bugly:crashreport_upgrade:latest.release'//其中latest.release指代最新版本号，也可以指定明确的版本号，例如1.2.0
+    implementation 'com.tencent.bugly:nativecrashreport:latest.release' //其中latest.release指代最新版本号，也可以指定明确的版本号，例如2.2.0
+
+
+
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.material:material:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.documentfile:documentfile:1.0.1'
+    testImplementation 'junit:junit:4.+'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+}
+
+
+
+
+////资源混淆规则
+apply plugin: 'AndResGuard'
+andResGuard {
+    // keep住不混淆的资源原有的物理路径 mappingFile = file("./resource_mapping.txt")；
+//如果混淆全部的话，设置 mappingFile = null
+    mappingFile = null
+    // use7zip 为true时，useSign必须为true
+    // 启用7zip压缩。当你使用v2签名的时候，7zip压缩是无法生效的。
+    // 对于发布于 Google Play 的 APP，建议不要使用 7Zip 压缩，因为这个会导致 Google Play 的优化 Patch 算法失效
+    use7zip = true
+    useSign = true
+    // 打开这个开关，会keep住所有资源的原始路径，只混淆资源的名字
+    keepRoot = false
+    // 设置这个值，会把arsc name列混淆成相同的名字，减少string常量池的大小
+    fixedResName = "arg"
+    // 打开这个开关会合并所有哈希值相同的资源，但请不要过度依赖这个功能去除去冗余资源
+    mergeDuplicatedRes = true
+    // 保留不被混淆的资源文件，只作用于文件名，不会对路径有影响，支持通配符：? * +
+//  【+】代表1个或多个，【?】代表0个或1个，【*】代表0个或多个。如  "R.id.*",//任意id
+    whiteList = [
+            // for your icon
+            "R.drawable.icon",
+            // for fabric
+            "R.string.com.crashlytics.*",
+            // for google-services
+            "R.string.google_app_id",
+            "R.string.gcm_defaultSenderId",
+            "R.string.default_web_client_id",
+            "R.string.ga_trackingId",
+            "R.string.firebase_database_url",
+            "R.string.google_api_key",
+            "R.string.google_crash_reporting_api_key"
+    ]
+    // 打包时是否压缩这类文件，支持通配符：? * +
+    //如果不是对APK size有极致的需求，请不要把resources.arsc添加进compressFilePattern
+    compressFilePattern = [
+            "*.png",
+            "*.jpg",
+            "*.jpeg",
+            "*.gif",
+    ]
+    //配置7Zip，只需设置 artifact 或 path；支持同时设置，但此时以 path 的值为优先
+    sevenzip {
+        artifact = 'com.tencent.mm:SevenZip:1.2.21'
+        //path = "/usr/local/bin/7za"
+    }
+
+    /**
+     * 可选： 如果不设置则会默认覆盖assemble输出的apk
+     **/
+    // finalApkBackupPath = "${project.rootDir}/final.apk"
+
+    /**
+     * 可选: 指定v1签名时生成jar文件的摘要算法
+     * 默认值为“SHA-1”
+     **/
+    // digestalg = "SHA-256"
+}
+
+

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_border_gray"
+    android:gravity="center"
+    android:orientation="vertical"
+    >
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/choosealertdialog_titel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="请选择功能"
+            android:textColor="@color/black"
+            android:textSize="16dp"
+            android:layout_marginVertical="15dp"
+            />
+
+        <RadioGroup
+            android:id="@+id/choosealertdialog_radioGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/choosealertdialog_titel"
+            android:layout_centerHorizontal="true"
+            android:drawableTop="@drawable/warning"
+            android:orientation="horizontal"
+            android:textColor="@color/black">
+
+
+            <RadioButton
+                android:id="@+id/split_rbtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:checked="true"
+                android:text=""
+                android:textSize="15dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="拆分(大小):"
+                    android:textColor="@color/black" />
+
+                <EditText
+                    android:id="@+id/split_edt"
+                    android:layout_width="65dp"
+                    android:layout_height="wrap_content"
+                    android:hint="单位MB"
+                    android:textSize="15dp" />
+            </LinearLayout>
+
+            <RadioButton
+                android:id="@+id/merge_rbtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="合并"
+                android:textSize="15dp"
+                android:layout_marginLeft="15dp"
+                />
+
+
+
+
+        </RadioGroup>
+
+        <View
+            android:id="@+id/view_1"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginTop="15dp"
+            android:layout_below="@id/choosealertdialog_radioGroup"
+            android:background="@color/gray"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/view_1"
+            android:gravity="center"
+            >
+
+            <Button
+                android:id="@+id/choosealertdialog_yes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:textColor="@color/black"
+                android:background="@drawable/bg_btn_press_gray"
+                android:text="执行"
+
+                />
+
+            <View
+                android:layout_width="1px"
+                android:layout_height="match_parent"
+                android:background="@color/gray"
+                />
+
+            <Button
+                android:id="@+id/choosealertdialog_no"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:textColor="@color/black"
+                android:background="@drawable/bg_btn_press_gray"
+                android:text="取消" />
+        </LinearLayout>
+    </RelativeLayout>
+
+
+</RelativeLayout>

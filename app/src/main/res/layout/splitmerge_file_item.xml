@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/splitmerge_file_image"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/dir_tp"
+        android:scaleType="centerCrop" />
+
+    <TextView
+        android:id="@+id/splitMerge_file_text"
+        android:layout_width="wrap_content"
+        android:layout_height="49dp"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@id/splitmerge_file_image"
+        android:gravity="center_vertical"
+        android:paddingLeft="20dp"
+        android:text="测试"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:maxLines="1"
+        android:ellipsize="end"
+
+        />
+
+
+</RelativeLayout>

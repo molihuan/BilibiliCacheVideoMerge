@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_border_gray"
+    android:gravity="center"
+    >
+
+    <TextView
+        android:id="@+id/Permission_dialog_Title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="安卓 11 权限申请"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:layout_marginVertical="15dp"
+        />
+    <TextView
+        android:id="@+id/Permission_dialog_Tips"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="    为了软件可以访问(Android/data)目录\n请点击按钮授予此软件权限"
+        android:layout_below="@id/Permission_dialog_Title"
+        android:textSize="15sp"
+        android:gravity="center"
+        />
+
+    <View
+        android:id="@+id/view_1"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginTop="15dp"
+        android:layout_below="@id/Permission_dialog_Tips"
+        android:background="@color/gray"/>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/view_1"
+    android:gravity="center"
+    >
+
+    <Button
+        android:id="@+id/Permission_dialog_yes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:textColor="@color/black"
+        android:background="@drawable/bg_btn_press_gray"
+        android:text="授予"
+        />
+
+    <View
+        android:layout_width="1px"
+        android:layout_height="match_parent"
+        android:background="@color/gray"
+        />
+    <Button
+        android:id="@+id/Permission_dialog_no"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:textColor="@color/black"
+        android:background="@drawable/bg_btn_press_gray"
+        android:text="本宝宝就不"
+        />
+</LinearLayout>
+
+</RelativeLayout>

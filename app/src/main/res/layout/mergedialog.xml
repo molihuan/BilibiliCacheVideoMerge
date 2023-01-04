@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_border_gray"
+    android:gravity="center"
+    >
+    <TextView
+        android:id="@+id/alert_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:layout_marginVertical="15dp"
+        android:text="提示"
+        android:textStyle="bold"
+        />
+    <TextView
+        android:id="@+id/alertdialog_alldelete_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="你确定要转换该视频或者合集吗？\n(PS：第一打开使用功能可能会闪退,之后应该就不会了)"
+        android:textSize="15sp"
+        android:gravity="center"
+        android:layout_marginHorizontal="15dp"
+        android:layout_below="@id/alert_title"
+        android:textColor="@color/black"
+        />
+
+    <Switch
+        android:id="@+id/TM_xml"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:padding="5dp"
+        android:text="导出弹幕(xml)"
+        android:textSize="12sp"
+        android:layout_below="@id/alertdialog_alldelete_text"
+        android:layout_centerHorizontal="true"
+        />
+
+
+
+    <View
+        android:id="@+id/view_1"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginTop="15dp"
+        android:layout_below="@id/TM_xml"
+        android:background="@color/gray"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/view_1">
+
+
+        <Button
+            android:id="@+id/alertdialog_yes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:textColor="@color/black"
+            android:background="@drawable/bg_btn_press_gray"
+            android:text="是"
+            />
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="@color/gray"
+            />
+        <Button
+            android:id="@+id/alertdialog_no"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:background="@drawable/bg_btn_press_gray"
+            android:textColor="@color/black"
+            android:text="否"
+            />
+    </LinearLayout>
+
+
+
+</RelativeLayout>

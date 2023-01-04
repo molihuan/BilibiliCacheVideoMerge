@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_alertdialog_alldelete"
+
+    >
+    <ProgressBar
+        android:id="@+id/progress_Bar_Loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="45dp"
+        android:indeterminateDrawable="@drawable/bg_progress"
+        />
+    <TextView
+        android:id="@+id/progress_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="45dp"
+        android:layout_marginLeft="20dp"
+        android:layout_toRightOf="@id/progress_Bar_Loading"
+        android:text="正在合并请稍后..."
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        />
+
+
+
+
+
+</RelativeLayout>
