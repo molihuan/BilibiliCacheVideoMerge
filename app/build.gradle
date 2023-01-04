@@ -10,8 +10,8 @@ android {
         applicationId "com.molihua.hlbmerge"
         minSdk 21
         targetSdk 33
-        versionCode 44
-        versionName "1.6.4beta"
+        versionCode 45
+        versionName "1.6.5beta"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -36,7 +36,7 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", includes: ["*.aar", "*.jar"])
     //文件选择器(包含权限请求)
-    implementation 'io.github.molihuan:pathselector:1.1.13'
+    implementation 'io.github.molihuan:pathselector:1.1.14'
     //RxFFmpeg依赖
     implementation 'com.github.microshow:RxFFmpeg:4.9.0-lite'
     // 腾讯的键值对存储mmkv

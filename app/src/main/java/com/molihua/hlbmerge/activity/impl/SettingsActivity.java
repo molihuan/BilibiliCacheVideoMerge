@@ -110,6 +110,9 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
                         String path = MConstants.DEFAULT_ROOTPATH + ConfigData.TYPE_OUTPUT_FILE_PATH_COMPLETE;
                         ConfigData.setOutputFilePath(path);
                         outputPathShowTv.setText(path);
+                        //默认更新设置
+                        autoUpdataFrequencyMs.setSelectedIndex(1);
+                        onItemSelected(autoUpdataFrequencyMs, 1, autoUpdataFrequencyMs.getId(), null);
 
                         Mtools.toast("恢复默认成功");
                     }
@@ -164,6 +167,7 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
         } else if (id == R.id.rela_custom_output_path) {
             PathSelector.build(this, MConstants.BUILD_ACTIVITY)
                     .setRequestCode(3660)
+                    .setShowSelectStorageBtn(false)
                     .setTitlebarMainTitle(new FontBean("选择输出路径"))
                     .setAlwaysShowHandleFragment(true)
                     .setMaxCount(1)

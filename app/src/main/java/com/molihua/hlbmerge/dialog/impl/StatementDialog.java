@@ -65,7 +65,7 @@ public class StatementDialog {
                         if (positiveCallback != null) {
                             positiveCallback.onClick(dialog, which);
                         }
-                        ConfigData.setAgreeTerms(true);
+                        ConfigData.setAgreeTerm(true);
                         dialog.dismiss();
                     }
                 })
@@ -73,7 +73,7 @@ public class StatementDialog {
                 .onNegative(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        ConfigData.setAgreeTerms(false);
+                        ConfigData.setAgreeTerm(false);
                         ActivityUtils.finishAllActivities(); //退出所有activity
                         System.exit(0);//退出应用
                     }

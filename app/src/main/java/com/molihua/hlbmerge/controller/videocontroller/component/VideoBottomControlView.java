@@ -362,12 +362,17 @@ public class VideoBottomControlView extends FrameLayout implements IGestureCompo
         //获取进度
         long duration = mControlWrapper.getDuration();
         long newPosition = (duration * progress) / progressSb.getMax();
+
+
         if (!danmakuView.isPaused()) {
             currTimeTv.setText(stringForTime((int) newPosition));
             totalTimeTv.setText(stringForTime((int) duration));
         }
+
+
         danmakuView.seekTo(newPosition);
         mControlWrapper.seekTo((int) newPosition);
+
     }
 
     @Override

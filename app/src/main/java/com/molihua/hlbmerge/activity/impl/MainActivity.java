@@ -216,12 +216,6 @@ public class MainActivity extends AbstractMainActivity implements NavigationView
     }
 
     @Override
-    protected void onDestroy() {
-        MobclickAgent.onKillProcess(this);
-        super.onDestroy();
-    }
-
-    @Override
     public void handleShowHide(boolean isShow) {
         //加载handle
         FragmentTools.fragmentShowHide(
