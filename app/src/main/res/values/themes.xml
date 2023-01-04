@@ -1,0 +1,55 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.Hlbmerge" parent="XUITheme.Phone">
+
+        <item name="colorPrimary">@color/app_color_theme_10</item>
+        <item name="colorPrimaryDark">@color/app_color_theme_10</item>
+        <item name="colorAccent">@color/app_color_theme_10</item>
+
+
+        <!-- Customize your theme here. -->
+    </style>
+
+
+    <!-- SwitchButton -->
+    <style name="SwitchButtonStyle">
+        <item name="android:paddingStart">?attr/xui_config_content_spacing_horizontal</item>
+        <item name="android:paddingEnd">?attr/xui_config_content_spacing_horizontal</item>
+        <item name="android:paddingTop">?attr/xui_config_content_spacing_vertical</item>
+        <item name="android:paddingBottom">?attr/xui_config_content_spacing_vertical</item>
+    </style>
+
+
+    <style name="ToolbarTheme" parent="Theme.AppCompat.Light">
+        <!-- 更换 Toolbar OVerFlow menu icon -->
+        <item name="actionOverflowButtonStyle">@color/black</item>
+        <!-- 设置 Toolbar 溢出菜单的文字的颜色 -->
+        <item name="android:textColor">@android:color/holo_red_dark</item>
+        <!-- 设置 显示在Toolbar上菜单文字的颜色 -->
+        <item name="actionMenuTextColor">@color/xui_config_color_white</item>
+        <!-- 设置toolbar 弹出菜单的字体大小-->
+        <item name="android:textSize">15sp</item>
+        <item name="colorControlNormal">@color/xui_config_color_white</item>
+        <item name="colorControlActivated">@color/xui_config_color_white</item>
+    </style>
+
+
+    <style name="ScrollViewStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:overScrollMode">never</item>
+    </style>
+
+    <style name="ToolbarStyle" parent="Base.Widget.AppCompat.Toolbar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">?attr/colorAccent</item>
+        <item name="titleTextColor">@color/xui_config_color_white</item>
+        <item name="subtitleTextColor">@color/xui_config_color_white</item>
+        <item name="contentInsetStart">0dp</item>
+        <item name="contentInsetStartWithNavigation">0dp</item>
+    </style>
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+
+</resources>

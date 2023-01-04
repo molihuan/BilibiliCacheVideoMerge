@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    app:layout_scrollFlags="scroll|enterAlways"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/body_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:title="主页"
+        app:navigationIcon="@drawable/ic_navigation_menu"
+        app:layout_scrollFlags="scroll|enterAlways"
+        app:popupTheme="@style/AppTheme.PopupOverlay"
+        app:titleTextColor="@color/white" />
+
+    <!--搜索组件-->
+    <com.xuexiang.xui.widget.searchview.MaterialSearchView
+        app:layout_scrollFlags="scroll|enterAlways"
+        android:id="@+id/search_view"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize" />
+</RelativeLayout>

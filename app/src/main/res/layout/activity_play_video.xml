@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_height="match_parent" android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+
+    <xyz.doikki.videoplayer.player.VideoView
+        android:id="@+id/play_video_view"
+        android:layout_width="match_parent"
+        android:layout_height="300dp" >
+    </xyz.doikki.videoplayer.player.VideoView>
+
+    <Button
+        android:id="@+id/btn_copypath"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/play_video_view"
+        android:padding="15dp"
+        android:layout_margin="5dp"
+        />
+    <Button
+        android:id="@+id/btn_updataxml"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btn_copypath"
+        android:padding="15dp"
+        android:layout_margin="5dp"
+        android:text="更新本地弹幕"
+        />
+
+
+
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:overScrollMode="never"
+        android:layout_below="@id/btn_copypath"
+        >
+
+<!--        <TextView-->
+<!--            android:id="@+id/vidio_file_message"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:padding="15dp"-->
+<!--            android:layout_margin="5dp"-->
+<!--            />-->
+
+    </androidx.core.widget.NestedScrollView>
+
+
+</RelativeLayout>

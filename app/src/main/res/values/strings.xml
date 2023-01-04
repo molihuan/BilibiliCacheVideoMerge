@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">HLB站缓存合并</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">测试中</string>
+    <string-array name="sort_mode_entry">
+        <item>有声音视频</item>
+        <item>无声音视频</item>
+        <item>仅音频</item>
+    </string-array>
+    <string-array name="version_show_title">
+        <item>哔哩哔哩(国内版)</item>
+        <item>bilibili(国际版)</item>
+        <item>哔哩哔哩HD(国内平板版)</item>
+        <item>哔哩哔哩(概念版)</item>
+    </string-array>
+</resources>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include
+            layout="@layout/fragment_body_appbarlayout"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            app:layout_scrollFlags="scroll|enterAlways" />
+
+        <FrameLayout
+            app:layout_scrollFlags="scroll|enterAlways"
+            android:id="@+id/fragment_body_appbarlayout"
+            android:layout_width="0dp"
+            android:layout_height="0dp" />
+
+        <!--多选按钮显示隐藏-->
+        <FrameLayout
+            android:background="@color/white"
+            android:id="@+id/show_hidden_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/body_view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_constraintBottom_toTopOf="@id/bottom_navigationview_body_viewpager"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </androidx.viewpager.widget.ViewPager>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigationview_body_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:layout_gravity="bottom"
+        android:background="@color/white"
+        app:itemTextColor="@color/black"
+        app:labelVisibilityMode="labeled"
+        app:layout_behavior="@string/xui_bottom_behavior"
+        app:menu="@menu/menu_bottom_navigationview_body_viewpager">
+
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

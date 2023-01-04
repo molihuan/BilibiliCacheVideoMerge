@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawerlayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent">
+        <!--Toolbar-->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/body_toolbar"
+            style="@style/ToolbarStyle"
+            app:title=" "
+            app:navigationIcon="@drawable/ic_navigation_menu"
+            />
+        <!--搜索组件-->
+        <com.xuexiang.xui.widget.searchview.MaterialSearchView
+            android:id="@+id/search_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!--数据列表-->
+        <FrameLayout
+            android:id="@+id/main_showarea"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/body_toolbar"
+            android:layout_above="@id/show_hidden_bar"
+            />
+        <!--多选按钮显示隐藏-->
+        <FrameLayout
+            android:id="@+id/show_hidden_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            />
+
+    </RelativeLayout>
+    <!--  侧滑栏  NavigationView-->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navigationview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="left"
+        android:background="@drawable/mm_tp_bmp"
+        app:headerLayout="@layout/navigation_head"
+        app:menu="@menu/navigation_menu" />
+
+</androidx.drawerlayout.widget.DrawerLayout>

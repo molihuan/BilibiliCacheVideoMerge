@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/controller_view"
+    android:background="@android:color/transparent">
+
+    <RelativeLayout
+        android:id="@+id/video_show_title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:padding="5dp"
+        android:background="#56000000"
+        >
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="27dp"
+            android:layout_height="27dp"
+            android:layout_centerVertical="true"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_title_bar_back" />
+
+        <TextView
+            android:id="@+id/video_title_name"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:textColor="@color/white"
+            android:layout_toRightOf="@id/iv_back"
+            android:layout_marginLeft="15dp"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:focusableInTouchMode="true"
+            android:focusable="true"
+            />
+
+    </RelativeLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleLargeInverse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:indeterminateTint="@android:color/white"
+        android:indeterminateTintMode="src_atop"
+        android:visibility="visible"
+        tools:ignore="UnusedAttribute"/>
+
+
+
+    <master.flame.danmaku.ui.widget.DanmakuView
+        android:id="@+id/play_DanmakuView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottomPanel"
+        android:layout_below="@id/video_show_title_bar"
+        />
+
+
+
+    <RelativeLayout
+        android:id="@+id/bottomPanel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="10dp"
+        android:background="#56000000"
+        >
+
+        <ImageView
+            android:id="@+id/iv_play"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_centerVertical="true"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_video_play" />
+
+        <ImageView
+            android:id="@+id/iv_barrage"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toEndOf="@id/iv_play"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_barrage_open" />
+
+        <TextView
+            android:id="@+id/time_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@id/iv_barrage"
+            android:textColor="#ffffff" />
+
+        <SeekBar
+            android:id="@+id/progress_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@id/iv_mute"
+            android:layout_toEndOf="@id/time_view" />
+
+        <ImageView
+            android:id="@+id/iv_mute"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_toLeftOf="@id/iv_fullscreen"
+            android:layout_marginHorizontal="10dp"
+            android:layout_centerVertical="true"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_volume_open" />
+
+        <ImageView
+            android:id="@+id/iv_fullscreen"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="0dp"
+            android:src="@drawable/ic_video_view_biggest" />
+
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/repeatPlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#72000000"
+        android:visibility="gone"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:drawableTop="@drawable/ic_video_pause"
+            />
+    </FrameLayout>
+
+</RelativeLayout>

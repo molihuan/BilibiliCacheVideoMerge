@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+
+        >
+
+        <com.xuexiang.xui.widget.textview.supertextview.SuperButton
+            android:id="@+id/btn_both_noboth"
+            android:layout_width="wrap_content"
+            android:gravity="center"
+            android:layout_height="32dp"
+            android:layout_weight="2"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="3dp"
+            android:text="全选"
+            app:sb_alpha_pressed="40"
+            app:sCornersRadius="50dp"
+            app:sSolidColor="@color/app_color_theme_10"
+            />
+
+
+        <com.xuexiang.xui.widget.textview.supertextview.SuperButton
+            android:id="@+id/btn_more_merge"
+            android:layout_width="wrap_content"
+            android:gravity="center"
+            android:layout_height="32dp"
+            android:layout_weight="2"
+            android:textColor="@color/white"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="3dp"
+            android:text="合并"
+
+            app:sSolidColor="@color/app_color_theme_10"
+
+            app:sCornersRadius="50dp"
+
+            />
+
+    </LinearLayout>
+
+</RelativeLayout>

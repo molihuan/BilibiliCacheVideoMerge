@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.xuexiang.xui.widget.layout.XUILinearLayout android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:id="@+id/item_XUILinearLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_gravity="center_horizontal"
+    android:background="@drawable/bg_button_pressed"
+    android:gravity="center"
+    app:xui_borderColor="?attr/xui_config_color_separator_light"
+    app:xui_outerNormalColor="?attr/xui_config_color_background"
+    app:xui_radius="8dp"
+    app:xui_shadowElevation="5dp"
+    app:xui_shadowAlpha="0.45"
+    app:sd_shadowColor="@color/app_color_theme_10"
+    >
+
+
+<RelativeLayout
+    android:id="@+id/item_Relative"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:descendantFocusability="blocksDescendants"
+    >
+
+    <com.xuexiang.xui.widget.imageview.RadiusImageView
+        android:id="@+id/video_thumbnail"
+        android:layout_width="wrap_content"
+        android:layout_height="85dp"
+        app:riv_border_color="@color/xui_config_color_gray_6"
+        app:riv_border_width="1px"
+        app:riv_corner_radius="5dp"
+        app:riv_selected_border_color="@color/xui_config_color_gray_4"
+        app:riv_selected_border_width="1px"
+        app:riv_selected_mask_color="@color/xui_config_color_gray_8" />
+
+
+    <TextView
+        android:id="@+id/video_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:padding="10dp"
+        android:textSize="20sp"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:text="666666"
+        android:layout_toEndOf="@id/video_thumbnail"
+        android:layout_marginStart="15dp"
+        android:layout_centerVertical="true"
+        android:textColor="@color/black"
+        />
+    <CheckBox
+        android:id="@+id/video_checkBox"
+        android:focusable="false"
+        android:clickable="false"
+        android:focusableInTouchMode="false"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:gravity="center"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:visibility="gone"
+        />
+
+
+
+</RelativeLayout>
+</com.xuexiang.xui.widget.layout.XUILinearLayout>

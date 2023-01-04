@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="?attr/xui_config_content_spacing_horizontal"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="    你确定要转换该视频或者合集吗？（注意：第一打开使用功能可能会闪退,之后应该就不会了）"
+        android:drawablePadding="5dp"
+        android:textSize="17sp"
+        android:textColor="@color/black" />
+
+    <com.xuexiang.xui.widget.spinner.materialspinner.MaterialSpinner
+        android:id="@+id/dialog_materialspinner"
+        style="@style/Material.SpinnerStyle"
+        android:layout_width="200dp"
+        app:ms_entries="@array/sort_mode_entry"
+        app:ms_in_dialog="true"
+        android:layout_marginVertical="10dp" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="导出弹幕(xml)"
+            android:layout_toRightOf="@id/switchBtn_XMLexport"
+            android:layout_centerVertical="true" />
+
+        <com.xuexiang.xui.widget.button.switchbutton.SwitchButton
+            android:id="@+id/switchBtn_XMLexport"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+</LinearLayout>
