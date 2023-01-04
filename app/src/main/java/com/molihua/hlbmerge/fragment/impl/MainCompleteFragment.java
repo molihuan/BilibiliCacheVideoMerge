@@ -3,11 +3,13 @@ package com.molihua.hlbmerge.fragment.impl;
 import android.content.Intent;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.blankj.molihuan.utilcode.util.FileUtils;
 import com.blankj.molihuan.utilcode.util.ToastUtils;
+import com.blankj.molihuan.utilcode.util.ZipUtils;
 import com.molihua.hlbmerge.R;
 import com.molihua.hlbmerge.activity.impl.PlayVideoActivity;
 import com.molihua.hlbmerge.dao.ConfigData;
@@ -19,11 +21,20 @@ import com.molihuan.pathselector.fragment.BasePathSelectFragment;
 import com.molihuan.pathselector.fragment.impl.PathSelectFragment;
 import com.molihuan.pathselector.listener.CommonItemListener;
 import com.molihuan.pathselector.listener.FileItemListener;
+import com.molihuan.pathselector.utils.FileTools;
 import com.molihuan.pathselector.utils.MConstants;
 import com.molihuan.pathselector.utils.Mtools;
+import com.xuexiang.xtask.XTask;
+import com.xuexiang.xtask.core.ITaskChainEngine;
+import com.xuexiang.xtask.core.param.ITaskResult;
+import com.xuexiang.xtask.core.step.impl.TaskChainCallbackAdapter;
+import com.xuexiang.xtask.core.step.impl.TaskCommand;
+import com.xuexiang.xui.widget.dialog.MiniLoadingDialog;
 import com.xuexiang.xui.widget.dialog.materialdialog.DialogAction;
 import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,7 +90,6 @@ public class MainCompleteFragment extends AbstractMainFragment {
     private void openFileChoose() {
 
         pathSelectFragment = PathSelector.build(this, MConstants.BUILD_FRAGMENT)
-                .setShowTabbarFragment(false)
                 .setRootPath(ConfigData.getOutputFilePath())
                 .setFrameLayoutId(R.id.main_complete_view)
                 .setShowTitlebarFragment(false)
@@ -103,18 +113,69 @@ public class MainCompleteFragment extends AbstractMainFragment {
                     }
                 })
                 .setHandleItemListeners(
-                        new CommonItemListener("全选") {
+                        new CommonItemListener("压缩") {
                             @Override
                             public boolean onClick(View v, TextView tv, List<FileBean> selectedFiles, String currentPath, BasePathSelectFragment pathSelectFragment) {
-                                pathSelectFragment.openCloseMultipleMode(true);
-                                if (tv.getText().equals("全选")) {
-                                    pathSelectFragment.selectAllFile(true);
-                                    tv.setText("全不选");
-                                } else {
-                                    pathSelectFragment.selectAllFile(false);
-                                    tv.setText("全选");
+
+
+                                if (selectedFiles == null || selectedFiles.size() == 0) {
+                                    Mtools.toast("你还没有选择文件捏!(长按进行选择)");
+                                    return false;
                                 }
-                                pathSelectFragment.refreshFileList();
+
+                                List<String> pathList = new ArrayList<>();
+
+
+                                MiniLoadingDialog miniLoadingDialog = new MiniLoadingDialog(mActivity, "压缩处理中");
+                                miniLoadingDialog.setCancelable(false);
+                                miniLoadingDialog.show();
+
+
+                                XTask.getTaskChain()
+                                        .addTask(XTask.getTask(new TaskCommand() {
+                                            @Override
+                                            public void run() throws Exception {
+                                                String zipPath;
+                                                for (int i = 0; i < selectedFiles.size(); i++) {
+                                                    zipPath = selectedFiles.get(i).getPath();
+                                                    if (FileTools.underAndroidDataUseUri(zipPath)) {
+                                                        throw new RuntimeException("Files cannot be compressed under Android/data");
+                                                    }
+                                                    pathList.add(zipPath);
+                                                }
+
+                                                if (FileUtils.createOrExistsDir(ConfigData.TYPE_OUTPUT_FILE_PATH_ZIP)) {
+                                                    try {
+                                                        ZipUtils.zipFiles(pathList, ConfigData.TYPE_OUTPUT_FILE_PATH_ZIP + File.separator + "video.zip");
+                                                    } catch (IOException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                }
+
+
+                                            }
+                                        }))
+                                        .setTaskChainCallback(new TaskChainCallbackAdapter() {
+                                            @Override
+                                            public void onTaskChainCompleted(@NonNull ITaskChainEngine engine, @NonNull ITaskResult result) {
+                                                //更新ui
+                                                miniLoadingDialog.dismiss();
+                                                Mtools.toast("压缩成功,压缩文件保存在" + ConfigData.TYPE_OUTPUT_FILE_PATH_ZIP + File.separator + "video.zip");
+                                                pathSelectFragment.updateFileList();
+                                                pathSelectFragment.openCloseMultipleMode(false);
+                                            }
+
+                                            @Override
+                                            public void onTaskChainError(@NonNull ITaskChainEngine engine, @NonNull ITaskResult result) {
+                                                miniLoadingDialog.dismiss();
+                                                Mtools.toast("压缩失败,如果你的手机为Android 11及以上,则不支持直接压缩Android/data下的文件,请先将文件或文件夹复制出Android/data再进行压缩", Toast.LENGTH_LONG);
+                                                pathSelectFragment.updateFileList();
+                                                pathSelectFragment.openCloseMultipleMode(false);
+                                                super.onTaskChainError(engine, result);
+                                            }
+                                        })
+                                        .start();
+
 
                                 return false;
                             }
@@ -129,16 +190,6 @@ public class MainCompleteFragment extends AbstractMainFragment {
                                         Mtools.toast("你还没有选择文件捏!(长按进行选择)");
                                         return false;
                                     }
-//TODO 设置取消复制
-
-//                                    List<CommonItemListener> handleItemListeners = pathSelectFragment.getHandleItemListeners();
-//                                    for (CommonItemListener handleItemListener : handleItemListeners) {
-//                                        if ("取消".equals(handleItemListener.getFontBean().getText())) {
-//                                            handleItemListener.getFontBean().setText("取消复制");
-//                                            pathSelectFragment.refreshHandleList();
-//                                            break;
-//                                        }
-//                                    }
 
                                     tv.setText("粘贴");
 

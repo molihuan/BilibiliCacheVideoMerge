@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.LayoutRes;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.umeng.analytics.MobclickAgent;
 import com.xuexiang.xui.XUI;
 
 
@@ -45,6 +46,13 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public void setListeners() {
+    }
+
+    @Override
+    protected void onDestroy() {
+        //友盟保存数据
+        MobclickAgent.onKillProcess(this);
+        super.onDestroy();
     }
 
 

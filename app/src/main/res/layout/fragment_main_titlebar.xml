@@ -69,7 +69,7 @@
                     android:layout_below="@id/tv_main_title_titlebar"
                     android:layout_centerHorizontal="true"
                     android:textColor="@color/white_mlh"
-                    android:text="@string/test_text"
+                    android:text="@string/test_text_mlh"
                     android:visibility="gone" />
             </LinearLayout>
         </RelativeLayout>

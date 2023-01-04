@@ -63,14 +63,17 @@ public class App extends Application {
                 .setOnUpdateFailureListener(new OnUpdateFailureListener() {     //设置版本更新出错的监听
                     @Override
                     public void onFailure(UpdateError error) {
-
-                        int errorCode = error.getCode();
-                        if (errorCode == UpdateError.ERROR.CHECK_NO_NEW_VERSION) {
-                            Mtools.toast("未发现新版本!");
-                        } else {
-                            Mtools.toast("更新失败!正在尝试使用备用链接 或 自行进入下载:" + LConstants.PROJECT_ADDRESS, Toast.LENGTH_LONG);
-                            //启用备用检测更新
-                            UpdataTools.checkUpdataByGitlink(getApplicationContext());
+                        switch (error.getCode()) {
+                            case UpdateError.ERROR.CHECK_NO_NEW_VERSION:
+                                Mtools.toast("未发现新版本!");
+                                break;
+                            case UpdateError.ERROR.CHECK_NO_NETWORK:
+                            case UpdateError.ERROR.CHECK_NO_WIFI:
+                                break;
+                            default:
+                                Mtools.toast("更新失败!正在尝试使用备用链接 或 自行进入下载:" + LConstants.PROJECT_ADDRESS, Toast.LENGTH_LONG);
+                                //启用备用检测更新
+                                UpdataTools.checkUpdataByGitlink(getApplicationContext());
                         }
 
                     }

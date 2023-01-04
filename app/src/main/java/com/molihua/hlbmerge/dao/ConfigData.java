@@ -36,6 +36,8 @@ public class ConfigData {
     public final static String TYPE_OUTPUT_FILE_PATH_COMPLETE = "/bilibili视频合并/complete";
     //临时文件路径
     public final static String TYPE_OUTPUT_FILE_PATH_TEMP = MConstants.DEFAULT_ROOTPATH + "/bilibili视频合并/temp";
+    //输出压缩文件路径
+    public final static String TYPE_OUTPUT_FILE_PATH_ZIP = MConstants.DEFAULT_ROOTPATH + "/bilibili视频合并/zip";
 
     private final static MMKV kv = MMKV.defaultMMKV();
 
@@ -48,7 +50,7 @@ public class ConfigData {
     //导出类型，0有声音视频，1无声音视频，2仅仅音频
     private int exportType;
     //是否同意条款
-    private boolean agreeTerms;
+    private boolean agreeTerm;
     //是否开启弹幕
     private boolean openBarrage;
     //弹幕大小
@@ -76,7 +78,7 @@ public class ConfigData {
             setOutputFilePath(MConstants.DEFAULT_ROOTPATH + TYPE_OUTPUT_FILE_PATH_COMPLETE);
             setExportDanmaku(false);
             setExportType(0);
-            setAgreeTerms(false);
+            setAgreeTerm(false);
             setOpenBarrage(true);
         }
         //新增配置1
@@ -153,12 +155,12 @@ public class ConfigData {
         return kv.encode("exportType", exportType);
     }
 
-    public static boolean isAgreeTerms() {
-        return kv.decodeBool("agreeTerms");
+    public static boolean isAgreeTerm() {
+        return kv.decodeBool("agreeTerm");
     }
 
-    public static boolean setAgreeTerms(boolean agreeTerms) {
-        return kv.encode("agreeTerms", agreeTerms);
+    public static boolean setAgreeTerm(boolean agreeTerm) {
+        return kv.encode("agreeTerm", agreeTerm);
     }
 
     public static boolean isOpenBarrage() {

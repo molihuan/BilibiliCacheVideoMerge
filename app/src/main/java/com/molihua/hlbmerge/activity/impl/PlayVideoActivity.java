@@ -128,9 +128,9 @@ public class PlayVideoActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         //销毁播放器
         releaseVideoViewDanmakuView();
+        super.onDestroy();
     }
 
     /**

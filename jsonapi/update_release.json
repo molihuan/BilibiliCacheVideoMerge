@@ -2,11 +2,11 @@
   "Code": 0,
   "Msg": "",
   "UpdateStatus": 1,
-  "VersionCode": 44,
-  "VersionName": "1.6.4beta",
-  "UploadTime": "2023-01-3",
-  "ModifyContent": "\r\n1、增加稳定性。\r\n2、优化播放器。",
+  "VersionCode": 45,
+  "VersionName": "1.6.5beta",
+  "UploadTime": "2023-01-4",
+  "ModifyContent": "\r\n1、修复播放器闪退问题。\r\n2、细节优化。",
   "DownloadUrl": "https://gitee.com/molihuan/BilibiliCacheVideoMergeAndroid/raw/master/app/release/app-release.apk",
-  "ApkSize": 23460,
+  "ApkSize": 23462,
   "ApkMd5": ""
 }

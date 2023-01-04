@@ -19,7 +19,9 @@ import com.molihuan.pathselector.utils.Mtools;
 import master.flame.danmaku.controller.DrawHandler;
 import master.flame.danmaku.danmaku.model.BaseDanmaku;
 import master.flame.danmaku.danmaku.model.DanmakuTimer;
+import master.flame.danmaku.danmaku.model.IDanmakus;
 import master.flame.danmaku.danmaku.model.android.DanmakuContext;
+import master.flame.danmaku.danmaku.model.android.Danmakus;
 import master.flame.danmaku.danmaku.parser.BaseDanmakuParser;
 import master.flame.danmaku.danmaku.parser.IDataSource;
 import master.flame.danmaku.danmaku.parser.android.AndroidFileSource;
@@ -44,6 +46,8 @@ public class VideoDanmakuView extends FrameLayout implements IGestureComponent {
     private String videoPath;
     private Context mContext;
     private DKVideoController dkVideoController;
+    //本地弹幕文件是否存在
+    private boolean localXmlExists = false;
 
     public DanmakuView getDanmakuView() {
         return danmakuView;
@@ -51,6 +55,10 @@ public class VideoDanmakuView extends FrameLayout implements IGestureComponent {
 
     public DanmakuContext getDanmakuContext() {
         return danmakuContext;
+    }
+
+    public boolean isLocalXmlExists() {
+        return localXmlExists;
     }
 
     public VideoDanmakuView(@NonNull Context context, String videoPath, DKVideoController dkVideoController) {
@@ -94,7 +102,15 @@ public class VideoDanmakuView extends FrameLayout implements IGestureComponent {
 
         if (danmakuView != null) {
             String localXmlPath = videoPath.replace(FileUtils.getFileExtension(videoPath), "xml");
+
             if (!FileUtils.isFileExists(localXmlPath)) {
+                localXmlExists = false;
+                danmakuView.prepare(new BaseDanmakuParser() {
+                    @Override
+                    protected IDanmakus parse() {
+                        return new Danmakus();
+                    }
+                }, danmakuContext);
                 return;
             }
             //String localXmlPath="https://comment.bilibili.com/367013145.xml";
@@ -134,6 +150,7 @@ public class VideoDanmakuView extends FrameLayout implements IGestureComponent {
             //danmakuView.showFPS(true);
             //开启绘制缓存
             danmakuView.enableDanmakuDrawingCache(true);
+            localXmlExists = true;
         }
 
     }

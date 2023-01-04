@@ -5,30 +5,40 @@
     android:orientation="horizontal">
 
     <TextView
-        android:id="@+id/left_tv"
+        android:id="@+id/tv_select_all"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/test_text"
+        android:text="@string/test_text_mlh"
         android:layout_weight="1"
         android:gravity="center"
         android:padding="15dp"
         android:background="@drawable/style_click_r_rectangle_white_gray_mlh" />
 
     <TextView
-        android:id="@+id/center_tv"
+        android:id="@+id/tv_copy_path"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/test_text"
+        android:text="@string/test_text_mlh"
         android:layout_weight="1"
         android:gravity="center"
         android:padding="15dp"
         android:background="@drawable/style_click_r_rectangle_white_gray_mlh" />
 
     <TextView
-        android:id="@+id/right_tv"
+        android:id="@+id/tv_merge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/test_text"
+        android:text="@string/test_text_mlh"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:padding="15dp"
+        android:background="@drawable/style_click_r_rectangle_white_gray_mlh" />
+
+    <TextView
+        android:id="@+id/tv_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/test_text_mlh"
         android:layout_weight="1"
         android:gravity="center"
         android:padding="15dp"

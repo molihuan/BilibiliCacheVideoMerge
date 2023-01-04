@@ -36,19 +36,24 @@ public class CacheFileListAdapter extends BaseQuickAdapter<CacheFile, BaseViewHo
         switch (cacheFile.getFlag()) {
             case BaseCacheFileManager.FLAG_CACHE_FILE_COLLECTION:
                 holder.setText(R.id.tv_item_file_name, cacheFile.getCollectionName());
+                holder.setVisible(R.id.tv_item_file_describe, true);
+                holder.setText(R.id.tv_item_file_describe, cacheFile.getCollectionPath());
                 break;
             case BaseCacheFileManager.FLAG_CACHE_FILE_CHAPTER:
                 holder.setText(R.id.tv_item_file_name, cacheFile.getChapterName());
+                holder.setVisible(R.id.tv_item_file_describe, true);
+                holder.setText(R.id.tv_item_file_describe, cacheFile.getChapterPath());
                 break;
             case BaseCacheFileManager.FLAG_CACHE_FILE_BACK:
                 holder.setText(R.id.tv_item_file_name, cacheFile.getChapterName());
+                holder.setVisible(R.id.tv_item_file_describe, false);
                 break;
             default:
         }
 
         checkBox.setVisibility(cacheFile.getBoxVisibility());
         checkBox.setChecked(cacheFile.getBoxCheck());
-        
+
         container.setVisibility(cacheFile.getWholeVisibility());
 
 

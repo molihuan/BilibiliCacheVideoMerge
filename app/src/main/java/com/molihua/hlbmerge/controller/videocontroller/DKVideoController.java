@@ -65,6 +65,10 @@ public class DKVideoController extends GestureVideoController implements View.On
         return videoDanmakuView.getDanmakuContext();
     }
 
+    public boolean isLocalXmlExists() {
+        return videoDanmakuView.isLocalXmlExists();
+    }
+
     public VideoSettingView getVideoSettingView() {
         return videoSettingView;
     }

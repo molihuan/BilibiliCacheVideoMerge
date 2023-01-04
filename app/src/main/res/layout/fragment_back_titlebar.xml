@@ -28,7 +28,7 @@
                 android:id="@+id/main_title_toolbar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/test_text"
+                android:text="@string/test_text_mlh"
                 android:textSize="21dp"
                 android:textColor="@color/white" />
 
@@ -47,7 +47,7 @@
             android:id="@+id/tv_right_option"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/test_text"
+            android:text="@string/test_text_mlh"
             android:textColor="@color/white_mlh"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
