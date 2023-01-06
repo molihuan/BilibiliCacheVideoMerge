@@ -1,14 +1,25 @@
 package com.molihua.hlbmerge.utils;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+
+import androidx.core.content.FileProvider;
+
+import com.blankj.molihuan.utilcode.util.AppUtils;
 import com.blankj.molihuan.utilcode.util.ConvertUtils;
 import com.blankj.molihuan.utilcode.util.FileIOUtils;
+import com.blankj.molihuan.utilcode.util.FileUtils;
 import com.blankj.molihuan.utilcode.util.StringUtils;
+import com.molihuan.pathselector.utils.MConstants;
+import com.molihuan.pathselector.utils.Mtools;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -18,6 +29,87 @@ import java.util.UUID;
  * @Description:
  */
 public class FileTools {
+
+    public static void shareFile(Context context, String filePath) {
+        shareFile(context, filePath, null);
+    }
+
+    public static void shareFile(Context context, String filePath, String targetPackageName) {
+        if (!FileUtils.isFileExists(filePath)) {
+            throw new IllegalArgumentException(filePath + " does not exist");
+        }
+        shareFile(context, new File(filePath), targetPackageName);
+    }
+
+    public static void shareFile(Context context, final File file) {
+        shareFile(context, file, null);
+    }
+
+    /**
+     * 分享文件
+     *
+     * @param context
+     * @param file
+     * @param targetPackageName 指定目标包名
+     */
+    public static void shareFile(Context context, final File file, String targetPackageName) {
+        final Uri uri;
+        int currentapiVersion = android.os.Build.VERSION.SDK_INT;
+        //若SDK大于等于24  获取uri采用共享文件模式
+        if (currentapiVersion >= 24) {
+            uri = FileProvider.getUriForFile(context, AppUtils.getAppPackageName() + ".fileprovider", file);
+        } else {
+            uri = Uri.fromFile(file);
+        }
+
+        Intent share = new Intent(Intent.ACTION_SEND);
+        share.putExtra(Intent.EXTRA_STREAM, uri);
+        //此处可发送多种文件
+        share.setType(getMIMEType(new File(file.getAbsolutePath())));
+        share.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        share.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        share.addCategory(Intent.CATEGORY_DEFAULT);
+        //是否指定目标包名
+        if (!StringUtils.isTrimEmpty(targetPackageName)) {
+            //share.setPackage("com.tencent.tim");
+            //share.setPackage("com.tencent.mobileqq");
+            //share.setPackage("com.tencent.mm");
+        }
+
+        if (share.resolveActivity(context.getPackageManager()) != null) {
+            context.startActivity(Intent.createChooser(share, "将文件发送到"));
+            //context.startActivity(share);
+        } else {
+            Mtools.toast("没有相应的应用,无法分享!");
+        }
+    }
+
+    /**
+     * 获取MIMEType
+     *
+     * @param file
+     * @return
+     */
+    public static String getMIMEType(File file) {
+        String type = "*/*";
+        String fName = file.getName();
+        //获取后缀名前的分隔符"."在fName中的位置。
+        int dotIndex = fName.lastIndexOf(".");
+        if (dotIndex < 0)
+            return type;
+        /* 获取文件的后缀名 */
+        String fileType = fName.substring(dotIndex).toLowerCase();
+        if ("".equals(fileType))
+            return type;
+        //在MIME和文件类型的匹配表中找到对应的MIME类型。
+        for (Map.Entry<String, String> entry : MConstants.mimeTypeMap.entrySet()) {
+            if (fileType.equals(entry.getKey())) {
+                type = entry.getValue();
+            }
+        }
+
+        return type;
+    }
 
 
     /**
@@ -102,20 +194,43 @@ public class FileTools {
             result[0] = UUID.randomUUID().toString();
         }
 
+        //二级json类型
+        int subJsonType;
+
         //获取二级json对象
         JSONObject subJsonObject = null;
         try {
             subJsonObject = jsonObject.getJSONObject("page_data");
+            subJsonType = 0;
         } catch (JSONException e) {
             e.printStackTrace();
-            result[1] = UUID.randomUUID().toString();
-            return result;
+            //如果没有获取到page_data就开始获取ep
+            try {
+                subJsonObject = jsonObject.getJSONObject("ep");
+                subJsonType = 1;
+            } catch (JSONException ex) {
+                ex.printStackTrace();
+                //都没有获取到就随机uuid
+                result[1] = UUID.randomUUID().toString();
+                return result;
+            }
+        }
+
+        String parseKey;
+        switch (subJsonType) {
+            case 1:
+                parseKey = "index_title";
+                break;
+            case 0:
+            default:
+                parseKey = "download_subtitle";
+
         }
 
         //通过二级json对象获取章节名称
         try {
             result[1] = subJsonObject
-                    .getString("download_subtitle")
+                    .getString(parseKey)
                     .replaceAll(LConstants.SPECIAL_CHARACTERS_REGULAR_RULE, "")
                     .replaceFirst(result[0], "");
         } catch (JSONException e1) {

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.molihua.hlbmerge">
 
     <application
         android:name=".App"
@@ -41,6 +42,17 @@
         <activity
             android:name=".activity.impl.PlayVideoActivity"
             android:configChanges="orientation|screenSize" />
+
+        <provider
+            android:authorities="com.molihua.hlbmerge.fileprovider"
+            android:name="androidx.core.content.FileProvider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
     </application>
 
 </manifest>

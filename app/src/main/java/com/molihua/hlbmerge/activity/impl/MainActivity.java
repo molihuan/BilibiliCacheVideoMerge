@@ -24,10 +24,10 @@ import com.molihua.hlbmerge.fragment.AbstractMainFileShowFragment;
 import com.molihua.hlbmerge.fragment.AbstractMainHandleFragment;
 import com.molihua.hlbmerge.fragment.AbstractMainTitlebarFragment;
 import com.molihua.hlbmerge.fragment.impl.MainCompleteFragment;
-import com.molihua.hlbmerge.fragment.impl.MainFfmpegFragment;
 import com.molihua.hlbmerge.fragment.impl.MainFileShowFragment;
 import com.molihua.hlbmerge.fragment.impl.MainHandleFragment;
 import com.molihua.hlbmerge.fragment.impl.MainTitlebarFragment;
+import com.molihua.hlbmerge.fragment.impl.MainToolsFragment;
 import com.molihua.hlbmerge.service.ICacheFileManager;
 import com.molihua.hlbmerge.utils.FragmentTools;
 import com.molihua.hlbmerge.utils.GeneralTools;
@@ -110,7 +110,7 @@ public class MainActivity extends AbstractMainActivity implements NavigationView
 
         mainTitlebarFragment = new MainTitlebarFragment();
         mainFileShowFragment = new MainFileShowFragment();
-        mainFfmpegFragment = new MainFfmpegFragment();
+        mainFfmpegFragment = new MainToolsFragment();
         mainCompleteFragment = new MainCompleteFragment();
         mainHandleFragment = new MainHandleFragment();
 

@@ -2,11 +2,11 @@
   "Code": 0,
   "Msg": "",
   "UpdateStatus": 1,
-  "VersionCode": 45,
-  "VersionName": "1.6.5beta",
+  "VersionCode": 46,
+  "VersionName": "1.6.6",
   "UploadTime": "2023-01-4",
-  "ModifyContent": "\r\n1、修复播放器闪退问题。\r\n2、细节优化。",
-  "DownloadUrl": "https://gitee.com/molihuan/BilibiliCacheVideoMergeAndroid/raw/master/app/release/app-release.apk",
-  "ApkSize": 23462,
+  "ModifyContent": "\r\n1、修复播放器全屏播放后返回闪退问题。\r\n2、增加视频分享功能。\r\n3、增加视频循环播放功能。\r\n4、修复某些视频名称解析错误",
+  "DownloadUrl": "https://www.gitlink.org.cn/api/molihuan/BilibiliCacheVideoMerge/raw?filepath=app/release/app-release.apk",
+  "ApkSize": 23464,
   "ApkMd5": ""
 }

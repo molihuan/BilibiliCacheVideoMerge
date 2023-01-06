@@ -8,32 +8,33 @@
         android:layout_width="match_parent"
         android:layout_height="300dp" />
 
-    <Button
-        android:id="@+id/btn_copypath"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/play_video_view"
-        android:padding="15dp"
-        android:layout_margin="5dp"
-        android:textAllCaps="false" />
+        android:orientation="vertical"
+        android:layout_below="@id/play_video_view">
 
-    <Button
-        android:id="@+id/btn_updataxml"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/btn_copypath"
-        android:padding="15dp"
-        android:layout_margin="5dp"
-        android:text="更新本地弹幕"
-        android:textAllCaps="false" />
+        <Button
+            android:id="@+id/btn_copypath"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false" />
 
-    <!--    <androidx.core.widget.NestedScrollView-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:overScrollMode="never"-->
-    <!--        android:layout_below="@id/btn_copypath">-->
+        <Button
+            android:id="@+id/btn_updataxml"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="更新本地弹幕"
+            android:textAllCaps="false" />
 
-    <!--    </androidx.core.widget.NestedScrollView>-->
+        <Button
+            android:id="@+id/btn_share"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="分享"
+            android:textAllCaps="false" />
+
+    </LinearLayout>
 
 
 </RelativeLayout>

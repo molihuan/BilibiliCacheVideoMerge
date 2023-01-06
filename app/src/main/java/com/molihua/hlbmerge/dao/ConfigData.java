@@ -64,6 +64,8 @@ public class ConfigData {
     private long updateMills;
     //自动检测更新频率(0:一天    1:一周    2:一月   3:永不)
     private int updateFrequency;
+    //播放视频时是否循环播放
+    private boolean videoReply;
 
 
     /**
@@ -95,6 +97,10 @@ public class ConfigData {
         if (!kv.containsKey("updateMills")) {
             setUpdateMills(TimeUtils.getNowMills());
             setUpdateFrequency(1);
+        }
+
+        if (!kv.containsKey("videoReply")) {
+            setVideoReply(false);
         }
 
 
@@ -212,6 +218,14 @@ public class ConfigData {
 
     public static boolean setUpdateFrequency(int updateFrequency) {
         return kv.encode("updateFrequency", updateFrequency);
+    }
+
+    public static boolean isVideoReply() {
+        return kv.decodeBool("videoReply");
+    }
+
+    public static boolean setVideoReply(boolean videoReply) {
+        return kv.encode("videoReply", videoReply);
     }
 
 

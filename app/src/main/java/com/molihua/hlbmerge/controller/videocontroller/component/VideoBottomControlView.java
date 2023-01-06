@@ -322,16 +322,7 @@ public class VideoBottomControlView extends FrameLayout implements IGestureCompo
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.iv_play) {
-            if (playCompleted) {
-                mControlWrapper.replay(true);
-                //danmakuView.restart();
-                danmakuView.show();
-                danmakuView.seekTo((long) 0);
-            } else {
-                mControlWrapper.togglePlay();
-                danmakuView.toggle();
-            }
-
+            pressPlayBtn();
         } else if (id == R.id.iv_barrage) {
             if (danmakuView.isShown()) {
                 danmakuView.hide();
@@ -344,6 +335,18 @@ public class VideoBottomControlView extends FrameLayout implements IGestureCompo
             }
         } else if (id == R.id.iv_full_screen) {
             mControlWrapper.toggleFullScreenByVideoSize(mActivity);
+        }
+    }
+
+    public void pressPlayBtn() {
+        if (playCompleted) {
+            mControlWrapper.replay(true);
+            //danmakuView.restart();
+            danmakuView.show();
+            danmakuView.seekTo((long) 0);
+        } else {
+            mControlWrapper.togglePlay();
+            danmakuView.toggle();
         }
     }
 

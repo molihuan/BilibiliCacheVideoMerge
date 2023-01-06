@@ -42,6 +42,7 @@ public class MergeProgressDialog {
     public static boolean FLAG_USER_HANDLE = false;
     //退出执行ffmpeg命令
     public static boolean FLAG_EXIT_RUN_COMMAND = false;
+
     public static final String CMD_TEMPLATE = "ffmpeg -i %s -i %s -c copy %s";
 
     /**

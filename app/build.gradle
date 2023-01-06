@@ -10,8 +10,8 @@ android {
         applicationId "com.molihua.hlbmerge"
         minSdk 21
         targetSdk 33
-        versionCode 45
-        versionName "1.6.5beta"
+        versionCode 46
+        versionName "1.6.6"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
