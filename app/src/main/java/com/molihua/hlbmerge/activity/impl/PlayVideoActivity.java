@@ -8,6 +8,7 @@ import com.blankj.molihuan.utilcode.util.ClipboardUtils;
 import com.molihua.hlbmerge.R;
 import com.molihua.hlbmerge.activity.BaseActivity;
 import com.molihua.hlbmerge.controller.videocontroller.DKVideoController;
+import com.molihua.hlbmerge.utils.FileTools;
 import com.molihuan.pathselector.utils.Mtools;
 
 import master.flame.danmaku.ui.widget.DanmakuView;
@@ -17,13 +18,15 @@ import xyz.doikki.videoplayer.player.VideoView;
  * @ClassName: PlayVideoActivity
  * @Author: molihuan
  * @Date: 2022/12/28/0:48
- * @Description:
+ * @Description: 播放器
  */
 public class PlayVideoActivity extends BaseActivity implements View.OnClickListener {
     //复制路径按钮
     private Button btn_copypath;
     //更新弹幕按钮
     private Button btn_updataxml;
+    //分享按钮
+    private Button shareBtn;
 
     //DK播放器视图
     private VideoView videoView;
@@ -47,6 +50,7 @@ public class PlayVideoActivity extends BaseActivity implements View.OnClickListe
         btn_copypath = findViewById(R.id.btn_copypath);
         btn_updataxml = findViewById(R.id.btn_updataxml);
         videoView = findViewById(R.id.play_video_view);
+        shareBtn = findViewById(R.id.btn_share);
     }
 
     @Override
@@ -66,6 +70,7 @@ public class PlayVideoActivity extends BaseActivity implements View.OnClickListe
 
         //开始播放
         videoView.start();
+        
 
     }
 
@@ -78,6 +83,7 @@ public class PlayVideoActivity extends BaseActivity implements View.OnClickListe
     public void setListeners() {
         btn_copypath.setOnClickListener(this);
         btn_updataxml.setOnClickListener(this);
+        shareBtn.setOnClickListener(this);
     }
 
 
@@ -89,6 +95,10 @@ public class PlayVideoActivity extends BaseActivity implements View.OnClickListe
                 Mtools.toast("文件路径已复制到剪贴板");
                 break;
             case R.id.btn_updataxml:
+                Mtools.toast("还在开发中...");
+                break;
+            case R.id.btn_share:
+                FileTools.shareFile(this, videoPath);
                 break;
 
         }

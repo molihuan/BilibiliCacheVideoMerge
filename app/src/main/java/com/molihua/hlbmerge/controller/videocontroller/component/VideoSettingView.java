@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
@@ -12,12 +13,14 @@ import androidx.annotation.Nullable;
 import com.molihua.hlbmerge.R;
 import com.molihua.hlbmerge.controller.videocontroller.DKVideoController;
 import com.molihua.hlbmerge.dao.ConfigData;
+import com.xuexiang.xui.widget.button.switchbutton.SwitchButton;
 import com.xuexiang.xui.widget.layout.ExpandableLayout;
 import com.xuexiang.xui.widget.picker.XSeekBar;
 
 import master.flame.danmaku.danmaku.model.android.DanmakuContext;
 import xyz.doikki.videoplayer.controller.ControlWrapper;
 import xyz.doikki.videoplayer.controller.IGestureComponent;
+import xyz.doikki.videoplayer.player.VideoView;
 
 /**
  * @ClassName: VideoSettingView
@@ -25,7 +28,7 @@ import xyz.doikki.videoplayer.controller.IGestureComponent;
  * @Date: 2023/01/02/13:44
  * @Description:
  */
-public class VideoSettingView extends FrameLayout implements IGestureComponent, XSeekBar.OnSeekBarListener, View.OnClickListener {
+public class VideoSettingView extends FrameLayout implements IGestureComponent, XSeekBar.OnSeekBarListener, View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
     private ControlWrapper mControlWrapper;
     private Context mContext;
@@ -39,13 +42,17 @@ public class VideoSettingView extends FrameLayout implements IGestureComponent, 
     private XSeekBar danmakuSizeXSB;
     private XSeekBar danmakuAlphaXSB;
     private XSeekBar danmakuSpeedXSB;
-    private XSeekBar danmakuShowAreaXSB;
+
+    private SwitchButton replySwitchBtn;
+    private boolean videoReply;
+
 
     private int danmakuSize;
     private int danmakuAlpha;
     private int danmakuSpeed;
 
     private View emptyView;
+
 
     public VideoSettingView(@NonNull Context context, DKVideoController dkVideoController) {
         super(context);
@@ -66,9 +73,9 @@ public class VideoSettingView extends FrameLayout implements IGestureComponent, 
         danmakuSizeXSB = findViewById(R.id.xsb_danmaku_size);
         danmakuAlphaXSB = findViewById(R.id.xsb_danmaku_alpha);
         danmakuSpeedXSB = findViewById(R.id.xsb_danmaku_speed);
-        danmakuShowAreaXSB = findViewById(R.id.xsb_danmaku_show_area);
-
         emptyView = findViewById(R.id.empty_view);
+
+        replySwitchBtn = findViewById(R.id.switch_btn_video_reply);
     }
 
     private void initData(Context context, DKVideoController dkVideoController) {
@@ -93,19 +100,23 @@ public class VideoSettingView extends FrameLayout implements IGestureComponent, 
         danmakuSpeedXSB.setMin(1);
         danmakuSpeedXSB.setMax(200);
 
+        //获取是否重复播放配置
+        videoReply = ConfigData.isVideoReply();
+
 
     }
 
     private void initMyView() {
         setVisibility(GONE);
+        replySwitchBtn.setChecked(videoReply);
     }
 
     private void setListeners() {
         danmakuSizeXSB.setOnSeekBarListener(this);
         danmakuAlphaXSB.setOnSeekBarListener(this);
         danmakuSpeedXSB.setOnSeekBarListener(this);
-        danmakuShowAreaXSB.setOnSeekBarListener(this);
         emptyView.setOnClickListener(this);
+        replySwitchBtn.setOnCheckedChangeListener(this);
     }
 
     @Override
@@ -120,8 +131,20 @@ public class VideoSettingView extends FrameLayout implements IGestureComponent, 
         } else if (id == R.id.xsb_danmaku_speed) {
             danmakuContext.setScrollSpeedFactor((float) (200 - newValue) / 100);
             danmakuSpeed = newValue;
-        } else if (id == R.id.xsb_danmaku_show_area) {
+        }
+    }
 
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        int id = buttonView.getId();
+        if (id == R.id.switch_btn_video_reply) {
+            if (isChecked) {
+                videoReply = true;
+                ConfigData.setVideoReply(true);
+            } else {
+                videoReply = false;
+                ConfigData.setVideoReply(false);
+            }
         }
     }
 
@@ -227,7 +250,25 @@ public class VideoSettingView extends FrameLayout implements IGestureComponent, 
 
     @Override
     public void onPlayStateChanged(int playState) {
-
+        switch (playState) {
+            //调用release方法会回到此状态
+            case VideoView.STATE_IDLE:
+                break;
+            case VideoView.STATE_PLAYING:
+            case VideoView.STATE_PAUSED:
+            case VideoView.STATE_PREPARED:
+            case VideoView.STATE_ERROR:
+            case VideoView.STATE_BUFFERED:
+                break;
+            case VideoView.STATE_PREPARING:
+            case VideoView.STATE_BUFFERING:
+                break;
+            case VideoView.STATE_PLAYBACK_COMPLETED:
+                if (videoReply) {
+                    dkVideoController.getBottomControlView().pressPlayBtn();
+                }
+                break;
+        }
     }
 
     @Override

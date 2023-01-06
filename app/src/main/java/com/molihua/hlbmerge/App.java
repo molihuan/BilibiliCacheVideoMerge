@@ -39,7 +39,7 @@ public class App extends Application {
         //ffmpeg debug
         RxFFmpegInvoke.getInstance().setDebug(false);
         //路径选择器debug
-        PathSelector.setDebug(false);
+        PathSelector.setDebug(true);
         //取消自动申请权限
         PathSelectorConfig.setAutoGetPermission(false);
         //XUpdate初始化
@@ -54,7 +54,7 @@ public class App extends Application {
 
     private void initXUpdate() {
         XUpdate.get()
-                .debug(true)
+                .debug(false)
                 .isWifiOnly(true)                                               //默认设置只在wifi下检查版本更新
                 .isGet(true)                                                    //默认设置使用get请求检查版本
                 .isAutoMode(false)                                              //默认设置非自动模式，可根据具体使用配置

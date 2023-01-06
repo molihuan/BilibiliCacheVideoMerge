@@ -90,12 +90,41 @@ public class UpdataTools {
 
     }
 
+    //public static final String XUPDATE_DEMO_DOWNLOAD_URL = "https://xuexiangjys.oss-cn-shanghai.aliyuncs.com/apk/xupdate_demo_1.0.2.apk";
 
     /**
      * 检查更新(gitee)
      */
     public static void checkUpdata(Context context) {
         EasyUpdate.checkUpdate(context, UPDATE_URL_CHANNEL_GITEE);
+
+//测试是否可以下载apk文件
+//        UpdateManager.Builder builder = EasyUpdate.create(context, UPDATE_URL_CHANNEL_GITEE);
+//        builder.build()
+//                .download("https://www.gitlink.org.cn/api/molihuan/BilibiliCacheVideoMerge/raw?filepath=app/release/app-release.apk", new OnFileDownloadListener() {
+//                    @Override
+//                    public void onStart() {
+//
+//                    }
+//
+//                    @Override
+//                    public void onProgress(float progress, long total) {
+//
+//                    }
+//
+//                    @Override
+//                    public boolean onCompleted(File file) {
+//                        Mtools.toast("apk下载完毕，文件路径：" + file.getPath());
+//                        LogUtils.e(file.getPath());
+//                        return false;
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable throwable) {
+//
+//                    }
+//                });
+
     }
 
     /**

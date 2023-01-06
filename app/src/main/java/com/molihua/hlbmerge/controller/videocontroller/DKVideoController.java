@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -57,12 +58,18 @@ public class DKVideoController extends GestureVideoController implements View.On
 
     private VideoSettingView videoSettingView;
 
+    private VideoBottomControlView bottomControlView;
+
     public DanmakuView getDanmakuView() {
         return videoDanmakuView.getDanmakuView();
     }
 
     public DanmakuContext getDanmakuContext() {
         return videoDanmakuView.getDanmakuContext();
+    }
+
+    public VideoBottomControlView getBottomControlView() {
+        return bottomControlView;
     }
 
     public boolean isLocalXmlExists() {
@@ -106,7 +113,7 @@ public class DKVideoController extends GestureVideoController implements View.On
         //获取弹幕视图
         mDanmakuView = getDanmakuView();
 
-        VideoBottomControlView bottomControlView = new VideoBottomControlView(mContext, this);
+        bottomControlView = new VideoBottomControlView(mContext, this);
         VideoCompleteView videoCompleteView = new VideoCompleteView(mContext, mDanmakuView);
         ErrorView errorView = new ErrorView(mContext);
         PrepareView prepareView = new PrepareView(mContext);
@@ -116,8 +123,8 @@ public class DKVideoController extends GestureVideoController implements View.On
 
         addControlComponent(
                 videoTitleView,
-                videoSettingView,
                 bottomControlView,
+                videoSettingView,
                 videoCompleteView,
                 errorView,
                 prepareView,
@@ -264,13 +271,13 @@ public class DKVideoController extends GestureVideoController implements View.On
             int dp24 = PlayerUtils.dp2px(getContext(), 24);
             int cutoutHeight = getCutoutHeight();
             if (orientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
-                FrameLayout.LayoutParams lblp = (LayoutParams) lockImgView.getLayoutParams();
+                RelativeLayout.LayoutParams lblp = (RelativeLayout.LayoutParams) lockImgView.getLayoutParams();
                 lblp.setMargins(dp24, 0, dp24, 0);
             } else if (orientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
-                FrameLayout.LayoutParams layoutParams = (LayoutParams) lockImgView.getLayoutParams();
+                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) lockImgView.getLayoutParams();
                 layoutParams.setMargins(dp24 + cutoutHeight, 0, dp24 + cutoutHeight, 0);
             } else if (orientation == ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE) {
-                FrameLayout.LayoutParams layoutParams = (LayoutParams) lockImgView.getLayoutParams();
+                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) lockImgView.getLayoutParams();
                 layoutParams.setMargins(dp24, 0, dp24, 0);
             }
         }
