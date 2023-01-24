@@ -12,10 +12,9 @@ import com.blankj.molihuan.utilcode.util.FileUtils;
 import com.blankj.molihuan.utilcode.util.UriUtils;
 import com.molihua.hlbmerge.dao.ConfigData;
 import com.molihua.hlbmerge.entity.CacheFile;
+import com.molihua.hlbmerge.ffmpeg.core.BaseFFmpegCallback;
 import com.molihua.hlbmerge.service.impl.PathCacheFileManager;
-import com.molihua.hlbmerge.service.impl.RxFFmpegCallback;
 import com.molihua.hlbmerge.service.impl.UriCacheFileManager;
-import com.molihua.hlbmerge.utils.RxFfmpegTools;
 import com.molihuan.pathselector.utils.FileTools;
 import com.xuexiang.xtask.XTask;
 import com.xuexiang.xtask.core.ITaskChainEngine;
@@ -42,8 +41,8 @@ public class MergeProgressDialog {
     public static boolean FLAG_USER_HANDLE = false;
     //退出执行ffmpeg命令
     public static boolean FLAG_EXIT_RUN_COMMAND = false;
-
-    public static final String CMD_TEMPLATE = "ffmpeg -i %s -i %s -c copy %s";
+    //ffmpeg命令模板
+    public static String ffmpegCmdTemplate;
 
     /**
      * 显示合并进度弹窗
@@ -54,6 +53,7 @@ public class MergeProgressDialog {
     public static MaterialDialog showMergeProgressDialog(List<CacheFile> cacheFileList, Fragment fragment) {
         //初始化
         FLAG_EXIT_RUN_COMMAND = false;
+        ffmpegCmdTemplate = ConfigData.getFfmpegCmdTemplate();
         Context context = fragment.getContext();
         Objects.requireNonNull(context, "context is null");
 
@@ -79,9 +79,9 @@ public class MergeProgressDialog {
                 .onNegative(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        RxFfmpegTools.exitRunCommand();
+                        ConfigData.ffmpegCore.exitRunCommand();
                         MergeProgressDialog.FLAG_EXIT_RUN_COMMAND = true;
-                        RxFfmpegTools.exitRunCommand();
+                        ConfigData.ffmpegCore.exitRunCommand();
                         dialog.dismiss();
                     }
                 })
@@ -104,7 +104,7 @@ public class MergeProgressDialog {
      * @param dialog
      */
     public static void startMerge(List<CacheFile> cacheFileList, MaterialDialog dialog) {
-        RxFFmpegCallback ffmpegCallback = new RxFFmpegCallback(dialog);
+        BaseFFmpegCallback ffmpegCallback = ConfigData.ffmpegCore.getFFmpegCallback(dialog);
         //获取输出根目录
         String outRoot = ConfigData.getOutputFilePath();
         //获取导出配置
@@ -148,8 +148,8 @@ public class MergeProgressDialog {
                                         //处理已经存在的文件弹窗
                                         MergeProgressDialog.handleExistsFileDialog(dialog.getContext(), completeOutPathSuf, cacheFile, ffmpegCallback, exportType, exportDanmaku);
                                     } else {
-                                        cmdStr = String.format(MergeProgressDialog.CMD_TEMPLATE, cacheFile.getAudioPath(), cacheFile.getVideoPath(), completeOutPathSuf);
-                                        RxFfmpegTools.runCommand(cmdStr, ffmpegCallback);
+                                        cmdStr = String.format(ffmpegCmdTemplate, cacheFile.getAudioPath(), cacheFile.getVideoPath(), completeOutPathSuf);
+                                        ConfigData.ffmpegCore.runCommand(cmdStr, ffmpegCallback);
                                         //是否导出弹幕
                                         if (exportDanmaku) {
                                             FileUtils.copy(cacheFile.getDanmakuPath(), completeOutPath + ".xml");
@@ -263,7 +263,7 @@ public class MergeProgressDialog {
      * @param target
      * @param ffmpegCallback
      */
-    public static void copyVideoAudioWithProgress(String src, String target, RxFFmpegCallback ffmpegCallback) {
+    public static void copyVideoAudioWithProgress(String src, String target, BaseFFmpegCallback ffmpegCallback) {
         boolean success = FileUtils.copy(src, target);
         if (ffmpegCallback == null) {
             return;
@@ -283,7 +283,7 @@ public class MergeProgressDialog {
      * @param cacheFile
      * @param ffmpegCallback
      */
-    public static void handleExistsFileDialog(Context context, String completeOutPathSuf, CacheFile cacheFile, RxFFmpegCallback ffmpegCallback, int type, boolean exportDanmaku) throws InterruptedException {
+    public static void handleExistsFileDialog(Context context, String completeOutPathSuf, CacheFile cacheFile, BaseFFmpegCallback ffmpegCallback, int type, boolean exportDanmaku) throws InterruptedException {
         //用户选择标志归位
         MergeProgressDialog.FLAG_USER_HANDLE = false;
 
@@ -317,8 +317,8 @@ public class MergeProgressDialog {
                                 switch (type) {
                                     case 0:
                                         //构造ffmpeg命令
-                                        String cmdStr = String.format(MergeProgressDialog.CMD_TEMPLATE, cacheFile.getAudioPath(), cacheFile.getVideoPath(), reName);
-                                        RxFfmpegTools.runCommand(cmdStr, ffmpegCallback);
+                                        String cmdStr = String.format(ffmpegCmdTemplate, cacheFile.getAudioPath(), cacheFile.getVideoPath(), reName);
+                                        ConfigData.ffmpegCore.runCommand(cmdStr, ffmpegCallback);
                                         break;
                                     case 1:
                                         MergeProgressDialog.copyVideoAudioWithProgress(cacheFile.getVideoPath(), reName, ffmpegCallback);
@@ -344,8 +344,8 @@ public class MergeProgressDialog {
                                 switch (type) {
                                     case 0:
                                         //构造ffmpeg命令
-                                        String cmdStr = String.format(MergeProgressDialog.CMD_TEMPLATE, cacheFile.getAudioPath(), cacheFile.getVideoPath(), completeOutPathSuf);
-                                        RxFfmpegTools.runCommand(cmdStr, ffmpegCallback);
+                                        String cmdStr = String.format(ffmpegCmdTemplate, cacheFile.getAudioPath(), cacheFile.getVideoPath(), completeOutPathSuf);
+                                        ConfigData.ffmpegCore.runCommand(cmdStr, ffmpegCallback);
                                         break;
                                     case 1:
                                         MergeProgressDialog.copyVideoAudioWithProgress(cacheFile.getVideoPath(), completeOutPathSuf, ffmpegCallback);

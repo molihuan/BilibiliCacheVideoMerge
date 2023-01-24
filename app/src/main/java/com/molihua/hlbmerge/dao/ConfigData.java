@@ -1,7 +1,10 @@
 package com.molihua.hlbmerge.dao;
 
 import com.blankj.molihuan.utilcode.util.AppUtils;
+import com.blankj.molihuan.utilcode.util.ReflectUtils;
 import com.blankj.molihuan.utilcode.util.TimeUtils;
+import com.molihua.hlbmerge.BuildConfig;
+import com.molihua.hlbmerge.ffmpeg.core.BaseFFmpegCore;
 import com.molihuan.pathselector.utils.MConstants;
 import com.tencent.mmkv.MMKV;
 
@@ -38,8 +41,17 @@ public class ConfigData {
     public final static String TYPE_OUTPUT_FILE_PATH_TEMP = MConstants.DEFAULT_ROOTPATH + "/bilibili视频合并/temp";
     //输出压缩文件路径
     public final static String TYPE_OUTPUT_FILE_PATH_ZIP = MConstants.DEFAULT_ROOTPATH + "/bilibili视频合并/zip";
+    //ffmpeg核心类型
+    public final static int FFMPEG_CORE_TYPE_All = -1;
+
+    public final static int FFMPEG_CORE_TYPE_RXFFMPEG = 0;
+
+    public final static int FFMPEG_CORE_TYPE_FFMPEGCOMMAND = 1;
 
     private final static MMKV kv = MMKV.defaultMMKV();
+
+    //ffmpeg核心
+    public static BaseFFmpegCore ffmpegCore;
 
     //缓存文件路径
     private String cacheFilePath;
@@ -66,6 +78,10 @@ public class ConfigData {
     private int updateFrequency;
     //播放视频时是否循环播放
     private boolean videoReply;
+    //ffmpeg命令模板
+    private String ffmpegCmdTemplate;
+    //ffmpeg核心类型
+    private int ffmpegCoreType;
 
 
     /**
@@ -103,7 +119,47 @@ public class ConfigData {
             setVideoReply(false);
         }
 
+        if (!kv.containsKey("ffmpegCmdTemplate")) {
+            //-vcodec copy ：视频只拷贝，不编解码
+            //-acodec copy : 音频只拷贝，不编解码
+            //-c copy      : 只拷贝，不编解码
+            setFfmpegCmdTemplate("ffmpeg -i %s -i %s -c copy %s");
+        }
 
+        if (!kv.containsKey("ffmpegCoreType")) {
+            setFfmpegCoreType(FFMPEG_CORE_TYPE_RXFFMPEG);
+        }
+
+
+    }
+
+    /**
+     * 初始化ffmpeg核心
+     */
+    public static void initFFmpegCore() {
+
+        switch (BuildConfig.FFMPEG_CORE_TYPE) {
+            //-1则是全核心,需要从ky中读取设置的核心，其他的则为单核心无法选择
+            case FFMPEG_CORE_TYPE_All:
+                //ffmpegCore = new RxFFmpegCore();
+                switch (getFfmpegCoreType()) {
+                    case FFMPEG_CORE_TYPE_FFMPEGCOMMAND:
+                        ffmpegCore = ReflectUtils.reflect("com.molihua.hlbmerge.ffmpeg.core.impl.FFmpegCommandCore").newInstance().get();
+                        break;
+                    case FFMPEG_CORE_TYPE_RXFFMPEG:
+                    default:
+                        ffmpegCore = ReflectUtils.reflect("com.molihua.hlbmerge.ffmpeg.core.impl.RxFFmpegCore").newInstance().get();
+                }
+                break;
+            case FFMPEG_CORE_TYPE_FFMPEGCOMMAND:
+                //ffmpegCore = new FFmpegCommandCore();
+                ffmpegCore = ReflectUtils.reflect("com.molihua.hlbmerge.ffmpeg.core.impl.FFmpegCommandCore").newInstance().get();
+                break;
+            case FFMPEG_CORE_TYPE_RXFFMPEG:
+            default:
+                //ffmpegCore = new RxFFmpegCore();
+                ffmpegCore = ReflectUtils.reflect("com.molihua.hlbmerge.ffmpeg.core.impl.RxFFmpegCore").newInstance().get();
+        }
     }
 
     /**
@@ -226,6 +282,22 @@ public class ConfigData {
 
     public static boolean setVideoReply(boolean videoReply) {
         return kv.encode("videoReply", videoReply);
+    }
+
+    public static String getFfmpegCmdTemplate() {
+        return kv.decodeString("ffmpegCmdTemplate");
+    }
+
+    public static boolean setFfmpegCmdTemplate(String ffmpegCmdTemplate) {
+        return kv.encode("ffmpegCmdTemplate", ffmpegCmdTemplate);
+    }
+
+    public static int getFfmpegCoreType() {
+        return kv.decodeInt("ffmpegCoreType");
+    }
+
+    public static boolean setFfmpegCoreType(int ffmpegCoreType) {
+        return kv.encode("ffmpegCoreType", ffmpegCoreType);
     }
 
 

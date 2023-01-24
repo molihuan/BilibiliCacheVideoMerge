@@ -2,6 +2,35 @@ plugins {
     id 'com.android.application'
 }
 
+/**
+ * ffmpeg核心类型
+ */
+
+def ffmpegCoreType = "-1"
+
+//ffmpeg核心依赖
+dependencies {
+    switch (ffmpegCoreType) {
+        case "-1"://全核心
+            //RxFFmpeg依赖
+            implementation 'com.github.microshow:RxFFmpeg:4.9.0-lite'
+            //FFmpegCommand依赖
+            implementation 'com.github.AnJoiner:FFmpegCommand:1.2.2-lite'
+            break
+        case "0":
+            //RxFFmpeg依赖
+            implementation 'com.github.microshow:RxFFmpeg:4.9.0-lite'
+            break
+        case "1":
+            //FFmpegCommand依赖
+            implementation 'com.github.AnJoiner:FFmpegCommand:1.2.2-lite'
+            break
+        default:
+            break
+    }
+}
+
+
 android {
     namespace 'com.molihua.hlbmerge'
     compileSdk 33
@@ -10,13 +39,13 @@ android {
         applicationId "com.molihua.hlbmerge"
         minSdk 21
         targetSdk 33
-        versionCode 46
-        versionName "1.6.6"
+        versionCode 49
+        versionName "1.6.8"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         ndk {
-            abiFilters "armeabi-v7a", "arm64-v8a", "x86_64"
+            abiFilters "armeabi-v7a", "arm64-v8a"
         }
 
     }
@@ -25,20 +54,54 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            //设置BuildConfig.FFMPEG_CORE_TYPE可以在java中调用
+            buildConfigField "int", "FFMPEG_CORE_TYPE", ffmpegCoreType
+        }
+        debug {
+            buildConfigField "int", "FFMPEG_CORE_TYPE", ffmpegCoreType
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    sourceSets {
+        main {
+            java {
+                //配置编译时忽略java文件
+                switch (ffmpegCoreType) {
+                    case "-1":
+                        break
+                    case "0":
+                        //RxFFmpeg依赖
+                        excludes = [
+                                'com/molihua/hlbmerge/ffmpeg/core/impl/FFmpegCommandCore.java',
+                                'com/molihua/hlbmerge/ffmpeg/core/impl/FFmpegCommandCallback.java'
+                        ]
+                        break
+                    case "1":
+                        //FFmpegCommand依赖
+                        excludes = [
+                                'com/molihua/hlbmerge/ffmpeg/core/impl/RxFFmpegCore.java',
+                                'com/molihua/hlbmerge/ffmpeg/core/impl/RxFFmpegCallback.java'
+                        ]
+                        break
+                    default:
+                        break
+                }
+            }
+        }
+    }
+
 }
+
 
 dependencies {
     implementation fileTree(dir: "libs", includes: ["*.aar", "*.jar"])
     //文件选择器(包含权限请求)
     implementation 'io.github.molihuan:pathselector:1.1.14'
-    //RxFFmpeg依赖
-    implementation 'com.github.microshow:RxFFmpeg:4.9.0-lite'
     // 腾讯的键值对存储mmkv
     implementation 'com.tencent:mmkv:1.2.14'
     //DKVideoPlayer内部默认使用系统mediaplayer进行解码

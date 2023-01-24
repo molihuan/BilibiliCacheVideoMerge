@@ -26,7 +26,7 @@ public class PathCacheFileManager extends BaseCacheFileManager {
         cacheFileList = initCollectionFileList(path, cacheFileList);
 
         String[] needPath = new String[4];
-        String[] names = new String[2];
+        String[] names = new String[3];
         //获取所有的合集
         File[] collectionFile = FileTools.getCollectionChapterFile(path);
 
@@ -68,6 +68,7 @@ public class PathCacheFileManager extends BaseCacheFileManager {
                             .setBoxVisibility(View.INVISIBLE)
                             .setBoxCheck(false)
                             .setUseUri(false)
+                            .setCoverUrl(names[2])
             );
         }
 
@@ -87,7 +88,7 @@ public class PathCacheFileManager extends BaseCacheFileManager {
                         .setFlag(BaseCacheFileManager.FLAG_CACHE_FILE_BACK)
                         .setWholeVisibility(View.VISIBLE)
                         .setCollectionPath(collectionPath)
-                        .setChapterName("...")
+                        .setChapterName("返回上一级")
                         .setBoxVisibility(View.INVISIBLE)
                         .setBoxCheck(false)
                         .setUseUri(false)
@@ -101,7 +102,7 @@ public class PathCacheFileManager extends BaseCacheFileManager {
         cacheFileList = initChapterFileList(collectionPath, cacheFileList);
 
         String[] needPath = new String[4];
-        String[] names = new String[2];
+        String[] names = new String[3];
         //获取一个合集下面所有的章节
         File[] chapterFile = FileTools.getCollectionChapterFile(collectionPath);
         for (int i = 0; i < chapterFile.length; i++) {
@@ -124,6 +125,7 @@ public class PathCacheFileManager extends BaseCacheFileManager {
                             .setBoxVisibility(View.INVISIBLE)
                             .setBoxCheck(false)
                             .setUseUri(false)
+                            .setCoverUrl(names[2])
             );
         }
 
@@ -147,7 +149,7 @@ public class PathCacheFileManager extends BaseCacheFileManager {
         List<CacheFile> tempList = new ArrayList<>();
 
         String[] needPath = new String[4];
-        String[] names = new String[2];
+        String[] names = new String[3];
 
         String collectionPath;
         //遍历所有合集
@@ -176,6 +178,7 @@ public class PathCacheFileManager extends BaseCacheFileManager {
                                 .setBoxVisibility(View.INVISIBLE)
                                 .setBoxCheck(false)
                                 .setUseUri(false)
+                                .setCoverUrl(names[2])
                 );
             }
 

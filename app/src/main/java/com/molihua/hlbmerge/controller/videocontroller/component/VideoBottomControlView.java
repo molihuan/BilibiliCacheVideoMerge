@@ -346,7 +346,7 @@ public class VideoBottomControlView extends FrameLayout implements IGestureCompo
             danmakuView.seekTo((long) 0);
         } else {
             mControlWrapper.togglePlay();
-            danmakuView.toggle();
+            //danmakuView.toggle();
         }
     }
 

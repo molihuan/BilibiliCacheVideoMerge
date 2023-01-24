@@ -12,6 +12,14 @@
         <item>哔哩哔哩(概念版)</item>
         <item> </item>
     </string-array>
+    <string-array name="ffmpeg_core_type_string_array">
+        <item>RxFFmpeg</item>
+        <item>FFmpegCommand</item>
+    </string-array>
+    <string-array name="ffmpeg_cmd_type_string_array">
+        <item>ffmpeg -i %s -i %s -c copy %s</item>
+        <item>ffmpeg -i %s -i %s -c:a copy -c:v copy -bsf:a aac_adtstoasc %s</item>
+    </string-array>
     <string-array name="auto_updata_frequency_string_array">
         <item>每天</item>
         <item>每周</item>

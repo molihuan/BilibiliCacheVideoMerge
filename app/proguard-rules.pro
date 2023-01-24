@@ -23,3 +23,6 @@
 #rxffmpeg混淆
 -dontwarn io.microshow.rxffmpeg.**
 -keep class io.microshow.rxffmpeg.**{*;}
+#FFmpegCommand混淆
+-keep class com.coder.ffmpeg.** {*;}
+-dontwarn  com.coder.ffmpeg.**
