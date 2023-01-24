@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <FrameLayout
@@ -10,213 +11,354 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="缓存位置"
-        android:textColor="@color/orange_mlh"
-        android:paddingHorizontal="15dp"
-        android:paddingTop="15dp" />
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:descendantFocusability="blocksDescendants"
-            android:orientation="horizontal"
-            android:padding="15dp"
-            android:gravity="center_vertical">
-
-            <TextView
-                android:id="@+id/tv_cache_path_tip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="当前缓存路径:"
-                android:textColor="@color/black"
-                android:textSize="16dp"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="15dp" />
-
-            <TextView
-                android:id="@+id/tv_cache_path_show"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/test_text_mlh"
-                android:textColor="@color/grey500_mlh"
-                android:textSize="16dp"
-                android:layout_toRightOf="@id/tv_cache_path_tip"
-                android:layout_centerVertical="true" />
-
-        </RelativeLayout>
-
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/line_switch_bilibili_app_version"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:descendantFocusability="blocksDescendants"
-            android:padding="15dp"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Bilibili软件(只支持官方包名)"
-                android:textColor="@color/black_mlh"
-                android:textSize="16dp" />
+                android:text="缓存位置"
+                android:textColor="@color/orange_mlh"
+                android:paddingHorizontal="15dp"
+                android:paddingTop="15dp" />
 
-            <com.xuexiang.xui.widget.spinner.materialspinner.MaterialSpinner
-                android:id="@+id/ms_bilibili_version"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:descendantFocusability="blocksDescendants"
+                    android:orientation="horizontal"
+                    android:padding="15dp"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/tv_cache_path_tip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="当前使用的缓存路径:"
+                        android:textColor="@color/black"
+                        android:textSize="16dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="15dp" />
+
+                    <TextView
+                        android:id="@+id/tv_cache_path_show"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/test_text_mlh"
+                        android:textColor="@color/grey500_mlh"
+                        android:textSize="16dp"
+                        android:layout_toRightOf="@id/tv_cache_path_tip"
+                        android:layout_centerVertical="true" />
+
+                </RelativeLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/line_switch_bilibili_app_version"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:descendantFocusability="blocksDescendants"
+                    android:padding="15dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Bilibili软件(只支持官方包名)"
+                        android:textColor="@color/black_mlh"
+                        android:textSize="16dp" />
+
+                    <com.xuexiang.xui.widget.spinner.materialspinner.MaterialSpinner
+                        android:id="@+id/ms_bilibili_version"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:ms_entries="@array/bilibili_app_version_string_array" />
+
+                </LinearLayout>
+
+
+                <RelativeLayout
+                    android:id="@+id/rela_custom_cache_path"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:descendantFocusability="blocksDescendants"
+                    android:orientation="horizontal"
+                    android:padding="15dp"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/style_click_rectangle_transp_gray_mlh">
+
+                    <TextView
+                        android:id="@+id/tv_custom_cache_path_tip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="自定义缓存文件位置"
+                        android:textColor="@color/black"
+                        android:textSize="16dp" />
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tv_custom_cache_path_tip"
+                        android:layout_marginRight="20dp"
+                        android:text="当你选择了此项则Bilibili软件(只支持官方包名)选项失效" />
+
+
+                </RelativeLayout>
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.2dp"
+                    android:background="@color/xui_btn_gray_normal_color" />
+
+            </LinearLayout>
+
+
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:ms_entries="@array/bilibili_app_version_string_array" />
+                android:text="输出位置"
+                android:textColor="@color/orange_mlh"
+                android:paddingHorizontal="15dp"
+                android:paddingTop="15dp" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:descendantFocusability="blocksDescendants"
+                    android:orientation="horizontal"
+                    android:padding="15dp"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/tv_output_path_tip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="当前使用的输出路径:"
+                        android:textColor="@color/black"
+                        android:textSize="16dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="15dp" />
+
+                    <TextView
+                        android:id="@+id/tv_output_path_show"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/test_text_mlh"
+                        android:textColor="@color/grey500_mlh"
+                        android:textSize="16dp"
+                        android:layout_toRightOf="@id/tv_output_path_tip"
+                        android:layout_centerVertical="true" />
+
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:id="@+id/rela_custom_output_path"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:descendantFocusability="blocksDescendants"
+                    android:orientation="horizontal"
+                    android:padding="15dp"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/style_click_rectangle_transp_gray_mlh">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="自定义输出位置"
+                        android:textColor="@color/black"
+                        android:textSize="16dp" />
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.2dp"
+                    android:background="@color/xui_btn_gray_normal_color" />
+
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ffmpeg设置"
+                android:textColor="@color/orange_mlh"
+                android:paddingHorizontal="15dp"
+                android:paddingTop="15dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/line_switch_ffmpeg_core_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:descendantFocusability="blocksDescendants"
+                    android:padding="15dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="ffmpeg核心"
+                        android:textColor="@color/black_mlh"
+                        android:textSize="16dp" />
+
+                    <com.xuexiang.xui.widget.spinner.materialspinner.MaterialSpinner
+                        android:id="@+id/ms_ffmpeg_core_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:ms_entries="@array/ffmpeg_core_type_string_array" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:descendantFocusability="blocksDescendants"
+                    android:orientation="horizontal"
+                    android:padding="15dp"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="当前使用的合并命令:"
+                        android:textColor="@color/black"
+                        android:textSize="16dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="15dp" />
+
+                    <TextView
+                        android:id="@+id/tv_ffmpeg_cmd_show"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/grey500_mlh"
+                        android:textSize="16dp"
+                        android:layout_centerVertical="true"
+                        tools:text="@string/test_text_mlh" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/line_switch_ffmpeg_cmd_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:descendantFocusability="blocksDescendants"
+                    android:padding="15dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="预备选项(%s分别为:输入音频、输入视频、输出视频)"
+                        android:textColor="@color/black_mlh"
+                        android:textSize="16dp" />
+
+                    <com.xuexiang.xui.widget.spinner.materialspinner.MaterialSpinner
+                        android:id="@+id/ms_ffmpeg_cmd_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:ms_entries="@array/ffmpeg_cmd_type_string_array" />
+
+                </LinearLayout>
+
+
+                <RelativeLayout
+                    android:id="@+id/rela_custom_ffmpeg_cmd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:descendantFocusability="blocksDescendants"
+                    android:orientation="horizontal"
+                    android:padding="15dp"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/style_click_rectangle_transp_gray_mlh">
+
+                    <TextView
+                        android:id="@+id/tv_custom_ffmpeg_cmd_tip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="自定义合并命令"
+                        android:textColor="@color/black"
+                        android:textSize="16dp" />
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tv_custom_ffmpeg_cmd_tip"
+                        android:layout_marginRight="20dp"
+                        android:text="命令请参考“预备选项”以及ffmpeg官网" />
+
+
+                </RelativeLayout>
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.2dp"
+                    android:background="@color/xui_btn_gray_normal_color" />
+
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="更新设置"
+                android:textColor="@color/orange_mlh"
+                android:paddingHorizontal="15dp"
+                android:paddingTop="15dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:descendantFocusability="blocksDescendants"
+                android:padding="15dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="自动检测更新频率"
+                    android:textColor="@color/black_mlh"
+                    android:textSize="16dp" />
+
+                <com.xuexiang.xui.widget.spinner.materialspinner.MaterialSpinner
+                    android:id="@+id/ms_auto_updata"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:ms_entries="@array/auto_updata_frequency_string_array" />
+
+            </LinearLayout>
         </LinearLayout>
 
-
-        <RelativeLayout
-            android:id="@+id/rela_custom_cache_path"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:descendantFocusability="blocksDescendants"
-            android:orientation="horizontal"
-            android:padding="15dp"
-            android:gravity="center_vertical"
-            android:background="@drawable/style_click_rectangle_transp_gray_mlh">
-
-            <TextView
-                android:id="@+id/tv_custom_cache_path_tip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="自定义缓存文件位置"
-                android:textColor="@color/black"
-                android:textSize="16dp" />
-
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tv_custom_cache_path_tip"
-                android:layout_marginRight="20dp"
-                android:text="当你选择了此项则Bilibili软件(只支持官方包名)选项失效" />
-
-
-        </RelativeLayout>
-
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.2dp"
-            android:background="@color/xui_btn_gray_normal_color" />
-
-    </LinearLayout>
-
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="输出位置"
-        android:textColor="@color/orange_mlh"
-        android:paddingHorizontal="15dp"
-        android:paddingTop="15dp" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:descendantFocusability="blocksDescendants"
-            android:orientation="horizontal"
-            android:padding="15dp"
-            android:gravity="center_vertical">
-
-            <TextView
-                android:id="@+id/tv_output_path_tip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="当前输出路径:"
-                android:textColor="@color/black"
-                android:textSize="16dp"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="15dp" />
-
-            <TextView
-                android:id="@+id/tv_output_path_show"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/test_text_mlh"
-                android:textColor="@color/grey500_mlh"
-                android:textSize="16dp"
-                android:layout_toRightOf="@id/tv_output_path_tip"
-                android:layout_centerVertical="true" />
-
-        </RelativeLayout>
-
-
-        <RelativeLayout
-            android:id="@+id/rela_custom_output_path"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:descendantFocusability="blocksDescendants"
-            android:orientation="horizontal"
-            android:padding="15dp"
-            android:gravity="center_vertical"
-            android:background="@drawable/style_click_rectangle_transp_gray_mlh">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="自定义输出位置"
-                android:textColor="@color/black"
-                android:textSize="16dp" />
-
-        </RelativeLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.2dp"
-            android:background="@color/xui_btn_gray_normal_color" />
-
-    </LinearLayout>
-
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="更新设置"
-        android:textColor="@color/orange_mlh"
-        android:paddingHorizontal="15dp"
-        android:paddingTop="15dp" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:descendantFocusability="blocksDescendants"
-        android:padding="15dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="自动检测更新频率"
-            android:textColor="@color/black_mlh"
-            android:textSize="16dp" />
-
-        <com.xuexiang.xui.widget.spinner.materialspinner.MaterialSpinner
-            android:id="@+id/ms_auto_updata"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:ms_entries="@array/auto_updata_frequency_string_array" />
-
-    </LinearLayout>
+    </ScrollView>
 
 
 </LinearLayout>

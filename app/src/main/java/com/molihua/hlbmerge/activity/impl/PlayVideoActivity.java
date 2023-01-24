@@ -11,6 +11,8 @@ import com.molihua.hlbmerge.controller.videocontroller.DKVideoController;
 import com.molihua.hlbmerge.utils.FileTools;
 import com.molihuan.pathselector.utils.Mtools;
 
+import java.io.File;
+
 import master.flame.danmaku.ui.widget.DanmakuView;
 import xyz.doikki.videoplayer.player.VideoView;
 
@@ -70,7 +72,7 @@ public class PlayVideoActivity extends BaseActivity implements View.OnClickListe
 
         //开始播放
         videoView.start();
-        
+
 
     }
 
@@ -98,7 +100,7 @@ public class PlayVideoActivity extends BaseActivity implements View.OnClickListe
                 Mtools.toast("还在开发中...");
                 break;
             case R.id.btn_share:
-                FileTools.shareFile(this, videoPath);
+                FileTools.shareFile(this, new File(videoPath));
                 break;
 
         }

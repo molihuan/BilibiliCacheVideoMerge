@@ -3,6 +3,7 @@ package com.molihua.hlbmerge.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 
 import androidx.core.content.FileProvider;
 
@@ -54,21 +55,19 @@ public class FileTools {
      */
     public static void shareFile(Context context, final File file, String targetPackageName) {
         final Uri uri;
-        int currentapiVersion = android.os.Build.VERSION.SDK_INT;
+        Intent share = new Intent(Intent.ACTION_SEND);
         //若SDK大于等于24  获取uri采用共享文件模式
-        if (currentapiVersion >= 24) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             uri = FileProvider.getUriForFile(context, AppUtils.getAppPackageName() + ".fileprovider", file);
+            share.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         } else {
             uri = Uri.fromFile(file);
         }
 
-        Intent share = new Intent(Intent.ACTION_SEND);
         share.putExtra(Intent.EXTRA_STREAM, uri);
         //此处可发送多种文件
-        share.setType(getMIMEType(new File(file.getAbsolutePath())));
-        share.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        share.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        share.addCategory(Intent.CATEGORY_DEFAULT);
+        share.setType(getMimeType(file));
+
         //是否指定目标包名
         if (!StringUtils.isTrimEmpty(targetPackageName)) {
             //share.setPackage("com.tencent.tim");
@@ -85,26 +84,22 @@ public class FileTools {
     }
 
     /**
-     * 获取MIMEType
+     * 获取MimeType
      *
      * @param file
      * @return
      */
-    public static String getMIMEType(File file) {
+    public static String getMimeType(File file) {
         String type = "*/*";
-        String fName = file.getName();
-        //获取后缀名前的分隔符"."在fName中的位置。
-        int dotIndex = fName.lastIndexOf(".");
-        if (dotIndex < 0)
-            return type;
         /* 获取文件的后缀名 */
-        String fileType = fName.substring(dotIndex).toLowerCase();
+        String fileType = FileUtils.getFileExtension(file);
         if ("".equals(fileType))
             return type;
         //在MIME和文件类型的匹配表中找到对应的MIME类型。
         for (Map.Entry<String, String> entry : MConstants.mimeTypeMap.entrySet()) {
             if (fileType.equals(entry.getKey())) {
                 type = entry.getValue();
+                break;
             }
         }
 
@@ -140,6 +135,15 @@ public class FileTools {
         });
     }
 
+    /**
+     * 用于uri文件
+     *
+     * @param jsonByte
+     * @param result
+     * @return result[0]合集名称
+     * result[1]章节名称
+     * result[2]封面图片地址(无法解析则为null)
+     */
     public static String[] getCollectionChapterName(byte[] jsonByte, String[] result) {
         //把jsonByte转换成json字符串
         String jsonStr = ConvertUtils.bytes2String(jsonByte);
@@ -153,6 +157,7 @@ public class FileTools {
      * @param result
      * @return result[0]合集名称
      * result[1]章节名称
+     * result[2]封面图片地址(无法解析则为null)
      */
     public static String[] getCollectionChapterName(String jsonPath, String[] result) {
         //把json文件转换成json字符串
@@ -183,6 +188,15 @@ public class FileTools {
             result[1] = UUID.randomUUID().toString();
             return result;
         }
+        //解析封面图片
+        try {
+            result[2] = jsonObject
+                    .getString("cover");
+        } catch (JSONException e) {
+            Mtools.log("无法从json中解析封面地址");
+            e.printStackTrace();
+        }
+
 
         //获取合集名称
         try {

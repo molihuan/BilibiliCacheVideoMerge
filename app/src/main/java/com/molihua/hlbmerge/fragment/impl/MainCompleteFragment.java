@@ -94,7 +94,7 @@ public class MainCompleteFragment extends AbstractMainFragment {
                 .setFrameLayoutId(R.id.main_complete_view)
                 .setShowTitlebarFragment(false)
                 .setAlwaysShowHandleFragment(true)
-                .setSelectFileTypes("mp4", "xml", "mp3", "m4s", "")
+                .setSelectFileTypes("mp4", "xml", "mp3", "m4s", "", "zip")
                 .setFileItemListener(new FileItemListener() {
                     @Override
                     public boolean onClick(View v, FileBean file, String currentPath, BasePathSelectFragment pathSelectFragment) {
@@ -210,6 +210,30 @@ public class MainCompleteFragment extends AbstractMainFragment {
                                 return false;
                             }
                         },
+                        new CommonItemListener("分享") {
+                            @Override
+                            public boolean onClick(View v, TextView tv, List<FileBean> selectedFiles, String currentPath, BasePathSelectFragment pathSelectFragment) {
+                                switch (selectedFiles.size()) {
+                                    case 0:
+                                        Mtools.toast("你还没有选择文件捏!(长按进行选择)");
+                                        return false;
+                                    case 1:
+                                        break;
+                                    default:
+                                        Mtools.toast("只能选择一个");
+                                        return false;
+                                }
+                                FileBean fileBean = selectedFiles.get(0);
+                                if (fileBean.isDir()) {
+                                    Mtools.toast("不能分享文件夹,请将其压缩后再分享");
+                                } else {
+                                    com.molihua.hlbmerge.utils.FileTools.shareFile(mActivity, selectedFiles.get(0).getPath());
+                                }
+
+                                return false;
+                            }
+                        },
+
                         new CommonItemListener("删除") {
                             @Override
                             public boolean onClick(View v, TextView tv, List<FileBean> selectedFiles, String currentPath, BasePathSelectFragment pathSelectFragment) {

@@ -32,6 +32,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         initView();
         //设置监听
         setListeners();
+        
     }
 
     public abstract @LayoutRes

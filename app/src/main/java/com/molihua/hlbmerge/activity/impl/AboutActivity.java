@@ -49,6 +49,7 @@ public class AboutActivity extends BaseActivity {
 
     @Override
     public void initView() {
+
         FragmentTools.fragmentReplace(
                 getSupportFragmentManager(),
                 R.id.titlebar_show_area,

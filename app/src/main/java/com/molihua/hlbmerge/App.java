@@ -18,8 +18,6 @@ import com.xuexiang.xupdate.entity.UpdateError;
 import com.xuexiang.xupdate.listener.OnUpdateFailureListener;
 import com.xuexiang.xupdate.utils.UpdateUtils;
 
-import io.microshow.rxffmpeg.RxFFmpegInvoke;
-
 /**
  * @ClassName: App
  * @Author: molihuan
@@ -33,11 +31,10 @@ public class App extends Application {
         MMKV.initialize(this);
         //配置初始化
         ConfigData.init();
+        ConfigData.initFFmpegCore();
         //初始化XUI
         XUI.init(this);
         XUI.debug(false);
-        //ffmpeg debug
-        RxFFmpegInvoke.getInstance().setDebug(false);
         //路径选择器debug
         PathSelector.setDebug(true);
         //取消自动申请权限
@@ -48,7 +45,8 @@ public class App extends Application {
         UMTools.setDebug(false);
         UMTools.setChannel(UMTools.CHANNEL_RELEASE);
         UMTools.preInit(this);
-
+        //ffmpeg核心debug
+        ConfigData.ffmpegCore.setDebug(false);
         super.onCreate();
     }
 

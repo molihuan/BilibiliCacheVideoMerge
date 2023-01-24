@@ -46,6 +46,8 @@ public class CacheFile implements Serializable, Cloneable {
     private Boolean useUri;
     //document
     private DocumentFile documentFile;
+    //图片封面地址
+    private String coverUrl;
 
     public CacheFile() {
     }
@@ -185,6 +187,15 @@ public class CacheFile implements Serializable, Cloneable {
         return this;
     }
 
+    public String getCoverUrl() {
+        return coverUrl;
+    }
+
+    public CacheFile setCoverUrl(String coverUrl) {
+        this.coverUrl = coverUrl;
+        return this;
+    }
+
     @NonNull
     @Override
     public CacheFile clone() throws CloneNotSupportedException {
@@ -212,6 +223,7 @@ public class CacheFile implements Serializable, Cloneable {
                 ", boxCheck=" + boxCheck +
                 ", useUri=" + useUri +
                 ", documentFile=" + documentFile +
+                ", coverUrl=" + coverUrl +
                 '}';
     }
 

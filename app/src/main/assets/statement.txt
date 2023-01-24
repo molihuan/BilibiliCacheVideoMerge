@@ -13,6 +13,7 @@
       【AndroidUtilCode】:感谢Blankj提供的开源utils。
       【DanmakuFlameMaster】:感谢bilibili提供的开源项目。
       【DKVideoPlayer】:感谢Doikki提供的开源播放器项目。
+      【FFmpegCommand】:感谢AnJoiner提供的ffmpeg开源解决方案。
       等等
     非常感谢以下网友帮助测试反馈Bug并提出建议:
       【@B站:wtybilibiliwty】

@@ -35,7 +35,7 @@ public class UriCacheFileManager extends BaseCacheFileManager {
         cacheFileList = initCollectionFileList(path, cacheFileList);
 
         Uri[] needUri = new Uri[4];
-        String[] names = new String[2];
+        String[] names = new String[3];
         //获取所有的合集路径
         List<DocumentFile> collectionFiles = UriTool.getCollectionChapterFile(fragment, path);
 
@@ -66,6 +66,7 @@ public class UriCacheFileManager extends BaseCacheFileManager {
                             .setBoxVisibility(View.INVISIBLE)
                             .setBoxCheck(false)
                             .setUseUri(true)
+                            .setCoverUrl(names[2])
             );
         }
 
@@ -85,7 +86,7 @@ public class UriCacheFileManager extends BaseCacheFileManager {
                         .setFlag(BaseCacheFileManager.FLAG_CACHE_FILE_BACK)
                         .setWholeVisibility(View.VISIBLE)
                         .setCollectionPath(collectionPath)
-                        .setChapterName("...")
+                        .setChapterName("返回上一级")
                         .setBoxVisibility(View.INVISIBLE)
                         .setBoxCheck(false)
                         .setUseUri(true)
@@ -99,7 +100,7 @@ public class UriCacheFileManager extends BaseCacheFileManager {
         cacheFileList = initChapterFileList(collectionPath, cacheFileList);
 
         Uri[] needUri = new Uri[4];
-        String[] names = new String[2];
+        String[] names = new String[3];
         //获取一个合集下面所有的章节
         List<DocumentFile> chapterFile = UriTool.getCollectionChapterFile(fragment, collectionPath);
 
@@ -130,6 +131,7 @@ public class UriCacheFileManager extends BaseCacheFileManager {
                             .setBoxVisibility(View.INVISIBLE)
                             .setBoxCheck(false)
                             .setUseUri(true)
+                            .setCoverUrl(names[2])
             );
         }
 
@@ -153,7 +155,7 @@ public class UriCacheFileManager extends BaseCacheFileManager {
         List<CacheFile> tempList = new ArrayList<>();
 
         Uri[] needUri = new Uri[4];
-        String[] names = new String[2];
+        String[] names = new String[3];
 
         String collectionPath;
         //遍历所有合集
@@ -185,6 +187,7 @@ public class UriCacheFileManager extends BaseCacheFileManager {
                                 .setBoxVisibility(View.INVISIBLE)
                                 .setBoxCheck(false)
                                 .setUseUri(true)
+                                .setCoverUrl(names[2])
                 );
             }
 

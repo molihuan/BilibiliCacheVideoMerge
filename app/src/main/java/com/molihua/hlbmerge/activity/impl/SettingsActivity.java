@@ -5,7 +5,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import com.blankj.molihuan.utilcode.util.TimeUtils;
+import com.molihua.hlbmerge.BuildConfig;
 import com.molihua.hlbmerge.R;
 import com.molihua.hlbmerge.activity.BaseActivity;
 import com.molihua.hlbmerge.dao.ConfigData;
@@ -19,6 +22,8 @@ import com.molihuan.pathselector.fragment.BasePathSelectFragment;
 import com.molihuan.pathselector.listener.CommonItemListener;
 import com.molihuan.pathselector.utils.MConstants;
 import com.molihuan.pathselector.utils.Mtools;
+import com.xuexiang.xui.widget.dialog.materialdialog.DialogAction;
+import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
 import com.xuexiang.xui.widget.spinner.materialspinner.MaterialSpinner;
 
 import java.util.List;
@@ -37,6 +42,14 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
     private RelativeLayout customOutputPathRela;
     private LinearLayout biliVersionLine;
 
+    private TextView ffmpegCmdShowTv;
+    private LinearLayout ffmpegCmdTypeLine;
+    private MaterialSpinner ffmpegCmdTypeMs;
+    private RelativeLayout customFfmpegCmdRela;
+
+    private LinearLayout ffmpegCoreTypeLine;
+    private MaterialSpinner ffmpegCoreTypeMs;
+
     private MaterialSpinner autoUpdataFrequencyMs;
 
 
@@ -54,6 +67,14 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
         customOutputPathRela = findViewById(R.id.rela_custom_output_path);
         biliVersionLine = findViewById(R.id.line_switch_bilibili_app_version);
         autoUpdataFrequencyMs = findViewById(R.id.ms_auto_updata);
+
+        ffmpegCmdShowTv = findViewById(R.id.tv_ffmpeg_cmd_show);
+        ffmpegCmdTypeLine = findViewById(R.id.line_switch_ffmpeg_cmd_type);
+        ffmpegCmdTypeMs = findViewById(R.id.ms_ffmpeg_cmd_type);
+        customFfmpegCmdRela = findViewById(R.id.rela_custom_ffmpeg_cmd);
+
+        ffmpegCoreTypeLine = findViewById(R.id.line_switch_ffmpeg_core_type);
+        ffmpegCoreTypeMs = findViewById(R.id.ms_ffmpeg_core_type);
     }
 
     @Override
@@ -66,10 +87,24 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
         //显示路径配置
         String cacheFilePath = ConfigData.getCacheFilePath();
         int updateFrequency = ConfigData.getUpdateFrequency();
+        String ffmpegCmdTemplate = ConfigData.getFfmpegCmdTemplate();
+        int ffmpegCoreType = ConfigData.getFfmpegCoreType();
+
+        Mtools.log(ffmpegCoreType);
+
+        if (BuildConfig.FFMPEG_CORE_TYPE != ConfigData.FFMPEG_CORE_TYPE_All) {
+            ffmpegCoreTypeLine.setVisibility(View.GONE);
+        } else {
+            ffmpegCoreTypeMs.setSelectedIndex(ffmpegCoreType);
+        }
+
         cachePathShowTv.setText(cacheFilePath);
         outputPathShowTv.setText(ConfigData.getOutputFilePath());
+        ffmpegCmdShowTv.setText(ffmpegCmdTemplate);
 
         autoUpdataFrequencyMs.setSelectedIndex(updateFrequency);
+
+        ffmpegCmdTypeMs.setSelectedItem(ffmpegCmdTemplate);
 
         if (cacheFilePath.equals(MConstants.PATH_ANRROID_DATA + ConfigData.TYPE_CACHE_FILE_PATH_INTERNAL)) {
             biliVersionMs.setSelectedIndex(0);
@@ -114,6 +149,9 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
                         autoUpdataFrequencyMs.setSelectedIndex(1);
                         onItemSelected(autoUpdataFrequencyMs, 1, autoUpdataFrequencyMs.getId(), null);
 
+                        ffmpegCoreTypeMs.setSelectedIndex(0);
+                        onItemSelected(ffmpegCoreTypeMs, 0, ffmpegCoreTypeMs.getId(), null);
+
                         Mtools.toast("恢复默认成功");
                     }
                 }),
@@ -125,8 +163,11 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
     public void setListeners() {
         customCachePathRela.setOnClickListener(this);
         customOutputPathRela.setOnClickListener(this);
+        customFfmpegCmdRela.setOnClickListener(this);
         biliVersionMs.setOnItemSelectedListener(this);
         autoUpdataFrequencyMs.setOnItemSelectedListener(this);
+        ffmpegCmdTypeMs.setOnItemSelectedListener(this);
+        ffmpegCoreTypeMs.setOnItemSelectedListener(this);
     }
 
     @Override
@@ -192,6 +233,31 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
                             }
                     )
                     .show();
+        } else if (id == R.id.rela_custom_ffmpeg_cmd) {
+            new MaterialDialog.Builder(this)
+                    .title("提示")
+                    .content("请使用三个%s分别代表:输入音频、输入视频、输出视频")
+                    .input(
+                            "ffmpeg命令",
+                            ConfigData.getFfmpegCmdTemplate(),
+                            false,
+                            new MaterialDialog.InputCallback() {
+                                @Override
+                                public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+
+                                }
+                            })
+                    .positiveText(R.string.option_confirm_hlb)
+                    .negativeText(R.string.option_cancel_hlb)
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            String inputText = dialog.getInputEditText().getText().toString();
+                            ConfigData.setFfmpegCmdTemplate(inputText);
+                            ffmpegCmdShowTv.setText(inputText);
+                        }
+                    })
+                    .show();
         }
     }
 
@@ -241,7 +307,17 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
             ConfigData.setUpdateMills(updateMills);
             ConfigData.setUpdateFrequency(position);
 
+        } else if (msid == R.id.ms_ffmpeg_cmd_type) {
+
+            String ffmpegCmd = (String) item;
+            ConfigData.setFfmpegCmdTemplate(ffmpegCmd);
+            ffmpegCmdShowTv.setText(ffmpegCmd);
+
+        } else if (msid == R.id.ms_ffmpeg_core_type) {
+            ConfigData.setFfmpegCoreType(position);
+            ConfigData.initFFmpegCore();
         }
+
 
     }
 }
