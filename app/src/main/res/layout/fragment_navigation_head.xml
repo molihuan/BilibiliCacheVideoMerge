@@ -1,6 +1,8 @@
-<RelativeLayout android:layout_height="wrap_content" android:layout_width="match_parent"
+<RelativeLayout android:layout_height="wrap_content"
+    android:layout_width="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
-   >
+    xmlns:tools="http://schemas.android.com/tools">
+
     <ImageView
         android:id="@+id/ceHuaImg"
         android:layout_width="60dp"
@@ -8,8 +10,7 @@
         android:src="@drawable/ic_launcher_ml"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="5dp"
-        android:layout_marginTop="15dp"
-        />
+        android:layout_marginTop="15dp" />
 
     <TextView
         android:id="@+id/HLBTitle"
@@ -20,17 +21,17 @@
         android:layout_centerHorizontal="true"
         android:textColor="@color/black"
         android:text="HLB站缓存合并"
-        android:textSize="17dp"
-        />
+        android:textSize="17dp" />
 
     <TextView
-        android:id="@+id/cehuaTitle"
+        android:id="@+id/phone_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
         android:layout_centerHorizontal="true"
         android:layout_below="@id/HLBTitle"
         android:layout_marginTop="5dp"
-        />
+        android:gravity="center_horizontal"
+        tools:text="@string/app_name" />
+
 
 </RelativeLayout>

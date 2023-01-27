@@ -4,7 +4,7 @@ import android.view.View;
 
 import com.molihua.hlbmerge.entity.CacheFile;
 import com.molihua.hlbmerge.service.BaseCacheFileManager;
-import com.molihua.hlbmerge.utils.FileTools;
+import com.molihua.hlbmerge.utils.FileTool;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ public class PathCacheFileManager extends BaseCacheFileManager {
         String[] needPath = new String[4];
         String[] names = new String[3];
         //获取所有的合集
-        File[] collectionFile = FileTools.getCollectionChapterFile(path);
+        File[] collectionFile = FileTool.getCollectionChapterFile(path);
 
 
         if (collectionFile == null || collectionFile.length == 0) {
@@ -45,10 +45,10 @@ public class PathCacheFileManager extends BaseCacheFileManager {
             //获取每一个集合中的第一个章节
             File oneChapterPath = collectionFile[i].listFiles()[0];
             //获取章节里需要的路径
-            needPath = FileTools.getNeedPath(oneChapterPath, needPath);
+            needPath = FileTool.getNeedPath(oneChapterPath, needPath);
 
             //获取合集名称和章节名称
-            names = FileTools.getCollectionChapterName(needPath[2], names);
+            names = FileTool.getCollectionChapterName(needPath[2], names);
 
             if (names == null) {
                 return cacheFileList;
@@ -104,12 +104,12 @@ public class PathCacheFileManager extends BaseCacheFileManager {
         String[] needPath = new String[4];
         String[] names = new String[3];
         //获取一个合集下面所有的章节
-        File[] chapterFile = FileTools.getCollectionChapterFile(collectionPath);
+        File[] chapterFile = FileTool.getCollectionChapterFile(collectionPath);
         for (int i = 0; i < chapterFile.length; i++) {
             //获取章节里需要的路径
-            needPath = FileTools.getNeedPath(chapterFile[i], needPath);
+            needPath = FileTool.getNeedPath(chapterFile[i], needPath);
             //获取合集名称和章节名称
-            names = FileTools.getCollectionChapterName(needPath[2], names);
+            names = FileTool.getCollectionChapterName(needPath[2], names);
             cacheFileList.add(
                     new CacheFile()
                             .setFlag(BaseCacheFileManager.FLAG_CACHE_FILE_CHAPTER)
@@ -157,12 +157,12 @@ public class PathCacheFileManager extends BaseCacheFileManager {
             //获取一个合集路径
             collectionPath = collectionCacheFileList.get(n).getCollectionPath();
             //获取一个合集下面所有的章节
-            File[] chapterFile = FileTools.getCollectionChapterFile(collectionPath);
+            File[] chapterFile = FileTool.getCollectionChapterFile(collectionPath);
             for (int i = 0; i < chapterFile.length; i++) {
                 //获取章节里需要的路径
-                needPath = FileTools.getNeedPath(chapterFile[i], needPath);
+                needPath = FileTool.getNeedPath(chapterFile[i], needPath);
                 //获取合集名称和章节名称
-                names = FileTools.getCollectionChapterName(needPath[2], names);
+                names = FileTool.getCollectionChapterName(needPath[2], names);
                 tempList.add(
                         new CacheFile()
                                 .setFlag(BaseCacheFileManager.FLAG_CACHE_FILE_CHAPTER)

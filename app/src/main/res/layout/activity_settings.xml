@@ -36,6 +36,7 @@
 
 
                 <RelativeLayout
+                    android:id="@+id/relal_cache_path_show"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:descendantFocusability="blocksDescendants"
@@ -47,7 +48,7 @@
                         android:id="@+id/tv_cache_path_tip"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="当前使用的缓存路径:"
+                        android:text="当前读取的缓存路径:"
                         android:textColor="@color/black"
                         android:textSize="16dp"
                         android:layout_centerVertical="true"
@@ -142,6 +143,7 @@
                 android:orientation="vertical">
 
                 <RelativeLayout
+                    android:id="@+id/relal_output_path_show"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:descendantFocusability="blocksDescendants"

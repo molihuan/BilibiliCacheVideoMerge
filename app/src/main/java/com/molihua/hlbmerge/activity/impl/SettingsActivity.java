@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import com.blankj.molihuan.utilcode.util.ClipboardUtils;
 import com.blankj.molihuan.utilcode.util.TimeUtils;
 import com.molihua.hlbmerge.BuildConfig;
 import com.molihua.hlbmerge.R;
@@ -52,6 +53,8 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
 
     private MaterialSpinner autoUpdataFrequencyMs;
 
+    private RelativeLayout outputPathShowRela;
+
 
     @Override
     public int setContentViewID() {
@@ -75,6 +78,8 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
 
         ffmpegCoreTypeLine = findViewById(R.id.line_switch_ffmpeg_core_type);
         ffmpegCoreTypeMs = findViewById(R.id.ms_ffmpeg_core_type);
+
+        outputPathShowRela = findViewById(R.id.relal_output_path_show);
     }
 
     @Override
@@ -168,6 +173,7 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
         autoUpdataFrequencyMs.setOnItemSelectedListener(this);
         ffmpegCmdTypeMs.setOnItemSelectedListener(this);
         ffmpegCoreTypeMs.setOnItemSelectedListener(this);
+        outputPathShowRela.setOnClickListener(this);
     }
 
     @Override
@@ -258,6 +264,9 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
                         }
                     })
                     .show();
+        } else if (id == R.id.relal_output_path_show) {
+            ClipboardUtils.copyText(outputPathShowTv.getText());
+            Mtools.toast("输出路径已复制到剪贴板");
         }
     }
 
