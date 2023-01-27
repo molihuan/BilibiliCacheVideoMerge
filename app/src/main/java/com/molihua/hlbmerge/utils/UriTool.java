@@ -1,5 +1,6 @@
 package com.molihua.hlbmerge.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.molihua.hlbmerge.R;
 import com.molihuan.pathselector.dialog.BaseDialog;
 import com.molihuan.pathselector.dialog.impl.MessageDialog;
 import com.molihuan.pathselector.entity.FontBean;
+import com.molihuan.pathselector.utils.FileTools;
 import com.molihuan.pathselector.utils.PermissionsTools;
 import com.molihuan.pathselector.utils.UriTools;
 import com.xuexiang.xtask.XTask;
@@ -117,14 +119,17 @@ public class UriTool {
 
     }
 
-    public static void grantedUriPermission(String path, Fragment fragment) {
-        //获取上下文
-        Context context = fragment.getContext();
+    public static void grantedUriPermission(String path, Activity context) {
+
         Objects.requireNonNull(context, "context is null");
+
+        if (!FileTools.needUseUri(path)) {
+            return;
+        }
 
         Uri uri = UriTools.path2Uri(path, false);
         //获取权限,没有权限返回null有权限返回授权uri字符串
-        String existsPermission = PermissionsTools.existsGrantedUriPermission(uri, fragment);
+        String existsPermission = PermissionsTools.existsGrantedUriPermission(uri, context);
 
         if (existsPermission == null) {
             //没有权限申请权限
@@ -137,7 +142,7 @@ public class UriTool {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                             //申请权限
-                            PermissionsTools.goApplyUriPermissionPage(uri, fragment);
+                            PermissionsTools.goApplyUriPermissionPage(uri, context);
                             dialog.dismiss();
                         }
                     })
@@ -161,37 +166,11 @@ public class UriTool {
         //获取权限,没有权限返回null有权限返回授权uri字符串
         String existsPermission = PermissionsTools.existsGrantedUriPermission(uri, fragment);
 
-        if (existsPermission == null) {
-            //没有权限申请权限
-            XTask.postToMain(new Runnable() {
-                @Override
-                public void run() {
-                    //申请权限弹窗
-                    new MaterialDialog.Builder(context)
-                            .title("授权提示")
-                            .content("需要授予\n" + currentPath + "\n目录访问权限")
-                            .cancelable(false)
-                            .positiveText("授权")
-                            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                @Override
-                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                    //申请权限
-                                    PermissionsTools.goApplyUriPermissionPage(uri, fragment);
-                                    dialog.dismiss();
-                                }
-                            })
-                            .negativeText("取消")
-                            .onNegative(new MaterialDialog.SingleButtonCallback() {
-                                @Override
-                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                    dialog.dismiss();
-                                }
-                            })
-                            .show();
-                }
-            });
+        List<DocumentFile> fileList = new ArrayList<>();
 
-            return null;
+        if (existsPermission == null) {
+            //没有权限直接返回
+            return fileList;
         }
 
         Uri targetUri = Uri.parse(existsPermission + uri.toString().replaceFirst(UriTools.URI_PERMISSION_REQUEST_COMPLETE_PREFIX, ""));
@@ -205,9 +184,9 @@ public class UriTool {
 
         //TODO 去除不是文件夹的item
         if (documentFiles == null) {
-            return null;
+            return fileList;
         }
-        List<DocumentFile> fileList = new ArrayList<>();
+
         for (DocumentFile documentFile : documentFiles) {
             if (documentFile.isDirectory()) {
                 fileList.add(documentFile);
@@ -248,7 +227,7 @@ public class UriTool {
         //uri转byte
         byte[] jsonByte = UriUtils.uri2Bytes(jsonUri);
         //通过jsonByte获取名称
-        result = FileTools.getCollectionChapterName(jsonByte, result);
+        result = FileTool.getCollectionChapterName(jsonByte, result);
         return result;
     }
 }

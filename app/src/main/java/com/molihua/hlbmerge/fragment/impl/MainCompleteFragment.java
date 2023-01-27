@@ -15,6 +15,7 @@ import com.molihua.hlbmerge.activity.impl.PlayVideoActivity;
 import com.molihua.hlbmerge.dao.ConfigData;
 import com.molihua.hlbmerge.dialog.impl.CopyProgressDialog;
 import com.molihua.hlbmerge.fragment.AbstractMainFragment;
+import com.molihua.hlbmerge.utils.FileTool;
 import com.molihuan.pathselector.PathSelector;
 import com.molihuan.pathselector.entity.FileBean;
 import com.molihuan.pathselector.fragment.BasePathSelectFragment;
@@ -227,7 +228,7 @@ public class MainCompleteFragment extends AbstractMainFragment {
                                 if (fileBean.isDir()) {
                                     Mtools.toast("不能分享文件夹,请将其压缩后再分享");
                                 } else {
-                                    com.molihua.hlbmerge.utils.FileTools.shareFile(mActivity, selectedFiles.get(0).getPath());
+                                    FileTool.shareFile(mActivity, selectedFiles.get(0).getPath());
                                 }
 
                                 return false;

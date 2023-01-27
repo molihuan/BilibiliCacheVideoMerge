@@ -26,3 +26,6 @@
 #FFmpegCommand混淆
 -keep class com.coder.ffmpeg.** {*;}
 -dontwarn  com.coder.ffmpeg.**
+#bugly混淆
+-dontwarn com.tencent.bugly.**
+-keep public class com.tencent.bugly.**{*;}

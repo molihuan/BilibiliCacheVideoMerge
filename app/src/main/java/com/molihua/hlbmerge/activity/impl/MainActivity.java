@@ -3,6 +3,7 @@ package com.molihua.hlbmerge.activity.impl;
 import android.content.Intent;
 import android.view.MenuItem;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,9 +12,10 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
+import com.blankj.molihuan.utilcode.util.DeviceUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
-import com.hjq.permissions.OnPermissionCallback;
+import com.molihua.hlbmerge.BuildConfig;
 import com.molihua.hlbmerge.R;
 import com.molihua.hlbmerge.activity.AbstractMainActivity;
 import com.molihua.hlbmerge.adapter.CacheFileListAdapter;
@@ -31,13 +33,13 @@ import com.molihua.hlbmerge.fragment.impl.MainToolsFragment;
 import com.molihua.hlbmerge.service.ICacheFileManager;
 import com.molihua.hlbmerge.utils.FragmentTools;
 import com.molihua.hlbmerge.utils.GeneralTools;
+import com.molihua.hlbmerge.utils.InitTool;
 import com.molihua.hlbmerge.utils.LConstants;
-import com.molihua.hlbmerge.utils.UMTools;
 import com.molihua.hlbmerge.utils.UpdataTools;
+import com.molihua.hlbmerge.utils.UriTool;
 import com.molihuan.pathselector.fragment.impl.PathSelectFragment;
-import com.molihuan.pathselector.utils.FileTools;
 import com.molihuan.pathselector.utils.Mtools;
-import com.molihuan.pathselector.utils.PermissionsTools;
+import com.tencent.bugly.crashreport.CrashReport;
 import com.umeng.analytics.MobclickAgent;
 import com.xuexiang.xui.adapter.FragmentAdapter;
 import com.xuexiang.xui.widget.searchview.MaterialSearchView;
@@ -73,40 +75,15 @@ public class MainActivity extends AbstractMainActivity implements NavigationView
         drawerLayout = findViewById(R.id.side_container_drawerlayout);
         navigationView = findViewById(R.id.side_navigationview);
         viewPager = findViewById(R.id.main_view_pager);
-
     }
 
 
     @Override
     public void initData() {
         //友盟初始化
-        UMTools.init(this);
+        InitTool.initWithDialog(this, true, false);
         //自动周期检测更新
         UpdataTools.autoCheckUpdata(this);
-        //存储权限的申请
-        PermissionsTools.generalPermissionsOfStorage(this, new OnPermissionCallback() {
-            @Override
-            public void onGranted(@NonNull List<String> permissions, boolean all) {
-                boolean dataUseUri = FileTools.underAndroidDataUseUri(ConfigData.getCacheFilePath());
-                if (!dataUseUri) {
-                    //获取数据刷新列表
-                    updateCollectionFileList();
-                    refreshCacheFileList();
-                }
-            }
-        });
-
-        PermissionsTools.specialPermissionsOfStorageWithDialog(this, true, new OnPermissionCallback() {
-            @Override
-            public void onGranted(@NonNull List<String> permissions, boolean all) {
-                boolean dataUseUri = FileTools.underAndroidDataUseUri(ConfigData.getCacheFilePath());
-                if (!dataUseUri) {
-                    //获取数据刷新列表
-                    updateCollectionFileList();
-                    refreshCacheFileList();
-                }
-            }
-        });
 
         mainTitlebarFragment = new MainTitlebarFragment();
         mainFileShowFragment = new MainFileShowFragment();
@@ -118,6 +95,15 @@ public class MainActivity extends AbstractMainActivity implements NavigationView
 
     @Override
     public void initView() {
+        //侧边栏手机信息
+        TextView phoneInfoTv = navigationView.getHeaderView(0).findViewById(R.id.phone_info);
+        phoneInfoTv.setText(
+                "Android:" + DeviceUtils.getSDKVersionName() +
+                        "   App版本:" + BuildConfig.VERSION_NAME +
+                        "\n机型:" + DeviceUtils.getManufacturer() + "/" + DeviceUtils.getModel() +
+                        "\n设备id:\n" + CrashReport.getUserId()
+        );
+
 
         //加载主显示区
         FragmentAdapter<Fragment> adapter = new FragmentAdapter<>(getSupportFragmentManager());
@@ -227,6 +213,13 @@ public class MainActivity extends AbstractMainActivity implements NavigationView
         );
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (ConfigData.isAgreeTerm()) {
+            UriTool.grantedUriPermission(ConfigData.getCacheFilePath(), this);
+        }
+    }
 
     @Override
     public void onPageSelected(int position) {

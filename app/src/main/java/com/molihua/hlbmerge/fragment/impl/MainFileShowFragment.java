@@ -1,8 +1,5 @@
 package com.molihua.hlbmerge.fragment.impl;
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.net.Uri;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -24,8 +21,6 @@ import com.molihua.hlbmerge.service.ICacheFileManager;
 import com.molihua.hlbmerge.service.impl.PathCacheFileManager;
 import com.molihua.hlbmerge.service.impl.UriCacheFileManager;
 import com.molihuan.pathselector.utils.FileTools;
-import com.molihuan.pathselector.utils.PermissionsTools;
-import com.molihuan.pathselector.utils.VersionTool;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -277,29 +272,5 @@ public class MainFileShowFragment extends AbstractMainFileShowFragment implement
         return false;
     }
 
-
-    @SuppressLint("WrongConstant")
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        //保存这个uri目录的访问权限
-        if (VersionTool.isAndroid11()) {
-            if (requestCode == PermissionsTools.PERMISSION_REQUEST_CODE) {
-                if (data != null) {
-                    Uri uri;
-                    if ((uri = data.getData()) != null) {
-                        mActivity.getContentResolver()
-                                .takePersistableUriPermission(uri,
-                                        data.getFlags() & (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-                                );
-                    }
-                    //获取数据刷新列表
-                    updateCollectionFileList();
-                    refreshCacheFileList();
-                }
-
-            }
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
 
 }

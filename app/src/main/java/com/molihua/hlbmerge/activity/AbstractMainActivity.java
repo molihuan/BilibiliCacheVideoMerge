@@ -1,5 +1,10 @@
 package com.molihua.hlbmerge.activity;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.net.Uri;
+
+import androidx.annotation.Nullable;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager.widget.ViewPager;
 
@@ -13,6 +18,8 @@ import com.molihua.hlbmerge.fragment.impl.MainCompleteFragment;
 import com.molihua.hlbmerge.interfaces.IMainFileShowFragment;
 import com.molihua.hlbmerge.interfaces.IMainTitlebarFragment;
 import com.molihuan.pathselector.fragment.impl.PathSelectFragment;
+import com.molihuan.pathselector.utils.PermissionsTools;
+import com.molihuan.pathselector.utils.VersionTool;
 
 /**
  * @ClassName: AbstractMainActivity
@@ -46,4 +53,31 @@ public abstract class AbstractMainActivity extends BaseActivity implements IMain
     public abstract PathSelectFragment getCompletePathSelectFragment();
 
     public abstract void refreshCompleteFileList();
+
+
+    @Override
+    @SuppressLint("WrongConstant")
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        //保存这个uri目录的访问权限
+        if (VersionTool.isAndroid11()) {
+            if (requestCode == PermissionsTools.PERMISSION_REQUEST_CODE) {
+                if (data != null) {
+                    Uri uri;
+                    if ((uri = data.getData()) != null) {
+                        getContentResolver()
+                                .takePersistableUriPermission(uri,
+                                        data.getFlags() & (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                                );
+                    }
+                    //获取数据刷新列表
+                    updateCollectionFileList();
+                    refreshCacheFileList();
+                }
+
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+    
+
 }

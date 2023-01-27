@@ -8,7 +8,7 @@ import com.blankj.molihuan.utilcode.util.ClipboardUtils;
 import com.molihua.hlbmerge.R;
 import com.molihua.hlbmerge.activity.BaseActivity;
 import com.molihua.hlbmerge.controller.videocontroller.DKVideoController;
-import com.molihua.hlbmerge.utils.FileTools;
+import com.molihua.hlbmerge.utils.FileTool;
 import com.molihuan.pathselector.utils.Mtools;
 
 import java.io.File;
@@ -100,7 +100,7 @@ public class PlayVideoActivity extends BaseActivity implements View.OnClickListe
                 Mtools.toast("还在开发中...");
                 break;
             case R.id.btn_share:
-                FileTools.shareFile(this, new File(videoPath));
+                FileTool.shareFile(this, new File(videoPath));
                 break;
 
         }
