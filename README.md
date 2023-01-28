@@ -41,9 +41,11 @@
 
 
 
-## 演示：
+## 演示：如果github显示不了请转到国内Gitee:[传送门](https://gitee.com/molihuan/BilibiliCacheVideoMergeAndroid))
 
-![hlbDemo.gif](https://z4a.net/images/2023/01/28/hlbDemo.gif)
+![https://github.com/molihuan/BilibiliCacheVideoMerge/tree/master/art/hlbDemo.gif](https://raw.kgithub.com/molihuan/BilibiliCacheVideoMerge/master/art/hlbDemo.gif)
+
+[![hlbDemo.gif](https://z4a.net/images/2023/01/28/hlbDemo.gif)](https://z4a.net/image/2p8r3U)
 
 # 特别鸣谢
 
