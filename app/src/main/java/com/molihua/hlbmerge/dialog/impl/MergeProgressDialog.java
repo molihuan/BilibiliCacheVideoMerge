@@ -107,9 +107,11 @@ public class MergeProgressDialog {
         BaseFFmpegCallback ffmpegCallback = ConfigData.ffmpegCore.getFFmpegCallback(dialog);
         //获取输出根目录
         String outRoot = ConfigData.getOutputFilePath();
+        FileUtils.createOrExistsDir(outRoot);
         //获取导出配置
         int exportType = ConfigData.getExportType();
         boolean exportDanmaku = ConfigData.isExportDanmaku();
+        boolean singleOutputDir = ConfigData.isSingleOutputDir();
 
         XTask.getTaskChain()
                 .addTask(XTask.getTask(new TaskCommand() {
@@ -135,8 +137,12 @@ public class MergeProgressDialog {
                             cacheFile = MergeProgressDialog.cacheFileUri2File(srcCacheFile, dialog);
 
                             //创建输出目录
-                            subOutPath = outRoot + File.separator + cacheFile.getCollectionName();
-                            FileUtils.createOrExistsDir(subOutPath);
+                            if (singleOutputDir) {
+                                subOutPath = outRoot;
+                            } else {
+                                subOutPath = outRoot + File.separator + cacheFile.getCollectionName();
+                                FileUtils.createOrExistsDir(subOutPath);
+                            }
                             //获取完整的输出目录
                             completeOutPath = subOutPath + File.separator + cacheFile.getChapterName();
 
