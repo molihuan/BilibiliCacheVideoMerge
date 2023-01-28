@@ -35,11 +35,15 @@
 ##### [Github地址](https://github.com/molihuan/BilibiliCacheVideoMerge)
 ##### [Gitee地址](https://gitee.com/molihuan/BilibiliCacheVideoMergeAndroid)
 
+
+
+## 下载链接：[跳转](https://github.com/molihuan/BilibiliCacheVideoMerge/tree/master/app/release)
+
+
+
 ## 演示：
 
-#### 下载链接：[体验APP](https://github.com/molihuan/BilibiliCacheVideoMerge/tree/master/app/release)
-
-
+![hlbDemo.gif](https://z4a.net/images/2023/01/28/hlbDemo.gif)
 
 # 特别鸣谢
 
