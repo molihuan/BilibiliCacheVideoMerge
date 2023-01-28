@@ -2,11 +2,11 @@
   "Code": 0,
   "Msg": "",
   "UpdateStatus": 0,
-  "VersionCode": 49,
-  "VersionName": "1.6.9.1",
-  "UploadTime": "2023-01-27",
-  "ModifyContent": "\r\n1、修复视频播放按钮的bug。\r\n2、新增FFmpegCommand核心。\r\n3、去除x86_64 平台架构。",
-  "DownloadUrl": "https://www.gitlink.org.cn/api/molihuan/BilibiliCacheVideoMerge/raw?filepath=app/release/app-release.apk",
-  "ApkSize": 28464,
+  "VersionCode": 51,
+  "VersionName": "1.6.9.1beta",
+  "UploadTime": "2023-01-28",
+  "ModifyContent": "\r\n1、修复视频播放按钮的bug。\r\n2、重新加入腾讯bugly。",
+  "DownloadUrl": "https://www.gitlink.org.cn/api/molihuan/BilibiliCacheVideoMerge/raw?filepath=app/release/app-armeabi-v7a.apk",
+  "ApkSize": 17315,
   "ApkMd5": ""
 }
