@@ -1,6 +1,7 @@
 package com.molihua.hlbmerge.activity.impl;
 
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -23,6 +24,7 @@ import com.molihuan.pathselector.fragment.BasePathSelectFragment;
 import com.molihuan.pathselector.listener.CommonItemListener;
 import com.molihuan.pathselector.utils.MConstants;
 import com.molihuan.pathselector.utils.Mtools;
+import com.xuexiang.xui.widget.button.switchbutton.SwitchButton;
 import com.xuexiang.xui.widget.dialog.materialdialog.DialogAction;
 import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
 import com.xuexiang.xui.widget.spinner.materialspinner.MaterialSpinner;
@@ -35,7 +37,7 @@ import java.util.List;
  * @Date: 2022/12/26/19:56
  * @Description:
  */
-public class SettingsActivity extends BaseActivity implements View.OnClickListener, MaterialSpinner.OnItemSelectedListener {
+public class SettingsActivity extends BaseActivity implements View.OnClickListener, MaterialSpinner.OnItemSelectedListener, CompoundButton.OnCheckedChangeListener {
     private TextView cachePathShowTv;
     private MaterialSpinner biliVersionMs;
     private RelativeLayout customCachePathRela;
@@ -54,6 +56,8 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
     private MaterialSpinner autoUpdataFrequencyMs;
 
     private RelativeLayout outputPathShowRela;
+
+    private SwitchButton switchSingleOutputDir;
 
 
     @Override
@@ -80,6 +84,8 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
         ffmpegCoreTypeMs = findViewById(R.id.ms_ffmpeg_core_type);
 
         outputPathShowRela = findViewById(R.id.relal_output_path_show);
+
+        switchSingleOutputDir = findViewById(R.id.switch_single_output_dir);
     }
 
     @Override
@@ -94,8 +100,8 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
         int updateFrequency = ConfigData.getUpdateFrequency();
         String ffmpegCmdTemplate = ConfigData.getFfmpegCmdTemplate();
         int ffmpegCoreType = ConfigData.getFfmpegCoreType();
-
-        Mtools.log(ffmpegCoreType);
+        
+        switchSingleOutputDir.setChecked(ConfigData.isSingleOutputDir());
 
         if (BuildConfig.FFMPEG_CORE_TYPE != ConfigData.FFMPEG_CORE_TYPE_All) {
             ffmpegCoreTypeLine.setVisibility(View.GONE);
@@ -174,6 +180,7 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
         ffmpegCmdTypeMs.setOnItemSelectedListener(this);
         ffmpegCoreTypeMs.setOnItemSelectedListener(this);
         outputPathShowRela.setOnClickListener(this);
+        switchSingleOutputDir.setOnCheckedChangeListener(this);
     }
 
     @Override
@@ -328,5 +335,13 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
         }
 
 
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        int id = buttonView.getId();
+        if (id == R.id.switch_single_output_dir) {
+            ConfigData.setSingleOutputDir(isChecked);
+        }
     }
 }

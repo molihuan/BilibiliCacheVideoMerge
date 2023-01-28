@@ -32,7 +32,7 @@ public class StatementDialog {
     private static View getCustomViewOfDialog(Context context) {
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_statement, null);//获取自定义布局
         TextView tx_statement = view.findViewById(R.id.tx_statement);
-        String statementContent = ResourceUtils.readAssets2String("statement.txt");//从Assets中读取
+        String statementContent = ResourceUtils.readAssets2String("statement.md");//从Assets中读取
         tx_statement.setText(statementContent);
         return view;
     }

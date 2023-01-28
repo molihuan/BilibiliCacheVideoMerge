@@ -82,6 +82,8 @@ public class ConfigData {
     private String ffmpegCmdTemplate;
     //ffmpeg核心类型
     private int ffmpegCoreType;
+    //单一输出目录,不再每个视频都创建目录
+    private boolean singleOutputDir;
 
 
     /**
@@ -128,6 +130,10 @@ public class ConfigData {
 
         if (!kv.containsKey("ffmpegCoreType")) {
             setFfmpegCoreType(FFMPEG_CORE_TYPE_RXFFMPEG);
+        }
+
+        if (!kv.containsKey("singleOutputDir")) {
+            setSingleOutputDir(false);
         }
 
 
@@ -300,5 +306,11 @@ public class ConfigData {
         return kv.encode("ffmpegCoreType", ffmpegCoreType);
     }
 
+    public static boolean isSingleOutputDir() {
+        return kv.decodeBool("singleOutputDir");
+    }
 
+    public static boolean setSingleOutputDir(boolean singleOutputDir) {
+        return kv.encode("singleOutputDir", singleOutputDir);
+    }
 }

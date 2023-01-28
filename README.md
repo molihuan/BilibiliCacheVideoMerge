@@ -41,11 +41,33 @@
 
 
 
-## 演示：如果github显示不了请转到国内Gitee:[传送门](https://gitee.com/molihuan/BilibiliCacheVideoMergeAndroid))
+## 演示：(如果github显示不了请转到国内Gitee:[传送门](https://gitee.com/molihuan/BilibiliCacheVideoMergeAndroid))
 
-![https://github.com/molihuan/BilibiliCacheVideoMerge/tree/master/art/hlbDemo.gif](https://raw.kgithub.com/molihuan/BilibiliCacheVideoMerge/master/art/hlbDemo.gif)
+### gif演示:
 
-[![hlbDemo.gif](https://z4a.net/images/2023/01/28/hlbDemo.gif)](https://z4a.net/image/2p8r3U)
+![https://github.com/molihuan/BilibiliCacheVideoMerge/tree/master/art/hlbDemo.gif](https://z4a.net/images/2023/01/28/hlbDemo.gif)
+
+### 图片演示:
+
+![1cb352c9975076400.md.jpg](https://z4a.net/images/2023/01/28/1cb352c9975076400.md.jpg)
+
+![hlb2.md.jpg](https://z4a.net/images/2023/01/28/hlb2.md.jpg)
+
+![hlb3.md.jpg](https://z4a.net/images/2023/01/28/hlb3.md.jpg)
+
+![hlb4.md.jpg](https://z4a.net/images/2023/01/28/hlb4.md.jpg)
+
+![hlb5.md.jpg](https://z4a.net/images/2023/01/28/hlb5.md.jpg)
+
+![hlb6.md.jpg](https://z4a.net/images/2023/01/28/hlb6.md.jpg)
+
+![hlb7.md.jpg](https://z4a.net/images/2023/01/28/hlb7.md.jpg)
+
+
+
+# 软件协议
+
+#### [查看](./app/src/main/assets/statement.md)
 
 # 特别鸣谢
 

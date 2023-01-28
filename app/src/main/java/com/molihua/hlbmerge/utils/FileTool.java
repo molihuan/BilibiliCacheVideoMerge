@@ -174,10 +174,6 @@ public class FileTool {
      */
     private static String[] getCollectionChapterNameByJsonStr(String jsonStr, String[] result) {
 
-        if (StringUtils.isTrimEmpty(jsonStr)) {
-            return null;
-        }
-
         JSONObject jsonObject;
         //将json字符串转换成json对象
         try {
@@ -213,7 +209,7 @@ public class FileTool {
         int subJsonType;
 
         //获取二级json对象
-        JSONObject subJsonObject = null;
+        JSONObject subJsonObject;
         try {
             subJsonObject = jsonObject.getJSONObject("page_data");
             subJsonType = 0;
@@ -240,6 +236,19 @@ public class FileTool {
             default:
                 parseKey = "download_subtitle";
 
+        }
+
+        //获取当前章节索引(1、2、3、4相等为第几集)如果是1可能只有一集章节名就用合集名代替
+        int pageIndex = 0;
+        try {
+            pageIndex = subJsonObject.getInt("page");
+        } catch (JSONException e) {
+            Mtools.log("无法从json中获取page字段");
+        }
+
+        if (pageIndex == 1) {
+            result[1] = result[0];
+            return result;
         }
 
         //通过二级json对象获取章节名称
