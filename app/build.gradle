@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
 }
 
 /**
@@ -39,8 +40,8 @@ android {
         applicationId "com.molihua.hlbmerge"
         minSdk 21
         targetSdk 33
-        versionCode 52
-        versionName "1.6.9.2beta"
+        versionCode 53
+        versionName "1.6.9.3"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -51,6 +52,10 @@ android {
         //设置BuildConfig.FFMPEG_CORE_TYPE可以在java中调用
         buildConfigField "int", "FFMPEG_CORE_TYPE", ffmpegCoreType
 
+    }
+    //开启数据绑定
+    buildFeatures {
+        dataBinding true
     }
 
     buildTypes {
@@ -68,9 +73,8 @@ android {
 
         }
     }
-
+    //基于不同的abi架构配置打包不同的apk
     splits {
-        // 基于不同的abi架构配置不同的apk
         abi {
             // 必须为true，打包才会为不同的abi生成不同的apk
             enable true
@@ -97,11 +101,7 @@ android {
     }
 
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-
+    //资源配置
     sourceSets {
         main {
             java {
@@ -128,6 +128,16 @@ android {
                 }
             }
         }
+    }
+
+    //环境配置
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
     }
 
 }
@@ -161,7 +171,13 @@ dependencies {
     implementation 'com.umeng.umsdk:apm:1.8.0'// U-APM产品包依赖(必选)
     //bugly依赖
     implementation 'com.tencent.bugly:crashreport:latest.release'
-
+    //kotlin
+    implementation 'androidx.core:core-ktx:1.9.0'
+    //协程
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
+    //黄油刀
+    implementation 'com.jakewharton:butterknife:10.2.3'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.3'
 
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.5.0'

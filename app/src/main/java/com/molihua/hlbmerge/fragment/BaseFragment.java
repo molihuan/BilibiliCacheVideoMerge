@@ -11,6 +11,8 @@ import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 
+import butterknife.ButterKnife;
+
 
 /**
  * @ClassName: BaseFragment
@@ -35,6 +37,8 @@ public abstract class BaseFragment extends DialogFragment {
         if (mFragmentView == null) {
             //获取Fragment布局
             mFragmentView = inflater.inflate(setFragmentViewId(), container, false);
+            //绑定黄油
+            ButterKnife.bind(this, mFragmentView);
             //获取组件
             getComponents(mFragmentView);
             //初始化数据

@@ -1,10 +1,10 @@
 pluginManagement {
     repositories {
-        gradlePluginPortal()
         maven { url 'https://maven.aliyun.com/repository/public' }
         maven { url 'https://maven.aliyun.com/repository/google' }
         maven { url 'https://repo.huaweicloud.com/repository/maven/' }
         maven { url 'https://jitpack.io' }
+        gradlePluginPortal()
         mavenCentral()
         google()
     }
