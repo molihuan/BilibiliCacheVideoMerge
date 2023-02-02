@@ -11,11 +11,13 @@
 <p align="center">将Bilibili缓存文件合并导出为MP4，支持安卓5.0 ~ 13，视频挂载弹幕播放</p>
 <p align="center">Merge and export the Bilibili cache file to MP4, support Android 5.0~13, and mount the video to play the bullet screen</p>
 
-
+<p align="center"> 
+  您是第  <img src="https://profile-counter.glitch.me/github:molihuan:BilibiliCacheVideoMerge/count.svg" />位访问者
+</p>
 
 ## 说明
 
-此软件是为了帮助网友合并音视频，你可以将它理解为一个专用的格式工厂，并不涉及破解相关内容，仅仅用于学习技术交流，严禁用于商业用途，如有侵权请联系我删档，对你带来困惑和不便我深感抱歉。
+此软件是为了帮助网友合并哔哩哔哩缓存视频，Android上将bilibili缓存视频合并导出为mp4，你可以将它理解为一个专用的格式工厂，并不涉及破解相关内容，仅仅用于学习技术交流，严禁用于商业用途，如有侵权请联系我删档，对你带来困惑和不便我深感抱歉。
 
 ## 特性
 
@@ -65,11 +67,42 @@
 
 
 
-# 软件协议
+## 软件协议
 
-#### [查看](./app/src/main/assets/statement.md)
+### [查看](./app/src/main/assets/statement.md)
 
-# 特别鸣谢
+## 软件更新
+
+- 优先级 1 (最快):交流群群文件
+- 优先级 2 (次之):网盘链接：
+安卓版：https://wwa.lanzouo.com/b016uhb5g
+密码:MLH
+电脑版：https://wwa.lanzouo.com/b016vmouf
+密码:MLH
+- 优先级 3 :Github(https://github.com/molihuan/BilibiliCacheVideoMerge/tree/master/app/release)
+- 优先级 4 :软件内
+
+## 问题反馈
+
+请使用模板反馈问题，这样可以帮助开发者快速定位和解决问题，谢谢配合，爱你萌萌哒~^o^~
+
+##### 反馈模板:
+
+类别：(必填，0、优化建议。1、打开软件就闪退。2、无论什么视频合并都失败或闪退。3、合并个别视频失败或闪退。4、主页空白无法加载哔哩哔哩缓存视频。5、其他问题)
+
+设备信息：(必填，软件内左测菜单栏中点击设备信息即可复制，不会泄漏设备特殊信息，无法进入软件按下列大概填写即可：
+Android:9 App版本:1.6.9.2beta
+机型:HUAWEI/VOG-AL10
+设备id:
+2f5e3c3905abc3dc5b757787725d28e43)
+
+描述：(必填，越详细越好)
+
+怎样触发bug：(选填)
+
+视频链接：(选填，如果视频已经下架则把本地缓存文件打包压缩发我邮箱或者直接发群里，具体操作：[https://www.bilibili.com/video/BV1Mx4y1G7by](https://www.bilibili.com/video/BV1Mx4y1G7by))
+
+## 特别鸣谢
 
 - [bilibili/DanmakuFlameMaster](https://github.com/bilibili/DanmakuFlameMaster)
 - [microshow/RxFFmpeg](https://github.com/microshow/RxFFmpeg)
@@ -82,7 +115,7 @@
 
 开源项目以及其依赖项目。
 
-### LICENSE 
+## LICENSE 
 
 ```
    Copyright [2020] molihuan

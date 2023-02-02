@@ -1,11 +1,11 @@
 {
   "Code": 0,
   "Msg": "",
-  "UpdateStatus": 0,
-  "VersionCode": 51,
-  "VersionName": "1.6.9.1beta",
-  "UploadTime": "2023-01-28",
-  "ModifyContent": "\r\n1、修复视频播放按钮的bug。\r\n2、重新加入腾讯bugly。",
+  "UpdateStatus": 1,
+  "VersionCode": 53,
+  "VersionName": "1.6.9.3",
+  "UploadTime": "2023-02-2",
+  "ModifyContent": "\r\n1、修复大视频合并卡死问题。\r\n2、修复压缩问题。",
   "DownloadUrl": "https://www.gitlink.org.cn/api/molihuan/BilibiliCacheVideoMerge/raw?filepath=app/release/app-armeabi-v7a.apk",
   "ApkSize": 17315,
   "ApkMd5": ""

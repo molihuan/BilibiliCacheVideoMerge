@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.umeng.analytics.MobclickAgent;
 import com.xuexiang.xui.XUI;
 
+import butterknife.ButterKnife;
+
 
 /**
  * @ClassName: AbstractActivity
@@ -24,6 +26,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //设置布局资源
         setContentView(setContentViewID());
+        //绑定黄油
+        ButterKnife.bind(this);
         //获取组件
         getComponents();
         //初始化数据

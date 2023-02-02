@@ -1,5 +1,7 @@
 package com.molihua.hlbmerge.ffmpeg.core;
 
+import com.blankj.molihuan.utilcode.util.FileUtils;
+import com.molihua.hlbmerge.dao.ConfigData;
 import com.xuexiang.xtask.XTask;
 import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
 
@@ -18,6 +20,7 @@ public class BaseFFmpegCallback {
     public void onFinish() {
         dialog.incrementProgress(1);
         successNum++;
+        FileUtils.deleteAllInDir(ConfigData.TYPE_OUTPUT_FILE_PATH_TEMP);
     }
 
     public void onProgress(int progress, long progressTime) {

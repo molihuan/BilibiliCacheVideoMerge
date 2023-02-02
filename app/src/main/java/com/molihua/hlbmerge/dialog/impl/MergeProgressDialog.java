@@ -7,14 +7,13 @@ import android.net.Uri;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.blankj.molihuan.utilcode.util.FileIOUtils;
 import com.blankj.molihuan.utilcode.util.FileUtils;
-import com.blankj.molihuan.utilcode.util.UriUtils;
 import com.molihua.hlbmerge.dao.ConfigData;
 import com.molihua.hlbmerge.entity.CacheFile;
 import com.molihua.hlbmerge.ffmpeg.core.BaseFFmpegCallback;
 import com.molihua.hlbmerge.service.impl.PathCacheFileManager;
 import com.molihua.hlbmerge.service.impl.UriCacheFileManager;
+import com.molihua.hlbmerge.utils.UriTool;
 import com.molihuan.pathselector.utils.FileTools;
 import com.xuexiang.xtask.XTask;
 import com.xuexiang.xtask.core.ITaskChainEngine;
@@ -108,6 +107,7 @@ public class MergeProgressDialog {
         //获取输出根目录
         String outRoot = ConfigData.getOutputFilePath();
         FileUtils.createOrExistsDir(outRoot);
+        FileUtils.createOrExistsDir(ConfigData.TYPE_OUTPUT_FILE_PATH_TEMP);
         //获取导出配置
         int exportType = ConfigData.getExportType();
         boolean exportDanmaku = ConfigData.isExportDanmaku();
@@ -154,12 +154,14 @@ public class MergeProgressDialog {
                                         //处理已经存在的文件弹窗
                                         MergeProgressDialog.handleExistsFileDialog(dialog.getContext(), completeOutPathSuf, cacheFile, ffmpegCallback, exportType, exportDanmaku);
                                     } else {
-                                        cmdStr = String.format(ffmpegCmdTemplate, cacheFile.getAudioPath(), cacheFile.getVideoPath(), completeOutPathSuf);
-                                        ConfigData.ffmpegCore.runCommand(cmdStr, ffmpegCallback);
                                         //是否导出弹幕
                                         if (exportDanmaku) {
                                             FileUtils.copy(cacheFile.getDanmakuPath(), completeOutPath + ".xml");
                                         }
+
+                                        cmdStr = String.format(ffmpegCmdTemplate, cacheFile.getAudioPath(), cacheFile.getVideoPath(), completeOutPathSuf);
+                                        ConfigData.ffmpegCore.runCommand(cmdStr, ffmpegCallback);
+
 
                                     }
                                     break;
@@ -168,11 +170,13 @@ public class MergeProgressDialog {
                                     if (FileUtils.isFileExists(completeOutPathSuf)) {
                                         MergeProgressDialog.handleExistsFileDialog(dialog.getContext(), completeOutPathSuf, cacheFile, ffmpegCallback, exportType, exportDanmaku);
                                     } else {
-                                        MergeProgressDialog.copyVideoAudioWithProgress(cacheFile.getVideoPath(), completeOutPathSuf, ffmpegCallback);
                                         //是否导出弹幕
                                         if (exportDanmaku) {
                                             FileUtils.copy(cacheFile.getDanmakuPath(), completeOutPath + ".xml");
                                         }
+
+                                        MergeProgressDialog.copyVideoAudioWithProgress(cacheFile.getVideoPath(), completeOutPathSuf, ffmpegCallback);
+
                                     }
                                     break;
                                 case 2:
@@ -180,11 +184,12 @@ public class MergeProgressDialog {
                                     if (FileUtils.isFileExists(completeOutPathSuf)) {
                                         MergeProgressDialog.handleExistsFileDialog(dialog.getContext(), completeOutPathSuf, cacheFile, ffmpegCallback, exportType, exportDanmaku);
                                     } else {
-                                        MergeProgressDialog.copyVideoAudioWithProgress(cacheFile.getAudioPath(), completeOutPathSuf, ffmpegCallback);
                                         //是否导出弹幕
                                         if (exportDanmaku) {
                                             FileUtils.copy(cacheFile.getDanmakuPath(), completeOutPath + ".xml");
                                         }
+                                        MergeProgressDialog.copyVideoAudioWithProgress(cacheFile.getAudioPath(), completeOutPathSuf, ffmpegCallback);
+
                                     }
                                     break;
                                 default:
@@ -201,10 +206,17 @@ public class MergeProgressDialog {
                         dialog.setContent(String.format("成功数:%s,失败数:%s,\n合并文件保存在%s目录下", ffmpegCallback.getSuccessNum(), ffmpegCallback.getFailNum(), outRoot));
                         dialog.setActionButton(DialogAction.NEGATIVE, "关闭");
                     }
+
+                    @Override
+                    public void onTaskChainError(@NonNull ITaskChainEngine engine, @NonNull ITaskResult result) {
+                        dialog.setContent("错误:" + result.getMessage());
+                        dialog.setActionButton(DialogAction.NEGATIVE, "关闭");
+                    }
                 })
                 .start();
 
     }
+
 
     /**
      * 将uri转换为file并把路径返回存入CacheFile中
@@ -214,32 +226,62 @@ public class MergeProgressDialog {
      */
     public static CacheFile cacheFileUri2File(CacheFile cacheFile, MaterialDialog dialog) {
         if (cacheFile.getUseUri()) {
+
             //获取临时文件名
             String audioTemp = ConfigData.TYPE_OUTPUT_FILE_PATH_TEMP + "/audio.mp3";
             String videoTemp = ConfigData.TYPE_OUTPUT_FILE_PATH_TEMP + "/video.mp4";
             String danmakuTemp = ConfigData.TYPE_OUTPUT_FILE_PATH_TEMP + "/danmaku.xml";
 
-            XTask.postToMain(new Runnable() {
-                @Override
-                public void run() {
-                    dialog.setContent("正在为你复制缓存文件,\n" + ConfigData.getCacheFilePath() + "--->" + ConfigData.TYPE_OUTPUT_FILE_PATH_TEMP);
-                }
-            });
-
-
-            //uri转byte
-            byte[] bytesAudio = UriUtils.uri2Bytes(Uri.parse(cacheFile.getAudioPath()));
-            byte[] bytesVideo = UriUtils.uri2Bytes(Uri.parse(cacheFile.getVideoPath()));
-            byte[] bytesDanmaku = UriUtils.uri2Bytes(Uri.parse(cacheFile.getDanmakuPath()));
-
             //删除已经存在的临时文件名
             FileUtils.delete(audioTemp);
             FileUtils.delete(videoTemp);
             FileUtils.delete(danmakuTemp);
-            //byte转file
-            FileIOUtils.writeFileFromBytesByChannel(audioTemp, bytesAudio, true);
-            boolean success = FileIOUtils.writeFileFromBytesByChannel(videoTemp, bytesVideo, true);
-            FileIOUtils.writeFileFromBytesByChannel(danmakuTemp, bytesDanmaku, true);
+
+            UriTool.documentFile2File(Uri.parse(cacheFile.getAudioPath()), audioTemp, new UriTool.IDocumentFileListener() {
+                @Override
+                public void onConvertProgress(long currentPosition, long total) {
+                    XTask.postToMain(new Runnable() {
+                        @Override
+                        public void run() {
+                            dialog.setContent("复制音频进度:" + currentPosition + "/" + total);
+                        }
+                    });
+                }
+            });
+            UriTool.documentFile2File(Uri.parse(cacheFile.getVideoPath()), videoTemp, new UriTool.IDocumentFileListener() {
+                @Override
+                public void onConvertProgress(long currentPosition, long total) {
+                    XTask.postToMain(new Runnable() {
+                        @Override
+                        public void run() {
+                            dialog.setContent("复制视频进度:" + currentPosition + "/" + total);
+                        }
+                    });
+                }
+            });
+            UriTool.documentFile2File(Uri.parse(cacheFile.getDanmakuPath()), danmakuTemp, new UriTool.IDocumentFileListener() {
+                @Override
+                public void onConvertProgress(long currentPosition, long total) {
+                    XTask.postToMain(new Runnable() {
+                        @Override
+                        public void run() {
+                            dialog.setContent("复制弹幕进度:" + currentPosition + "/" + total);
+                        }
+                    });
+                }
+            });
+
+
+//            //uri转byte
+//            byte[] bytesAudio = UriUtils.uri2Bytes(Uri.parse(cacheFile.getAudioPath()));
+//            byte[] bytesVideo = UriUtils.uri2Bytes(Uri.parse(cacheFile.getVideoPath()));
+//            byte[] bytesDanmaku = UriUtils.uri2Bytes(Uri.parse(cacheFile.getDanmakuPath()));
+//
+//            //byte转file
+//            FileIOUtils.writeFileFromBytesByChannel(audioTemp, bytesAudio, true);
+//            boolean success = FileIOUtils.writeFileFromBytesByChannel(videoTemp, bytesVideo, true);
+//            FileIOUtils.writeFileFromBytesByChannel(danmakuTemp, bytesDanmaku, true);
+
             //拷贝一份，不能影响源CacheFile
             CacheFile tempCacheFile = null;
             try {
@@ -347,6 +389,14 @@ public class MergeProgressDialog {
                                 //删除已存在的
                                 FileUtils.delete(completeOutPathSuf);
 
+                                //是否导出弹幕
+                                if (exportDanmaku) {
+                                    String targetXml = completeOutPathSuf.replace(extension, "xml");
+                                    //删除已存在的
+                                    FileUtils.delete(targetXml);
+                                    FileUtils.copy(cacheFile.getDanmakuPath(), targetXml);
+                                }
+
                                 switch (type) {
                                     case 0:
                                         //构造ffmpeg命令
@@ -362,13 +412,6 @@ public class MergeProgressDialog {
                                     default:
                                 }
 
-                                //是否导出弹幕
-                                if (exportDanmaku) {
-                                    String targetXml = completeOutPathSuf.replace(extension, "xml");
-                                    //删除已存在的
-                                    FileUtils.delete(targetXml);
-                                    FileUtils.copy(cacheFile.getDanmakuPath(), targetXml);
-                                }
 
                                 dialog.dismiss();
                             }

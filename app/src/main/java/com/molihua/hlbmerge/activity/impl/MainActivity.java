@@ -2,6 +2,7 @@ package com.molihua.hlbmerge.activity.impl;
 
 import android.content.Intent;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
@@ -12,6 +13,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
+import com.blankj.molihuan.utilcode.util.ClipboardUtils;
 import com.blankj.molihuan.utilcode.util.DeviceUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
@@ -91,18 +93,25 @@ public class MainActivity extends AbstractMainActivity implements NavigationView
         mainCompleteFragment = new MainCompleteFragment();
         mainHandleFragment = new MainHandleFragment();
 
+
     }
 
     @Override
     public void initView() {
         //侧边栏手机信息
         TextView phoneInfoTv = navigationView.getHeaderView(0).findViewById(R.id.phone_info);
-        phoneInfoTv.setText(
-                "Android:" + DeviceUtils.getSDKVersionName() +
-                        "   App版本:" + BuildConfig.VERSION_NAME +
-                        "\n机型:" + DeviceUtils.getManufacturer() + "/" + DeviceUtils.getModel() +
-                        "\n设备id:\n" + CrashReport.getUserId()
-        );
+        String infos = "Android:" + DeviceUtils.getSDKVersionName() +
+                "   App版本:" + BuildConfig.VERSION_NAME +
+                "\n机型:" + DeviceUtils.getManufacturer() + "/" + DeviceUtils.getModel() +
+                "\n设备id:\n" + CrashReport.getUserId();
+        phoneInfoTv.setText(infos);
+        phoneInfoTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClipboardUtils.copyText(infos);
+                Mtools.toast("已复制到剪贴板");
+            }
+        });
 
 
         //加载主显示区

@@ -1,15 +1,17 @@
 package com.molihua.hlbmerge.utils;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
+import android.database.Cursor;
 import android.net.Uri;
+import android.provider.OpenableColumns;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.documentfile.provider.DocumentFile;
 import androidx.fragment.app.Fragment;
 
-import com.blankj.molihuan.utilcode.util.FileIOUtils;
 import com.blankj.molihuan.utilcode.util.FileUtils;
 import com.blankj.molihuan.utilcode.util.UriUtils;
 import com.molihua.hlbmerge.R;
@@ -18,12 +20,17 @@ import com.molihuan.pathselector.dialog.impl.MessageDialog;
 import com.molihuan.pathselector.entity.FontBean;
 import com.molihuan.pathselector.utils.FileTools;
 import com.molihuan.pathselector.utils.PermissionsTools;
+import com.molihuan.pathselector.utils.ReflectTools;
 import com.molihuan.pathselector.utils.UriTools;
 import com.xuexiang.xtask.XTask;
 import com.xuexiang.xui.widget.dialog.materialdialog.DialogAction;
 import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -39,23 +46,20 @@ public class UriTool {
     public static String tempPath;
 
     /**
-     * 复制DocumentFile
+     * 复制DocumentFile文件夹
      *
-     * @param fragment
-     * @param srcParentPath
-     * @param srcPath
-     * @param destPath
+     * @param fragment      存储uri权限的fragment
+     * @param srcParentPath 选择文件夹的父目录
+     * @param srcPath       选择的文件夹
+     * @param destPath      目标文件夹
      */
-    public static void copyDocumentFile(Fragment fragment, String srcParentPath, String srcPath, String destPath) {
+    public static void copyDocumentDir(Fragment fragment, String srcParentPath, String srcPath, String destPath) {
 
         Context context = fragment.getContext();
-
         Uri uri = UriTools.path2Uri(srcPath, false);
-
         String existsPermission = PermissionsTools.existsGrantedUriPermission(uri, fragment);
 
         if (existsPermission == null) {
-
             //没有权限申请权限
             XTask.postToMain(new Runnable() {
                 @Override
@@ -82,13 +86,10 @@ public class UriTool {
                             .show();
                 }
             });
-
             return;
         }
 
         Uri targetUri = Uri.parse(existsPermission + uri.toString().replaceFirst(UriTools.URI_PERMISSION_REQUEST_COMPLETE_PREFIX, ""));
-
-        //Mtools.log(targetUri);
 
         DocumentFile rootDocumentFile = DocumentFile.fromSingleUri(context, targetUri);
         Objects.requireNonNull(rootDocumentFile, "rootDocumentFile is null");
@@ -105,20 +106,24 @@ public class UriTool {
                 tempPath = srcPath + File.separator + documentFiles[i].getName();
 
                 if (documentFiles[i].isDirectory()) {
-//                    LogUtils.w(documentFiles[i].getUri() + "\n夹夹夹夹夹夹夹夹夹夹" + tempPath.replace(srcParentPath, destPath));
                     FileUtils.createOrExistsDir(tempPath.replace(srcParentPath, destPath));
-                    copyDocumentFile(fragment, srcParentPath, tempPath, destPath);
+                    copyDocumentDir(fragment, srcParentPath, tempPath, destPath);
                 } else {
-//                    LogUtils.w(documentFiles[i].getUri() + "\n文件文件文件文件文件" + tempPath.replace(srcParentPath, destPath));
-                    byte[] srcBytes = UriUtils.uri2Bytes(documentFiles[i].getUri());
-                    FileIOUtils.writeFileFromBytesByChannel(tempPath.replace(srcParentPath, destPath), srcBytes, true);
+                    documentFile2File(documentFiles[i].getUri(), tempPath.replace(srcParentPath, destPath));
                 }
+
             }
         }
 
 
     }
 
+    /**
+     * 获取uri权限
+     *
+     * @param path
+     * @param context
+     */
     public static void grantedUriPermission(String path, Activity context) {
 
         Objects.requireNonNull(context, "context is null");
@@ -229,5 +234,96 @@ public class UriTool {
         //通过jsonByte获取名称
         result = FileTool.getCollectionChapterName(jsonByte, result);
         return result;
+    }
+
+    /**
+     * 通过uri获取文件长度
+     *
+     * @param uri
+     * @return
+     */
+    public static long getUriFileLength(Uri uri) {
+        switch (uri.getScheme()) {
+            case ContentResolver.SCHEME_FILE:
+                return new File(uri.getPath()).length();
+            case ContentResolver.SCHEME_CONTENT:
+                ContentResolver cr = ReflectTools.getApplicationByReflect().getContentResolver();
+                Cursor cursor = cr.query(uri, null, null, null, null);
+                if (cursor != null && cursor.moveToFirst()) {
+                    int columnIndex = cursor.getColumnIndex(OpenableColumns.SIZE);
+                    if (cursor.isNull(columnIndex)) {
+                        return 0L;
+                    } else {
+                        return cursor.getLong(columnIndex);
+                    }
+                } else {
+                    return 0;
+                }
+            default:
+                return 0L;
+        }
+    }
+
+
+    public interface IDocumentFileListener {
+        /**
+         * 转换进度
+         *
+         * @param currentPosition
+         */
+        void onConvertProgress(long currentPosition, long total);
+    }
+
+
+    public static boolean documentFile2File(Uri srcFile, String targetPath) {
+        return documentFile2File(srcFile, targetPath, null);
+    }
+
+    /**
+     * 将documentfile转换为file
+     *
+     * @param srcFile
+     * @param targetPath
+     * @param listener
+     * @return
+     */
+    public static boolean documentFile2File(Uri srcFile, String targetPath, IDocumentFileListener listener) {
+        long currentPosition = 0;
+        long total = getUriFileLength(srcFile);
+        InputStream fis = null;
+        OutputStream fos = null;
+
+        try {
+            fis = ReflectTools.getApplicationByReflect().getContentResolver().openInputStream(srcFile);
+            fos = new FileOutputStream(targetPath);
+            byte[] buf = new byte[1024];
+            int count = 0;
+            if (listener == null) {
+                while ((count = fis.read(buf)) != -1) {
+                    fos.write(buf, 0, count);
+                }
+            } else {
+                while ((count = fis.read(buf)) != -1) {
+                    currentPosition += count;
+                    if (currentPosition % 40960 == 0) {
+                        listener.onConvertProgress(currentPosition, total);
+                    }
+                    fos.write(buf, 0, count);
+                }
+            }
+
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (fos != null) fos.close();
+                if (fis != null) fis.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return false;
     }
 }

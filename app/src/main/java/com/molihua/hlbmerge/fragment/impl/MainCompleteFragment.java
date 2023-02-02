@@ -13,9 +13,9 @@ import com.blankj.molihuan.utilcode.util.ZipUtils;
 import com.molihua.hlbmerge.R;
 import com.molihua.hlbmerge.activity.impl.PlayVideoActivity;
 import com.molihua.hlbmerge.dao.ConfigData;
-import com.molihua.hlbmerge.dialog.impl.CopyProgressDialog;
 import com.molihua.hlbmerge.fragment.AbstractMainFragment;
 import com.molihua.hlbmerge.utils.FileTool;
+import com.molihua.hlbmerge.utils.UriTool;
 import com.molihuan.pathselector.PathSelector;
 import com.molihuan.pathselector.entity.FileBean;
 import com.molihuan.pathselector.fragment.BasePathSelectFragment;
@@ -122,37 +122,47 @@ public class MainCompleteFragment extends AbstractMainFragment {
                                 if (selectedFiles == null || selectedFiles.size() == 0) {
                                     Mtools.toast("你还没有选择文件捏!(长按进行选择)");
                                     return false;
+                                } else if (selectedFiles.size() != 1) {
+                                    Mtools.toast("只能选择一个");
+                                    return false;
                                 }
 
                                 List<String> pathList = new ArrayList<>();
-
 
                                 MiniLoadingDialog miniLoadingDialog = new MiniLoadingDialog(mActivity, "压缩处理中");
                                 miniLoadingDialog.setCancelable(false);
                                 miniLoadingDialog.show();
 
+                                String zipTemp = ConfigData.TYPE_OUTPUT_FILE_PATH_ZIP + File.separator + "temp";
+
+                                FileUtils.createOrExistsDir(zipTemp);
+                                FileUtils.deleteAllInDir(zipTemp);
 
                                 XTask.getTaskChain()
                                         .addTask(XTask.getTask(new TaskCommand() {
                                             @Override
                                             public void run() throws Exception {
-                                                String zipPath;
-                                                for (int i = 0; i < selectedFiles.size(); i++) {
-                                                    zipPath = selectedFiles.get(i).getPath();
-                                                    if (FileTools.underAndroidDataUseUri(zipPath)) {
-                                                        throw new RuntimeException("Files cannot be compressed under Android/data");
-                                                    }
-                                                    pathList.add(zipPath);
+                                                //判断是否为Andriod/data如果是则复制到外面
+                                                String zipSrcPath = selectedFiles.get(0).getPath();
+                                                if (FileTools.underAndroidDataUseUri(zipSrcPath)) {
+                                                    //开始复制DocumentDir
+                                                    UriTool.copyDocumentDir(pathSelectFragment, currentPath, zipSrcPath, zipTemp);
+                                                    pathList.add(zipTemp);
+                                                } else {
+                                                    pathList.add(zipSrcPath);
                                                 }
 
-                                                if (FileUtils.createOrExistsDir(ConfigData.TYPE_OUTPUT_FILE_PATH_ZIP)) {
-                                                    try {
-                                                        ZipUtils.zipFiles(pathList, ConfigData.TYPE_OUTPUT_FILE_PATH_ZIP + File.separator + "video.zip");
-                                                    } catch (IOException e) {
-                                                        e.printStackTrace();
-                                                    }
+                                            }
+                                        }))
+                                        .addTask(XTask.getTask(new TaskCommand() {
+                                            @Override
+                                            public void run() throws Exception {
+                                                //进行压缩
+                                                try {
+                                                    ZipUtils.zipFiles(pathList, ConfigData.TYPE_OUTPUT_FILE_PATH_ZIP + File.separator + "video.zip");
+                                                } catch (IOException e) {
+                                                    throw new RuntimeException("压缩错误");
                                                 }
-
 
                                             }
                                         }))
@@ -161,7 +171,7 @@ public class MainCompleteFragment extends AbstractMainFragment {
                                             public void onTaskChainCompleted(@NonNull ITaskChainEngine engine, @NonNull ITaskResult result) {
                                                 //更新ui
                                                 miniLoadingDialog.dismiss();
-                                                Mtools.toast("压缩成功,压缩文件保存在" + ConfigData.TYPE_OUTPUT_FILE_PATH_ZIP + File.separator + "video.zip");
+                                                Mtools.toast("压缩成功,压缩文件保存在" + ConfigData.TYPE_OUTPUT_FILE_PATH_ZIP + File.separator + "video.zip", Toast.LENGTH_LONG);
                                                 pathSelectFragment.updateFileList();
                                                 pathSelectFragment.openCloseMultipleMode(false);
                                             }
@@ -169,44 +179,13 @@ public class MainCompleteFragment extends AbstractMainFragment {
                                             @Override
                                             public void onTaskChainError(@NonNull ITaskChainEngine engine, @NonNull ITaskResult result) {
                                                 miniLoadingDialog.dismiss();
-                                                Mtools.toast("压缩失败,如果你的手机为Android 11及以上,则不支持直接压缩Android/data下的文件,请先将文件或文件夹复制出Android/data再进行压缩", Toast.LENGTH_LONG);
+                                                Mtools.toast("压缩失败", Toast.LENGTH_LONG);
                                                 pathSelectFragment.updateFileList();
                                                 pathSelectFragment.openCloseMultipleMode(false);
-                                                super.onTaskChainError(engine, result);
                                             }
                                         })
                                         .start();
 
-
-                                return false;
-                            }
-                        },
-                        new CommonItemListener("复制") {
-                            @Override
-                            public boolean onClick(View v, TextView tv, List<FileBean> selectedFiles, String currentPath, BasePathSelectFragment pathSelectFragment) {
-                                copyBtnTextView = tv;
-                                if (tv.getText().equals("复制")) {
-
-                                    if (selectedFiles == null || selectedFiles.size() == 0) {
-                                        Mtools.toast("你还没有选择文件捏!(长按进行选择)");
-                                        return false;
-                                    }
-
-                                    tv.setText("粘贴");
-
-                                    //获取源文件路径
-                                    copySrcFileList = new ArrayList<>(selectedFiles);
-                                    //获取源文件父目录
-                                    copySrcParentPath = currentPath;
-                                    pathSelectFragment.openCloseMultipleMode(false);
-
-                                } else {
-                                    if (copySrcFileList == null || copySrcFileList.size() == 0) {
-                                        return false;
-                                    }
-                                    CopyProgressDialog.showCopyProgressDialog(copySrcFileList, copySrcParentPath, currentPath, mActivity, tv, pathSelectFragment);
-
-                                }
 
                                 return false;
                             }
