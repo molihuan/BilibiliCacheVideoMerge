@@ -1,5 +1,7 @@
 package com.molihua.hlbmerge.utils;
 
+import static com.molihua.hlbmerge.utils.FileTool.getCollectionChapterNameByJsonStr;
+
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -15,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import com.blankj.molihuan.utilcode.util.FileUtils;
 import com.blankj.molihuan.utilcode.util.UriUtils;
 import com.molihua.hlbmerge.R;
+import com.molihua.hlbmerge.entity.CacheSrc;
 import com.molihuan.pathselector.dialog.BaseDialog;
 import com.molihuan.pathselector.dialog.impl.MessageDialog;
 import com.molihuan.pathselector.entity.FontBean;
@@ -26,10 +29,12 @@ import com.xuexiang.xtask.XTask;
 import com.xuexiang.xui.widget.dialog.materialdialog.DialogAction;
 import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -200,25 +205,25 @@ public class UriTool {
         return fileList;
     }
 
-    public static Uri[] getNeedUri(DocumentFile chapterFile, Uri[] result) {
+    public static CacheSrc getNeedUri(DocumentFile chapterFile, CacheSrc result) {
         DocumentFile[] files = chapterFile.listFiles();
         if (files != null) {
             for (int i = 0; i < files.length; i++) {
                 if (files[i].isDirectory()) {
                     getNeedUri(files[i], result);
-                } else {
-                    switch (files[i].getName()) {
+                } else if (files[i].getName() != null) {
+                    switch (Objects.requireNonNull(files[i].getName())) {
                         case "audio.m4s":
-                            result[0] = files[i].getUri();
+                            result.setAudio(files[i].getUri());
                             break;
                         case "video.m4s":
-                            result[1] = files[i].getUri();
+                            result.setVideo(files[i].getUri());
                             break;
                         case "entry.json":
-                            result[2] = files[i].getUri();
+                            result.setJson(files[i].getUri());
                             break;
                         case "danmaku.xml":
-                            result[3] = files[i].getUri();
+                            result.setDanmaku(files[i].getUri());
                             break;
                     }
                 }
@@ -236,6 +241,25 @@ public class UriTool {
         return result;
     }
 
+
+    public static String[] uriToJsonString(Context context, Uri uri, String[] result) throws IOException {
+        StringBuilder stringBuilder = new StringBuilder();
+        InputStream inputStream = context.getContentResolver().openInputStream(uri);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+
+        try {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                stringBuilder.append(line);
+            }
+        } finally {
+            reader.close();
+            inputStream.close();
+        }
+
+        return getCollectionChapterNameByJsonStr(stringBuilder.toString(), result);
+    }
+
     /**
      * 通过uri获取文件长度
      *
@@ -243,9 +267,9 @@ public class UriTool {
      * @return
      */
     public static long getUriFileLength(Uri uri) {
-        switch (uri.getScheme()) {
+        switch (Objects.requireNonNull(uri.getScheme())) {
             case ContentResolver.SCHEME_FILE:
-                return new File(uri.getPath()).length();
+                return new File(Objects.requireNonNull(uri.getPath())).length();
             case ContentResolver.SCHEME_CONTENT:
                 ContentResolver cr = ReflectTools.getApplicationByReflect().getContentResolver();
                 Cursor cursor = cr.query(uri, null, null, null, null);

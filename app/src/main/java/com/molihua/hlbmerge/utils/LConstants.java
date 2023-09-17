@@ -12,6 +12,8 @@ public class LConstants {
     public static final String SPECIAL_CHARACTERS_REGULAR_RULE = "[\t\r\n`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】\"‘；：”“’。， 、？-]*";
     //bilibili主页url
     public static final String URL_BILIBILI_HOMEPAGE = "https://space.bilibili.com/454222981";
+    public static final String URL_GITEE_HOMEPAGE = "https://gitee.com/molihuan/BilibiliCacheVideoMergeAndroid";
+
 
     //**************************    Fragment Tag标志    ****************************
     public static final String TAG_FRAGMENT_MAIN_TITLEBAR = "frameLayout_main_titlebar_area_mlh";
@@ -21,6 +23,7 @@ public class LConstants {
 
     //本项目地址
     public static final String PROJECT_ADDRESS = "https://github.com/molihuan/BilibiliCacheVideoMerge";
+    //public static final String PROJECT_ADDRESS_GITEE = "https://github.com/molihuan/BilibiliCacheVideoMerge";
 
 
 }

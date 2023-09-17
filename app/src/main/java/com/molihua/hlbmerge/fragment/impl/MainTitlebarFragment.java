@@ -103,7 +103,7 @@ public class MainTitlebarFragment extends AbstractMainTitlebarFragment implement
 
                     List<CacheFile> allCacheFileList = abstractMainActivity.getAllCacheFileList();
 
-                    if (allCacheFileList.size() == 0) {
+                    if (allCacheFileList == null || allCacheFileList.size() == 0) {
                         ToastUtils.showLong("当前缓存路径为:" + ConfigData.getCacheFilePath() + "\n请检测‘设置’中缓存路径是否正确,哔哩哔哩版本是否正确,如果正确请再次刷新");
                         abstractMainActivity.updateCollectionFileList();
                         return;
@@ -153,6 +153,10 @@ public class MainTitlebarFragment extends AbstractMainTitlebarFragment implement
     public List<CacheFile> filterCacheFileList(String key) {
 
         List<CacheFile> allCacheFileList = abstractMainActivity.getAllCacheFileList();
+
+        if (allCacheFileList == null || allCacheFileList.size() == 0) {
+            return null;
+        }
 
         //将关键字处理成正则
         key = ".*" + key.replace(LConstants.SPECIAL_CHARACTERS_REGULAR_RULE, "") + ".*";

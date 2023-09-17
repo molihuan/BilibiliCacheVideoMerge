@@ -21,6 +21,11 @@ import com.molihua.hlbmerge.service.ICacheFileManager;
 import com.molihua.hlbmerge.service.impl.PathCacheFileManager;
 import com.molihua.hlbmerge.service.impl.UriCacheFileManager;
 import com.molihuan.pathselector.utils.FileTools;
+import com.xuexiang.xtask.XTask;
+import com.xuexiang.xtask.core.ITaskChainEngine;
+import com.xuexiang.xtask.core.param.ITaskResult;
+import com.xuexiang.xtask.core.step.impl.TaskChainCallbackAdapter;
+import com.xuexiang.xtask.core.step.impl.TaskCommand;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,11 +67,10 @@ public class MainFileShowFragment extends AbstractMainFileShowFragment implement
         //权限申请
 //        UriTool.grantedUriPermission(ConfigData.getCacheFilePath(), this);
 
-        pathCacheFileManager = new PathCacheFileManager();
+        pathCacheFileManager = new PathCacheFileManager(abstractMainActivity);
         uriCacheFileManager = new UriCacheFileManager(this);
-
         allCacheFileList = new ArrayList<>();
-        updateCollectionFileList();
+
     }
 
     @Override
@@ -74,8 +78,23 @@ public class MainFileShowFragment extends AbstractMainFileShowFragment implement
         mRecycView.setLayoutManager(new LinearLayoutManager(mActivity, LinearLayoutManager.VERTICAL, false));//设置布局管理者
 
         cacheFileListAdapter = new CacheFileListAdapter(R.layout.item_cache_file, allCacheFileList);//适配器添加数据
+
+
         mRecycView.setAdapter(cacheFileListAdapter);//RecyclerView设置适配器
 
+
+        // 设置上拉加载更多监听
+//        cacheFileListAdapter.getLoadMoreModule().setOnLoadMoreListener(new OnLoadMoreListener() {
+//            @Override
+//            public void onLoadMore() {
+//                // 在这里处理加载更多数据的逻辑
+//                // 当加载完成后，调用 adapter.getLoadMoreModule().loadMoreComplete() 表示加载完成
+//                // 当加载出错时，调用 adapter.getLoadMoreModule().loadMoreFail() 表示加载失败
+//            }
+//        });
+
+
+        initCollectionFileList();
     }
 
     @Override
@@ -142,42 +161,136 @@ public class MainFileShowFragment extends AbstractMainFileShowFragment implement
         return false;
     }
 
+    /**
+     * 初始化
+     *
+     * @return
+     */
+    public List<CacheFile> initCollectionFileList() {
+
+
+        XTask.getTaskChain()
+                .addTask(XTask.getTask(new TaskCommand() {
+                    @Override
+                    public void run() throws Exception {
+                        //是否需要使用uri
+                        boolean dataUseUri = FileTools.underAndroidDataUseUri(ConfigData.getCacheFilePath());
+
+                        if (dataUseUri) {
+                            allCacheFileList = uriCacheFileManager.updateCollectionFileList(ConfigData.getCacheFilePath(), allCacheFileList);
+                        } else {
+                            allCacheFileList = pathCacheFileManager.updateCollectionFileList(ConfigData.getCacheFilePath(), allCacheFileList);
+                        }
+
+
+                    }
+                }))
+                .setTaskChainCallback(new TaskChainCallbackAdapter() {
+                    @Override
+                    public void onTaskChainCompleted(@NonNull ITaskChainEngine engine, @NonNull ITaskResult result) {
+                        //更新ui
+                        cacheFileListAdapter.setList(allCacheFileList);
+                        refreshCacheFileList();
+
+                    }
+                })
+                .start();
+
+
+        return allCacheFileList;
+    }
+
     @Override
     public List<CacheFile> updateCollectionFileList() {
-        //是否需要使用uri
-        boolean dataUseUri = FileTools.underAndroidDataUseUri(ConfigData.getCacheFilePath());
 
-        if (dataUseUri) {
-            allCacheFileList = uriCacheFileManager.updateCollectionFileList(ConfigData.getCacheFilePath(), allCacheFileList);
-        } else {
-            allCacheFileList = pathCacheFileManager.updateCollectionFileList(ConfigData.getCacheFilePath(), allCacheFileList);
-        }
+
+        XTask.getTaskChain()
+                .addTask(XTask.getTask(new TaskCommand() {
+                    @Override
+                    public void run() throws Exception {
+                        //是否需要使用uri
+                        boolean dataUseUri = FileTools.underAndroidDataUseUri(ConfigData.getCacheFilePath());
+                        if (dataUseUri) {
+                            allCacheFileList = uriCacheFileManager.updateCollectionFileList(ConfigData.getCacheFilePath(), allCacheFileList);
+                        } else {
+                            allCacheFileList = pathCacheFileManager.updateCollectionFileList(ConfigData.getCacheFilePath(), allCacheFileList);
+                        }
+
+                    }
+                }))
+                .setTaskChainCallback(new TaskChainCallbackAdapter() {
+                    @Override
+                    public void onTaskChainCompleted(@NonNull ITaskChainEngine engine, @NonNull ITaskResult result) {
+                        //更新ui
+                        refreshCacheFileList();
+
+                    }
+                })
+                .start();
 
         return allCacheFileList;
     }
 
     @Override
     public List<CacheFile> updateChapterFileList() {
-        boolean dataUseUri = FileTools.underAndroidDataUseUri(ConfigData.getCacheFilePath());
 
-        if (dataUseUri) {
-            allCacheFileList = uriCacheFileManager.updateChapterFileList(allCacheFileList.get(0).getCollectionPath(), allCacheFileList);
-        } else {
-            allCacheFileList = pathCacheFileManager.updateChapterFileList(allCacheFileList.get(0).getCollectionPath(), allCacheFileList);
-        }
+        XTask.getTaskChain()
+                .addTask(XTask.getTask(new TaskCommand() {
+                    @Override
+                    public void run() throws Exception {
+                        //是否需要使用uri
+                        boolean dataUseUri = FileTools.underAndroidDataUseUri(ConfigData.getCacheFilePath());
+
+                        if (dataUseUri) {
+                            allCacheFileList = uriCacheFileManager.updateChapterFileList(allCacheFileList.get(0).getCollectionPath(), allCacheFileList);
+                        } else {
+                            allCacheFileList = pathCacheFileManager.updateChapterFileList(allCacheFileList.get(0).getCollectionPath(), allCacheFileList);
+                        }
+
+                    }
+                }))
+                .setTaskChainCallback(new TaskChainCallbackAdapter() {
+                    @Override
+                    public void onTaskChainCompleted(@NonNull ITaskChainEngine engine, @NonNull ITaskResult result) {
+                        //更新ui
+                        refreshCacheFileList();
+
+                    }
+                })
+                .start();
+
 
         return allCacheFileList;
     }
 
     @Override
     public List<CacheFile> updateChapterFileList(String collectionPath) {
-        boolean dataUseUri = FileTools.underAndroidDataUseUri(ConfigData.getCacheFilePath());
 
-        if (dataUseUri) {
-            allCacheFileList = uriCacheFileManager.updateChapterFileList(collectionPath, allCacheFileList);
-        } else {
-            allCacheFileList = pathCacheFileManager.updateChapterFileList(collectionPath, allCacheFileList);
-        }
+        XTask.getTaskChain()
+                .addTask(XTask.getTask(new TaskCommand() {
+                    @Override
+                    public void run() throws Exception {
+                        //是否需要使用uri
+                        boolean dataUseUri = FileTools.underAndroidDataUseUri(ConfigData.getCacheFilePath());
+
+                        if (dataUseUri) {
+                            allCacheFileList = uriCacheFileManager.updateChapterFileList(collectionPath, allCacheFileList);
+                        } else {
+                            allCacheFileList = pathCacheFileManager.updateChapterFileList(collectionPath, allCacheFileList);
+                        }
+
+                    }
+                }))
+                .setTaskChainCallback(new TaskChainCallbackAdapter() {
+                    @Override
+                    public void onTaskChainCompleted(@NonNull ITaskChainEngine engine, @NonNull ITaskResult result) {
+                        //更新ui
+                        refreshCacheFileList();
+
+                    }
+                })
+                .start();
+
 
         return allCacheFileList;
     }

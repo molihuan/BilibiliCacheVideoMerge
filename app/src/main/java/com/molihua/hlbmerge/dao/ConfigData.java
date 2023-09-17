@@ -1,10 +1,15 @@
 package com.molihua.hlbmerge.dao;
 
+import android.os.Parcelable;
+
+import androidx.annotation.Nullable;
+
 import com.blankj.molihuan.utilcode.util.AppUtils;
 import com.blankj.molihuan.utilcode.util.ReflectUtils;
 import com.blankj.molihuan.utilcode.util.TimeUtils;
 import com.molihua.hlbmerge.BuildConfig;
 import com.molihua.hlbmerge.ffmpeg.core.BaseFFmpegCore;
+import com.molihua.hlbmerge.utils.UpdataTools;
 import com.molihuan.pathselector.utils.MConstants;
 import com.tencent.mmkv.MMKV;
 
@@ -47,6 +52,7 @@ public class ConfigData {
     public final static int FFMPEG_CORE_TYPE_RXFFMPEG = 0;
 
     public final static int FFMPEG_CORE_TYPE_FFMPEGCOMMAND = 1;
+    public final static String TEMP_DATA_PERFIX = "TEMP_DATA_PERFIX_";
 
     private final static MMKV kv = MMKV.defaultMMKV();
 
@@ -85,6 +91,8 @@ public class ConfigData {
     //单一输出目录,不再每个视频都创建目录
     private boolean singleOutputDir;
 
+    private long clearTempDataMills;
+
 
     /**
      * 每当需要新增配置就
@@ -105,6 +113,7 @@ public class ConfigData {
 //        if (!kv.containsKey("ffmpegVersion")) {
 //            kv.encode("ffmpegVersion", 0);
 //        }
+
 
         if (!kv.containsKey("danmakuSize")) {
             setDanmakuSize(100);
@@ -135,6 +144,13 @@ public class ConfigData {
         if (!kv.containsKey("singleOutputDir")) {
             setSingleOutputDir(false);
         }
+
+        if (!containsKey("clearTempDataMills")) {
+            setClearTempDataMills(TimeUtils.getNowMills() + UpdataTools.TIMESTAMP_WEEK);
+        }
+
+
+        autoClearTempData();
 
 
     }
@@ -168,6 +184,29 @@ public class ConfigData {
         }
     }
 
+    public static void autoClearTempData() {
+        long nowMills = TimeUtils.getNowMills();
+        long clearMills = ConfigData.getClearTempDataMills();
+
+        if (nowMills > clearMills) {
+            clearTempData();
+            clearMills = nowMills + UpdataTools.TIMESTAMP_WEEK;
+            //设置下一次清理时间戳
+            ConfigData.setClearTempDataMills(clearMills);
+        }
+
+    }
+
+    public static void clearTempData() {
+//        Mtools.log();
+        String[] keys = kv.allKeys();
+        for (int i = keys.length - 1; i >= 0; i--) {
+            if (keys[i].startsWith(TEMP_DATA_PERFIX)) {
+                kv.removeValueForKey(keys[i]);
+            }
+        }
+    }
+
     /**
      * 根据安装的bilibili版本设置对应的缓存路径
      */
@@ -188,6 +227,31 @@ public class ConfigData {
 
         kv.encode("cacheFilePath", cacheFilePath);
 
+    }
+
+    public static boolean containsKey(String key) {
+        return kv.containsKey(key);
+    }
+
+
+    /**
+     * 获取实例
+     *
+     * @param key
+     * @param tClass
+     * @param <T>
+     * @return
+     */
+    public static <T extends Parcelable> T getInstance(String key, Class<T> tClass) {
+        return kv.decodeParcelable(key, tClass);
+    }
+
+    public static boolean saveInstance(String key, @Nullable Parcelable value) {
+        return kv.encode(key, value);
+    }
+
+    public static boolean saveInstance(String key, @Nullable Parcelable value, int expireDurationInSecond) {
+        return kv.encode(key, value, expireDurationInSecond);
     }
 
 
@@ -271,6 +335,14 @@ public class ConfigData {
 
     public static boolean setUpdateMills(long updateMills) {
         return kv.encode("updateMills", updateMills);
+    }
+
+    public static long getClearTempDataMills() {
+        return kv.decodeLong("clearTempDataMills");
+    }
+
+    public static boolean setClearTempDataMills(long clearTempDataMills) {
+        return kv.encode("clearTempDataMills", clearTempDataMills);
     }
 
 

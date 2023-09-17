@@ -100,7 +100,7 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
         int updateFrequency = ConfigData.getUpdateFrequency();
         String ffmpegCmdTemplate = ConfigData.getFfmpegCmdTemplate();
         int ffmpegCoreType = ConfigData.getFfmpegCoreType();
-        
+
         switchSingleOutputDir.setChecked(ConfigData.isSingleOutputDir());
 
         if (BuildConfig.FFMPEG_CORE_TYPE != ConfigData.FFMPEG_CORE_TYPE_All) {
@@ -221,7 +221,7 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
         } else if (id == R.id.rela_custom_output_path) {
             PathSelector.build(this, MConstants.BUILD_ACTIVITY)
                     .setRequestCode(3660)
-                    .setShowSelectStorageBtn(false)
+                    .setShowSelectStorageBtn(true)
                     .setTitlebarMainTitle(new FontBean("选择输出路径"))
                     .setAlwaysShowHandleFragment(true)
                     .setMaxCount(1)

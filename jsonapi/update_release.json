@@ -2,11 +2,11 @@
   "Code": 0,
   "Msg": "",
   "UpdateStatus": 1,
-  "VersionCode": 53,
-  "VersionName": "1.6.9.3",
-  "UploadTime": "2023-02-2",
-  "ModifyContent": "\r\n1、修复大视频合并卡死问题。\r\n2、修复压缩问题。",
-  "DownloadUrl": "https://www.gitlink.org.cn/api/molihuan/BilibiliCacheVideoMerge/raw?filepath=app/release/app-armeabi-v7a.apk",
-  "ApkSize": 17315,
+  "VersionCode": 57,
+  "VersionName": "1.6.9.7",
+  "UploadTime": "2023-09-17",
+  "ModifyContent": "\r\n1、修复一些闪退问题。\r\n2、加快缓存数据获取速度,修复卡死问题。",
+  "DownloadUrl": "https://gitee.com/molihuan/BilibiliCacheVideoMergeAndroid/raw/master/app/release/app-armeabi-v7a.apk",
+  "ApkSize": 17815,
   "ApkMd5": ""
 }

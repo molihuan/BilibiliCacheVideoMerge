@@ -27,7 +27,7 @@ public class BaseFFmpegCallback {
         XTask.postToMain(new Runnable() {
             @Override
             public void run() {
-                dialog.setContent("已处理progressTime=" + (double) progressTime / 1000000 + "秒");
+                dialog.setContent("进度:" + progress + "\n" + (double) progressTime / 1000000);
             }
         });
     }
