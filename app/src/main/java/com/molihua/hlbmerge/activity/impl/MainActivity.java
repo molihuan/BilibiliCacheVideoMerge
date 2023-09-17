@@ -161,7 +161,7 @@ public class MainActivity extends AbstractMainActivity implements NavigationView
             intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
         } else if (id == R.id.item_teach) {
-            GeneralTools.jumpBrowser(this, LConstants.URL_BILIBILI_HOMEPAGE);
+            GeneralTools.jumpBrowser(this, LConstants.URL_GITEE_HOMEPAGE);
         } else if (id == R.id.item_aboutus) {
             intent = new Intent(this, AboutActivity.class);
             startActivity(intent);

@@ -1,21 +1,18 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group>
 
         <item
             android:id="@+id/item_setting"
             android:title="设置"
-            android:icon="@drawable/settingtp"
-            />
+            android:icon="@drawable/settingtp" />
         <item
             android:id="@+id/item_teach"
             android:icon="@drawable/helptp"
-            android:title="使用教程(必看)" />
+            android:title="使用教程(官网)" />
         <item
             android:id="@+id/item_aboutus"
             android:title="关于我们"
-            android:icon="@drawable/aboutustp"
-            />
+            android:icon="@drawable/aboutustp" />
         <item
             android:id="@+id/item_updatalog"
             android:icon="@drawable/updatatp"
@@ -23,8 +20,7 @@
         <item
             android:id="@+id/item_exitapp"
             android:title="退出"
-            android:icon="@drawable/exittp"
-            />
+            android:icon="@drawable/exittp" />
 
 
     </group>

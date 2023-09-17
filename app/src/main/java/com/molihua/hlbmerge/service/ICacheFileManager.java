@@ -37,4 +37,20 @@ public interface ICacheFileManager {
 
     void refreshCacheFileList(CacheFileListAdapter cacheFileAdapter);
 
+    /**
+     * 显示加载弹窗
+     */
+    void showLoadingDialog();
+
+    /**
+     * 更新加载弹窗信息
+     */
+    void updateLoadingDialogMsg(String str);
+
+    /**
+     * 销毁加载弹窗
+     */
+    void dismissLoadingDialog();
+
+
 }

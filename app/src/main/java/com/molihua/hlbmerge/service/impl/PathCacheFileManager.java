@@ -1,8 +1,10 @@
 package com.molihua.hlbmerge.service.impl;
 
+import android.content.Context;
 import android.view.View;
 
 import com.molihua.hlbmerge.entity.CacheFile;
+import com.molihua.hlbmerge.entity.CacheSrc;
 import com.molihua.hlbmerge.service.BaseCacheFileManager;
 import com.molihua.hlbmerge.utils.FileTool;
 
@@ -20,12 +22,17 @@ import java.util.Objects;
 public class PathCacheFileManager extends BaseCacheFileManager {
 
 
+    public PathCacheFileManager(Context mContext) {
+        super(mContext);
+    }
+
     @Override
     public List<CacheFile> updateCollectionFileList(String path, List<CacheFile> cacheFileList) {
         //初始化列表
         cacheFileList = initCollectionFileList(path, cacheFileList);
 
-        String[] needPath = new String[4];
+        CacheSrc<String> needPath = new CacheSrc<>();
+
         String[] names = new String[3];
         //获取所有的合集
         File[] collectionFile = FileTool.getCollectionChapterFile(path);
@@ -38,17 +45,30 @@ public class PathCacheFileManager extends BaseCacheFileManager {
 
         for (int i = 0; i < collectionFile.length; i++) {
 
-            if (collectionFile[i].listFiles() == null || collectionFile[i].listFiles().length == 0) {
-                return cacheFileList;
+            File[] allFiles = collectionFile[i].listFiles();
+
+
+            if (allFiles == null || allFiles.length == 0) {
+                continue;
             }
 
             //获取每一个集合中的第一个章节
-            File oneChapterPath = collectionFile[i].listFiles()[0];
+            File oneChapterPath = allFiles[0];
             //获取章节里需要的路径
             needPath = FileTool.getNeedPath(oneChapterPath, needPath);
 
-            //获取合集名称和章节名称
-            names = FileTool.getCollectionChapterName(needPath[2], names);
+            String prePathName = collectionFile[i].getName();
+
+            //校验needPath
+            String srcErrorMsg = FileTool.needSrcErrorHandle(needPath, prePathName);
+            if (srcErrorMsg != null) {
+                names[0] = srcErrorMsg;
+                names[1] = srcErrorMsg;
+            } else {
+                //获取合集名称和章节名称
+                names = FileTool.getCollectionChapterName(needPath.getJson(), names);
+            }
+
 
             if (names == null) {
                 return cacheFileList;
@@ -61,10 +81,10 @@ public class PathCacheFileManager extends BaseCacheFileManager {
                             .setCollectionPath(collectionFile[i].getAbsolutePath())
                             .setCollectionName(names[0])
                             .setChapterName(names[1])
-                            .setAudioPath(needPath[0])
-                            .setVideoPath(needPath[1])
-                            .setJsonPath(needPath[2])
-                            .setDanmakuPath(needPath[3])
+                            .setAudioPath(needPath.getAudio())
+                            .setVideoPath(needPath.getVideo())
+                            .setJsonPath(needPath.getJson())
+                            .setDanmakuPath(needPath.getDanmaku())
                             .setBoxVisibility(View.INVISIBLE)
                             .setBoxCheck(false)
                             .setUseUri(false)
@@ -101,15 +121,24 @@ public class PathCacheFileManager extends BaseCacheFileManager {
     public List<CacheFile> updateChapterFileList(String collectionPath, List<CacheFile> cacheFileList) {
         cacheFileList = initChapterFileList(collectionPath, cacheFileList);
 
-        String[] needPath = new String[4];
+        CacheSrc<String> needPath = new CacheSrc<>();
         String[] names = new String[3];
         //获取一个合集下面所有的章节
         File[] chapterFile = FileTool.getCollectionChapterFile(collectionPath);
         for (int i = 0; i < chapterFile.length; i++) {
             //获取章节里需要的路径
             needPath = FileTool.getNeedPath(chapterFile[i], needPath);
-            //获取合集名称和章节名称
-            names = FileTool.getCollectionChapterName(needPath[2], names);
+
+            String prePathName = chapterFile[i].getName();
+            //校验needPath
+            String srcErrorMsg = FileTool.needSrcErrorHandle(needPath, prePathName);
+            if (srcErrorMsg != null) {
+                names[0] = FileTool.getName(collectionPath);
+                names[1] = srcErrorMsg;
+            } else {
+                //获取合集名称和章节名称
+                names = FileTool.getCollectionChapterName(needPath.getJson(), names);
+            }
             cacheFileList.add(
                     new CacheFile()
                             .setFlag(BaseCacheFileManager.FLAG_CACHE_FILE_CHAPTER)
@@ -118,10 +147,10 @@ public class PathCacheFileManager extends BaseCacheFileManager {
                             .setCollectionName(names[0])
                             .setChapterPath(chapterFile[i].getAbsolutePath())
                             .setChapterName(names[1])
-                            .setAudioPath(needPath[0])
-                            .setVideoPath(needPath[1])
-                            .setJsonPath(needPath[2])
-                            .setDanmakuPath(needPath[3])
+                            .setAudioPath(needPath.getAudio())
+                            .setVideoPath(needPath.getVideo())
+                            .setJsonPath(needPath.getJson())
+                            .setDanmakuPath(needPath.getDanmaku())
                             .setBoxVisibility(View.INVISIBLE)
                             .setBoxCheck(false)
                             .setUseUri(false)
@@ -131,6 +160,7 @@ public class PathCacheFileManager extends BaseCacheFileManager {
 
         return cacheFileList;
     }
+
 
     /**
      * 将合集item转换为章节item
@@ -148,7 +178,7 @@ public class PathCacheFileManager extends BaseCacheFileManager {
 
         List<CacheFile> tempList = new ArrayList<>();
 
-        String[] needPath = new String[4];
+        CacheSrc<String> needPath = new CacheSrc<>();
         String[] names = new String[3];
 
         String collectionPath;
@@ -161,8 +191,17 @@ public class PathCacheFileManager extends BaseCacheFileManager {
             for (int i = 0; i < chapterFile.length; i++) {
                 //获取章节里需要的路径
                 needPath = FileTool.getNeedPath(chapterFile[i], needPath);
-                //获取合集名称和章节名称
-                names = FileTool.getCollectionChapterName(needPath[2], names);
+
+                String prePathName = chapterFile[i].getName();
+                //校验needPath
+                String srcErrorMsg = FileTool.needSrcErrorHandle(needPath, prePathName);
+                if (srcErrorMsg != null) {
+                    names[0] = FileTool.getName(collectionPath);
+                    names[1] = srcErrorMsg;
+                } else {
+                    //获取合集名称和章节名称
+                    names = FileTool.getCollectionChapterName(needPath.getJson(), names);
+                }
                 tempList.add(
                         new CacheFile()
                                 .setFlag(BaseCacheFileManager.FLAG_CACHE_FILE_CHAPTER)
@@ -171,10 +210,10 @@ public class PathCacheFileManager extends BaseCacheFileManager {
                                 .setCollectionName(names[0])
                                 .setChapterPath(chapterFile[i].getAbsolutePath())
                                 .setChapterName(names[1])
-                                .setAudioPath(needPath[0])
-                                .setVideoPath(needPath[1])
-                                .setJsonPath(needPath[2])
-                                .setDanmakuPath(needPath[3])
+                                .setAudioPath(needPath.getAudio())
+                                .setVideoPath(needPath.getVideo())
+                                .setJsonPath(needPath.getJson())
+                                .setDanmakuPath(needPath.getDanmaku())
                                 .setBoxVisibility(View.INVISIBLE)
                                 .setBoxCheck(false)
                                 .setUseUri(false)

@@ -65,6 +65,7 @@ public class InitTool {
         if (ConfigData.isAgreeTerm()) {
             init(context, buglyDebug, umDebug);
         }
+
     }
 
     /**

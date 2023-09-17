@@ -23,9 +23,13 @@ public class UpdataTools {
     //默认更新url(gitee)
     public static final String UPDATE_URL_CHANNEL_GITEE = "https://gitee.com/molihuan/BilibiliCacheVideoMergeAndroid/raw/master/jsonapi/update_release.json";
     //备份更新url(gitlink)
-    public static final String UPDATE_URL_CHANNEL_GITLINK = "https://www.gitlink.org.cn/api/molihuan/BilibiliCacheVideoMerge/raw?filepath=jsonapi/update_release.json&ref=master";
+    public static final String UPDATE_URL_CHANNEL_GITLINK = "https://www.gitlink.org.cn/api/molihuan/BilibiliCacheVideoMerge/raw/jsonapi%2Fupdate_release.json?ref=master";
     //备份更新url(github)
     public static final String UPDATE_URL_CHANNEL_GITHUB = "https://raw.githubusercontent.com/molihuan/BilibiliCacheVideoMerge/master/jsonapi/update_release.json";
+
+//    public static final String UPDATE_URL_CHANNEL_GITCODE = "https://gitcode.net/molihuan/BilibiliCacheVideoMerge/-/raw/master/jsonapi/update_release.json";
+
+
     //已经使用gitlink检测更新
     private static boolean usedGitlinkCheckUpdata = false;
     //已经使用github检测更新
@@ -39,6 +43,7 @@ public class UpdataTools {
 
     public final static long TIMESTAMP_DAY = 86400000;
     public final static long TIMESTAMP_WEEK = 604800000;
+    //    public final static long TIMESTAMP_WEEK = 604;
     public final static long TIMESTAMP_MONTH = Long.parseLong("2592000000");
 
     /**
@@ -67,7 +72,7 @@ public class UpdataTools {
     public static void initXUpdate(Context context) {
         XUpdate.get()
                 .debug(false)
-                .isWifiOnly(true)                                               //默认设置只在wifi下检查版本更新
+                .isWifiOnly(false)                                               //默认设置只在wifi下检查版本更新
                 .isGet(true)                                                    //默认设置使用get请求检查版本
                 .isAutoMode(false)                                              //默认设置非自动模式，可根据具体使用配置
                 .param("versionCode", UpdateUtils.getVersionCode(context))         //设置默认公共请求参数
@@ -128,7 +133,7 @@ public class UpdataTools {
     //public static final String XUPDATE_DEMO_DOWNLOAD_URL = "https://xuexiangjys.oss-cn-shanghai.aliyuncs.com/apk/xupdate_demo_1.0.2.apk";
 
     /**
-     * 检查更新(gitee)
+     * 检查更新(默认gitee)
      */
     public static void checkUpdata(Context context) {
         EasyUpdate.checkUpdate(context, UPDATE_URL_CHANNEL_GITEE);

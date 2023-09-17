@@ -12,6 +12,7 @@ import com.blankj.molihuan.utilcode.util.ConvertUtils;
 import com.blankj.molihuan.utilcode.util.FileIOUtils;
 import com.blankj.molihuan.utilcode.util.FileUtils;
 import com.blankj.molihuan.utilcode.util.StringUtils;
+import com.molihua.hlbmerge.entity.CacheSrc;
 import com.molihuan.pathselector.utils.MConstants;
 import com.molihuan.pathselector.utils.Mtools;
 
@@ -30,6 +31,45 @@ import java.util.UUID;
  * @Description:
  */
 public class FileTool {
+    /**
+     * 获取上一级名称
+     *
+     * @param path
+     * @return
+     */
+    public static String getParentName(String path) {
+
+        if (path.endsWith(File.separator)) {
+            path = path.substring(0, path.length() - 1);
+        }
+
+        // 拆分字符串获取路径元素
+        String[] elements = path.split(File.separator);
+
+        // 获取最后一个路径元素作为父目录名
+        String parentName = elements[elements.length - 2];
+        return parentName;
+    }
+
+    /**
+     * 通过全路径获取名称
+     *
+     * @param path
+     * @return
+     */
+    public static String getName(String path) {
+
+        if (path.endsWith(File.separator)) {
+            path = path.substring(0, path.length() - 1);
+        }
+
+        // 拆分字符串获取路径元素
+        String[] elements = path.split(File.separator);
+
+        // 获取最后一个路径元素作为父目录名
+        String name = elements[elements.length - 1];
+        return name;
+    }
 
     public static void shareFile(Context context, String filePath) {
         shareFile(context, filePath, null);
@@ -172,7 +212,7 @@ public class FileTool {
      * @param result
      * @return
      */
-    private static String[] getCollectionChapterNameByJsonStr(String jsonStr, String[] result) {
+    public static String[] getCollectionChapterNameByJsonStr(String jsonStr, String[] result) {
 
         JSONObject jsonObject;
         //将json字符串转换成json对象
@@ -283,12 +323,12 @@ public class FileTool {
      * result[2]:entry.json
      * result[3]:danmaku.xml
      */
-    public static String[] getNeedPath(String chapterPath, String[] result) {
+    public static CacheSrc getNeedPath(String chapterPath, CacheSrc result) {
         File file = new File(chapterPath);
         return getNeedPath(file, result);
     }
 
-    public static String[] getNeedPath(File chapterFile, String[] result) {
+    public static CacheSrc getNeedPath(File chapterFile, CacheSrc result) {
         File[] files = chapterFile.listFiles();
         if (files != null) {
             for (int i = 0; i < files.length; i++) {
@@ -297,22 +337,48 @@ public class FileTool {
                 } else {
                     switch (files[i].getName()) {
                         case "audio.m4s":
-                            result[0] = files[i].getAbsolutePath();
+                            result.setAudio(files[i].getAbsolutePath());
+
                             break;
                         case "video.m4s":
-                            result[1] = files[i].getAbsolutePath();
+                            result.setVideo(files[i].getAbsolutePath());
                             break;
                         case "entry.json":
-                            result[2] = files[i].getAbsolutePath();
+                            result.setJson(files[i].getAbsolutePath());
                             break;
                         case "danmaku.xml":
-                            result[3] = files[i].getAbsolutePath();
+                            result.setDanmaku(files[i].getAbsolutePath());
                             break;
                     }
                 }
             }
         }
         return result;
+    }
+
+    public static String needSrcErrorHandle(CacheSrc src, String preFoldName) {
+        StringBuilder builder = new StringBuilder();
+
+        if (src.getAudio() == null) {
+            builder.append("audio.m4s,");
+        }
+        if (src.getVideo() == null) {
+            builder.append("video.m4s,");
+        }
+        if (src.getJson() == null) {
+            builder.append("entry.json,");
+        }
+        if (src.getDanmaku() == null) {
+//            builder.append("danmaku.xml,");
+        }
+
+        if (builder.length() == 0) {
+            return null;
+        }
+
+        builder.insert(0, preFoldName + "下");
+        builder.append("没找到");
+        return builder.toString();
     }
 
 }

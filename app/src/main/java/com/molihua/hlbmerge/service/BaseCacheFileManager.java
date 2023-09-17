@@ -1,10 +1,14 @@
 package com.molihua.hlbmerge.service;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.view.View;
 
 import com.molihua.hlbmerge.adapter.CacheFileListAdapter;
 import com.molihua.hlbmerge.entity.CacheFile;
+import com.xuexiang.xtask.XTask;
+import com.xuexiang.xui.utils.WidgetUtils;
+import com.xuexiang.xui.widget.dialog.LoadingDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +27,17 @@ public abstract class BaseCacheFileManager implements ICacheFileManager {
     public final static int FLAG_CACHE_FILE_CHAPTER = 1;
     //返回
     public final static int FLAG_CACHE_FILE_BACK = -1;
+
+    protected LoadingDialog mLoadingDialog;
+
+    protected Context mContext;
+
+    public BaseCacheFileManager(Context mContext) {
+        this.mContext = mContext;
+        mLoadingDialog = WidgetUtils.getLoadingDialog(mContext)
+                .setIconScale(0.7F)
+                .setLoadingSpeed(8);
+    }
 
     @Override
     public List<CacheFile> initCollectionFileList(String path, List<CacheFile> cacheFileList) {
@@ -128,5 +143,38 @@ public abstract class BaseCacheFileManager implements ICacheFileManager {
         cacheFileAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void showLoadingDialog() {
+        XTask.postToMain(new Runnable() {
+            @Override
+            public void run() {
+                if (mLoadingDialog != null) {
+                    mLoadingDialog.show();
+                }
+            }
+        });
+    }
 
+    @Override
+    public void updateLoadingDialogMsg(String str) {
+        XTask.postToMain(new Runnable() {
+            @Override
+            public void run() {
+                mLoadingDialog.updateMessage(str);
+            }
+        });
+    }
+
+    @Override
+    public void dismissLoadingDialog() {
+        XTask.postToMain(new Runnable() {
+            @Override
+            public void run() {
+                if (mLoadingDialog != null) {
+                    mLoadingDialog.dismiss();
+//                    mLoadingDialog.hide();
+                }
+            }
+        });
+    }
 }

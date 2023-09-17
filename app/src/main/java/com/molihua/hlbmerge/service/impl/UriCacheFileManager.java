@@ -6,11 +6,17 @@ import android.view.View;
 import androidx.documentfile.provider.DocumentFile;
 import androidx.fragment.app.Fragment;
 
+import com.molihua.hlbmerge.dao.ConfigData;
+import com.molihua.hlbmerge.entity.CacheDo;
 import com.molihua.hlbmerge.entity.CacheFile;
+import com.molihua.hlbmerge.entity.CacheSrc;
 import com.molihua.hlbmerge.service.BaseCacheFileManager;
+import com.molihua.hlbmerge.utils.FileTool;
 import com.molihua.hlbmerge.utils.UriTool;
+import com.tencent.mmkv.MMKV;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -23,9 +29,11 @@ import java.util.Objects;
  */
 public class UriCacheFileManager extends BaseCacheFileManager {
 
+
     private Fragment fragment;
 
     public UriCacheFileManager(Fragment fragment) {
+        super(fragment.getContext());
         this.fragment = fragment;
     }
 
@@ -34,41 +42,63 @@ public class UriCacheFileManager extends BaseCacheFileManager {
         //初始化列表
         cacheFileList = initCollectionFileList(path, cacheFileList);
 
-        Uri[] needUri = new Uri[4];
+        CacheSrc<Uri> needUri = new CacheSrc<>();
         String[] names = new String[3];
+
+
         //获取所有的合集路径
         List<DocumentFile> collectionFiles = UriTool.getCollectionChapterFile(fragment, path);
+        //显示进度弹窗
+        showLoadingDialog();
 
-        if (collectionFiles == null) {
-            return cacheFileList;
-        }
+
         for (int i = 0; i < collectionFiles.size(); i++) {
+
+            DocumentFile[] allDocumentFiles = collectionFiles.get(i).listFiles();
+
+
+            if (allDocumentFiles.length == 0) {
+                continue;
+            }
+            //进度加载
+            int finalI = i + 1;
+            //更新弹窗信息
+            updateLoadingDialogMsg(finalI + " / " + collectionFiles.size());
+
+
+            String prePathName = collectionFiles.get(i).getName();
+
             //获取每一个集合中的第一个章节路径
-            DocumentFile oneChapterPath = Objects.requireNonNull(collectionFiles.get(i).listFiles())[0];
+            DocumentFile oneChapterPath = allDocumentFiles[0];
+//            Mtools.log(oneChapterPath.getUri().toString());
+            getCacheMsgByMMKV(oneChapterPath, prePathName, needUri, names);
 
-            //获取章节里需要的Uri
-            needUri = UriTool.getNeedUri(oneChapterPath, needUri);
 
-            //获取合集名称和章节名称
-            names = UriTool.getCollectionChapterName(needUri[2], names);
+            //item显示路径
+            String itemShowPath = path + File.separator + prePathName;
 
             cacheFileList.add(
                     new CacheFile()
                             .setFlag(BaseCacheFileManager.FLAG_CACHE_FILE_COLLECTION)
                             .setWholeVisibility(View.VISIBLE)
-                            .setCollectionPath(path + File.separator + collectionFiles.get(i).getName())
+                            .setCollectionPath(itemShowPath)
                             .setCollectionName(names[0])
                             .setChapterName(names[1])
-                            .setAudioPath(needUri[0].toString())
-                            .setVideoPath(needUri[1].toString())
-                            .setJsonPath(needUri[2].toString())
-                            .setDanmakuPath(needUri[3].toString())
+                            .setJsonPath(needUri.getJson() == null ? null : needUri.getJson().toString())
+                            .setAudioPath(needUri.getAudio() == null ? null : needUri.getAudio().toString())
+                            .setVideoPath(needUri.getVideo() == null ? null : needUri.getVideo().toString())
+                            .setDanmakuPath(needUri.getDanmaku() == null ? null : needUri.getDanmaku().toString())
                             .setBoxVisibility(View.INVISIBLE)
                             .setBoxCheck(false)
                             .setUseUri(true)
                             .setCoverUrl(names[2])
             );
+
+
         }
+
+        //关闭弹窗
+        dismissLoadingDialog();
 
         return cacheFileList;
     }
@@ -99,22 +129,40 @@ public class UriCacheFileManager extends BaseCacheFileManager {
     public List<CacheFile> updateChapterFileList(String collectionPath, List<CacheFile> cacheFileList) {
         cacheFileList = initChapterFileList(collectionPath, cacheFileList);
 
-        Uri[] needUri = new Uri[4];
+        CacheSrc<Uri> needUri = new CacheSrc<>();
         String[] names = new String[3];
+
+        showLoadingDialog();
+
         //获取一个合集下面所有的章节
         List<DocumentFile> chapterFile = UriTool.getCollectionChapterFile(fragment, collectionPath);
 
-        if (chapterFile == null) {
-            return cacheFileList;
-        }
-
         for (int i = 0; i < chapterFile.size(); i++) {
 
-            //获取章节里需要的Uri
-            needUri = UriTool.getNeedUri(chapterFile.get(i), needUri);
+            int finalI = i + 1;
+            updateLoadingDialogMsg(finalI + " / " + chapterFile.size());
+            String prePathName = chapterFile.get(i).getName();
 
-            //获取合集名称和章节名称
-            names = UriTool.getCollectionChapterName(needUri[2], names);
+            boolean cacheMsgByMMKVresult = getCacheMsgByMMKV(chapterFile.get(i), prePathName, needUri, names);
+
+            if (cacheMsgByMMKVresult) {
+                names[0] = FileTool.getName(collectionPath);
+            }
+
+
+            //获取章节里需要的Uri
+//            needUri = UriTool.getNeedUri(chapterFile.get(i), needUri);
+
+
+            //校验needUri
+//            String srcErrorMsg = FileTool.needSrcErrorHandle(needUri, prePathName);
+//            if (srcErrorMsg != null) {
+//                names[0] = FileTool.getName(collectionPath);
+//                names[1] = srcErrorMsg;
+//            } else {
+//                //获取合集名称和章节名称
+//                names = UriTool.getCollectionChapterName(needUri.getJson(), names);
+//            }
 
             cacheFileList.add(
                     new CacheFile()
@@ -122,21 +170,85 @@ public class UriCacheFileManager extends BaseCacheFileManager {
                             .setWholeVisibility(View.VISIBLE)
                             .setCollectionPath(collectionPath)
                             .setCollectionName(names[0])
-                            .setChapterPath(collectionPath + File.separator + chapterFile.get(i).getName())
+                            .setChapterPath(collectionPath + File.separator + prePathName)
                             .setChapterName(names[1])
-                            .setAudioPath(needUri[0].toString())
-                            .setVideoPath(needUri[1].toString())
-                            .setJsonPath(needUri[2].toString())
-                            .setDanmakuPath(needUri[3].toString())
+                            .setJsonPath(needUri.getJson() == null ? null : needUri.getJson().toString())
+                            .setAudioPath(needUri.getAudio() == null ? null : needUri.getAudio().toString())
+                            .setVideoPath(needUri.getVideo() == null ? null : needUri.getVideo().toString())
+                            .setDanmakuPath(needUri.getDanmaku() == null ? null : needUri.getDanmaku().toString())
                             .setBoxVisibility(View.INVISIBLE)
                             .setBoxCheck(false)
                             .setUseUri(true)
                             .setCoverUrl(names[2])
             );
         }
-
+        dismissLoadingDialog();
         return cacheFileList;
     }
+
+    /**
+     * 进行数据缓存
+     *
+     * @param documentFile
+     * @param prePathName
+     * @param needUri
+     * @param names
+     * @return
+     */
+    public boolean getCacheMsgByMMKV(DocumentFile documentFile, String prePathName, CacheSrc<Uri> needUri, String[] names) {
+        String key = ConfigData.TEMP_DATA_PERFIX + documentFile.getUri();
+        boolean result = false;
+        //判断kv中是否存在
+        if (ConfigData.containsKey(key)) {
+            CacheDo cacheDo = ConfigData.getInstance(key, CacheDo.class);
+            //获取章节里需要的Uri
+            needUri.setAudio(Uri.parse(cacheDo.getAudio() == null ? "" : cacheDo.getAudio()));
+            needUri.setVideo(Uri.parse(cacheDo.getVideo() == null ? "" : cacheDo.getVideo()));
+            needUri.setJson(Uri.parse(cacheDo.getJson() == null ? "" : cacheDo.getJson()));
+            needUri.setDanmaku(Uri.parse(cacheDo.getDanmaku() == null ? "" : cacheDo.getDanmaku()));
+
+            names[0] = cacheDo.getTitle();
+            names[1] = cacheDo.getSubTitle();
+            names[2] = cacheDo.getCoverUrl();
+
+
+        } else {
+            CacheDo cacheDo = new CacheDo();
+            //获取章节里需要的Uri
+            needUri = UriTool.getNeedUri(documentFile, needUri);
+            cacheDo.setJson(needUri.getJson() == null ? "" : needUri.getJson().toString())
+                    .setAudio(needUri.getAudio() == null ? "" : needUri.getAudio().toString())
+                    .setVideo(needUri.getVideo() == null ? "" : needUri.getVideo().toString())
+                    .setDanmaku(needUri.getDanmaku() == null ? "" : needUri.getDanmaku().toString());
+
+            //校验needUri
+            String srcErrorMsg = FileTool.needSrcErrorHandle(needUri, prePathName);
+
+            if (srcErrorMsg != null) {
+                names[0] = srcErrorMsg;
+                names[1] = srcErrorMsg;
+                result = true;
+            } else {
+                //获取合集名称和章节名称
+//                names = UriTool.getCollectionChapterName(needUri.getJson(), names);
+                try {
+                    names = UriTool.uriToJsonString(mContext, needUri.getJson(), names);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            cacheDo.setTitle(names[0]);
+            cacheDo.setSubTitle(names[1]);
+            cacheDo.setCoverUrl(names[2]);
+
+            ConfigData.saveInstance(key, cacheDo, MMKV.ExpireInMinute);
+        }
+
+        return result;
+
+    }
+
 
     /**
      * 将合集item转换为章节item
@@ -154,7 +266,7 @@ public class UriCacheFileManager extends BaseCacheFileManager {
 
         List<CacheFile> tempList = new ArrayList<>();
 
-        Uri[] needUri = new Uri[4];
+        CacheSrc<Uri> needUri = new CacheSrc<>();
         String[] names = new String[3];
 
         String collectionPath;
@@ -169,8 +281,17 @@ public class UriCacheFileManager extends BaseCacheFileManager {
                 //获取章节里需要的Uri
                 needUri = UriTool.getNeedUri(chapterFile.get(i), needUri);
 
-                //获取合集名称和章节名称
-                names = UriTool.getCollectionChapterName(needUri[2], names);
+                String prePathName = chapterFile.get(i).getName();
+
+                //校验needUri
+                String srcErrorMsg = FileTool.needSrcErrorHandle(needUri, prePathName);
+                if (srcErrorMsg != null) {
+                    names[0] = FileTool.getName(collectionPath);
+                    names[1] = srcErrorMsg;
+                } else {
+                    //获取合集名称和章节名称
+                    names = UriTool.getCollectionChapterName(needUri.getJson(), names);
+                }
 
                 tempList.add(
                         new CacheFile()
@@ -180,15 +301,17 @@ public class UriCacheFileManager extends BaseCacheFileManager {
                                 .setCollectionName(names[0])
                                 .setChapterPath(collectionPath + File.separator + chapterFile.get(i).getName())
                                 .setChapterName(names[1])
-                                .setAudioPath(needUri[0].toString())
-                                .setVideoPath(needUri[1].toString())
-                                .setJsonPath(needUri[2].toString())
-                                .setDanmakuPath(needUri[3].toString())
+                                .setJsonPath(needUri.getJson() == null ? null : needUri.getJson().toString())
+                                .setAudioPath(needUri.getAudio() == null ? null : needUri.getAudio().toString())
+                                .setVideoPath(needUri.getVideo() == null ? null : needUri.getVideo().toString())
+                                .setDanmakuPath(needUri.getDanmaku() == null ? null : needUri.getDanmaku().toString())
                                 .setBoxVisibility(View.INVISIBLE)
                                 .setBoxCheck(false)
                                 .setUseUri(true)
                                 .setCoverUrl(names[2])
                 );
+
+
             }
 
         }
