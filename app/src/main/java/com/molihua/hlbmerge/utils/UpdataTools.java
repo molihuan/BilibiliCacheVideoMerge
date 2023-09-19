@@ -57,9 +57,9 @@ public class UpdataTools {
 
             if (unlimitClickCheckUpdataMills == 0) {
                 unlimitClickCheckUpdataMills = nowMills + 300000;
-                Mtools.toast("为了减小服务器压力,请5分钟后再试 或 自行进入下载:" + LConstants.PROJECT_ADDRESS);
+                Mtools.toast("为了减小服务器压力,请5分钟后再试 或 自行进入官网(开源地址)下载");
             } else if (nowMills < unlimitClickCheckUpdataMills) {
-                Mtools.toast(String.format("为了减小服务器压力,请%s分钟后再试 或 自行进入下载:" + LConstants.PROJECT_ADDRESS, (unlimitClickCheckUpdataMills - nowMills) / 60000));
+                Mtools.toast(String.format("为了减小服务器压力,请%s分钟后再试 或 自行进入官网(开源地址)下载", (unlimitClickCheckUpdataMills - nowMills) / 60000));
             } else {
                 checkUpdata(context);
                 clickCheckUpdataTimes = 0;
@@ -88,14 +88,14 @@ public class UpdataTools {
                             case UpdateError.ERROR.CHECK_NO_WIFI:
                                 break;
                             default:
-                                Mtools.toast("更新失败!正在尝试使用备用链接 或 自行进入下载:" + LConstants.PROJECT_ADDRESS, Toast.LENGTH_LONG);
+                                Mtools.toast("更新失败!正在尝试使用备用链接 或 自行进入官网(开源地址)下载", Toast.LENGTH_LONG);
                                 //启用备用检测更新
                                 UpdataTools.checkUpdataByGitlink(context.getApplicationContext());
                         }
 
                     }
                 })
-                .supportSilentInstall(true)                                     //设置是否支持静默安装，默认是true
+                .supportSilentInstall(false)                                     //设置是否支持静默安装，默认是true
         ;
     }
 

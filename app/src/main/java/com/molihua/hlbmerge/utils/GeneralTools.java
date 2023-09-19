@@ -13,6 +13,7 @@ import com.molihua.hlbmerge.activity.AbstractMainActivity;
 import com.molihua.hlbmerge.dao.ConfigData;
 import com.molihuan.pathselector.utils.FileTools;
 import com.molihuan.pathselector.utils.PermissionsTools;
+import com.xuexiang.xui.widget.dialog.DialogLoader;
 
 import java.util.List;
 
@@ -76,6 +77,45 @@ public class GeneralTools {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    /**
+     * 跳转项目地址
+     *
+     * @param context
+     */
+    public static void jumpProjectAddress(Context context) {
+        DialogLoader.getInstance().showConfirmDialog(
+                context,
+                "国内选GITEE国外选GITHUB",
+                "GITEE",
+                (dialog, which) -> {
+                    GeneralTools.jumpBrowser(context, LConstants.PROJECT_ADDRESS_GITEE);
+                    dialog.dismiss();
+                },
+                "GITHUB",
+                (dialog, which) -> {
+                    GeneralTools.jumpBrowser(context, LConstants.PROJECT_ADDRESS_GITHUB);
+                    dialog.dismiss();
+                }
+        ).setCanceledOnTouchOutside(true);
+    }
+
+    public static void jumpProjectIssues(Context context) {
+        DialogLoader.getInstance().showConfirmDialog(
+                context,
+                "国内选GITEE国外选GITHUB",
+                "GITEE",
+                (dialog, which) -> {
+                    GeneralTools.jumpBrowser(context, LConstants.PROJECT_ADDRESS_GITEE + "/issues");
+                    dialog.dismiss();
+                },
+                "GITHUB",
+                (dialog, which) -> {
+                    GeneralTools.jumpBrowser(context, LConstants.PROJECT_ADDRESS_GITHUB + "/issues");
+                    dialog.dismiss();
+                }
+        ).setCanceledOnTouchOutside(true);
     }
 
 

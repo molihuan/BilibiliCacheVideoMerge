@@ -22,6 +22,7 @@
 ## 特性
 
 - [x] 合并(导出)B站缓存(有声音视频，无声音视频，仅音频)
+- [x] 番剧、电影合并(导出)
 - [x] 支持安卓 5.0 ~ 13（理论上）
 - [x] 视频挂载弹幕播放
 - [ ] 更新本地弹幕
@@ -36,12 +37,6 @@
 #### 项目地址：
 ##### [Github地址](https://github.com/molihuan/BilibiliCacheVideoMerge)
 ##### [Gitee地址](https://gitee.com/molihuan/BilibiliCacheVideoMergeAndroid)
-
-
-
-## 下载链接：[跳转](https://github.com/molihuan/BilibiliCacheVideoMerge/tree/master/app/release)
-
-
 
 ## 演示：(如果github显示不了请转到国内Gitee:[传送门](https://gitee.com/molihuan/BilibiliCacheVideoMergeAndroid))
 
@@ -63,54 +58,72 @@
 
 ![hlb6.md.jpg](https://z4a.net/images/2023/01/28/hlb6.md.jpg)
 
-![hlb7.md.jpg](https://z4a.net/images/2023/01/28/hlb7.md.jpg)
+## 软件下载:
 
+Gitee([https://gitee.com/molihuan/BilibiliCacheVideoMergeAndroid/tree/master/app/release](https://gitee.com/molihuan/BilibiliCacheVideoMergeAndroid/tree/master/app/release))
 
+Github(https://github.com/molihuan/BilibiliCacheVideoMerge/tree/master/app/release)
 
-## 软件协议
-
-### [查看](./app/src/main/assets/statement.md)
+网盘分流：https://wwa.lanzouo.com/b016uhb5g      密码：MLH
 
 ## 软件更新
 
 - 优先级 1 (最快):交流群群文件
+
 - 优先级 2 (次之):网盘链接：
-安卓版：https://wwa.lanzouo.com/b016uhb5g
-密码:MLH
-电脑版：https://wwa.lanzouo.com/b016vmouf
-密码:MLH
-- 优先级 3 :Github(https://github.com/molihuan/BilibiliCacheVideoMerge/tree/master/app/release)
+  安卓版：https://wwa.lanzouo.com/b016uhb5g
+  密码：MLH
+  电脑版：https://wwa.lanzouo.com/b016vmouf
+  密码：MLH
+
+- 优先级 3 :
+
+  Github(https://github.com/molihuan/BilibiliCacheVideoMerge/tree/master/app/release)
+
+  Gitee([https://gitee.com/molihuan/BilibiliCacheVideoMergeAndroid/tree/master/app/release](https://gitee.com/molihuan/BilibiliCacheVideoMergeAndroid/tree/master/app/release))
+
 - 优先级 4 :软件内
 
 ## 问题反馈
 
-请使用模板反馈问题，这样可以帮助开发者快速定位和解决问题，谢谢配合，爱你萌萌哒~^o^~
+##### 请使用模板反馈问题，这样可以帮助开发者快速定位和解决问题，否则一律不处理，谢谢配合，爱你萌萌哒~^o^~
 
-##### 反馈模板:
+#### 反馈模板:
 
-类别：(必填，0、优化建议。1、打开软件就闪退。2、无论什么视频合并都失败或闪退。3、合并个别视频失败或闪退。4、主页空白无法加载哔哩哔哩缓存视频。5、其他问题)
+##### 类别：(必填，选择)
 
-设备信息：(必填，软件内左测菜单栏中点击设备信息即可复制，不会泄漏设备特殊信息，无法进入软件按下列大概填写即可：
+0、优化建议。
+
+1、打开软件就闪退。
+
+2、无论什么视频合并都失败或闪退。
+
+3、合并个别视频失败或闪退。
+
+4、主页空白无法加载哔哩哔哩缓存视频。
+
+5、无法授权。
+
+6、其他问题。
+
+##### 设备信息：(必填）
+
+软件内左测菜单栏中点击设备信息即可复制，不会泄漏设备特殊信息，仅仅是一个标识，无法进入软件按下列大概填写即可（例如）：
 Android:9 App版本:1.6.9.2beta
 机型:HUAWEI/VOG-AL10
-设备id:
-2f5e3c3905abc3dc5b757787725d28e43)
+设备id:2f5e3c3905abc3dc5b757787725d28e43
 
-描述：(必填，越详细越好)
+##### 描述：(必填，越详细越好)
 
-怎样触发bug：(选填)
+阿巴阿巴阿巴阿巴xxxxxx.........
 
-视频链接：(选填，如果视频已经下架则把本地缓存文件打包压缩发我邮箱或者直接发群里，具体操作：[https://www.bilibili.com/video/BV1Mx4y1G7by](https://www.bilibili.com/video/BV1Mx4y1G7by))
+##### 怎样触发bug：(选填)
 
+阿巴阿巴阿巴阿巴xxxxxx.........
 
+##### 视频链接：(选填）
 
-## 软件下载:
-
-https://github.com/molihuan/BilibiliCacheVideoMerge/tree/master/app/release
-
-## 更新日志:
-
-https://github.com/molihuan/BilibiliCacheVideoMerge/blob/master/app/src/main/assets/updataLog.html
+如果视频已经下架则把本地缓存文件打包压缩发我邮箱或者直接发群里，具体操作教程：[https://www.bilibili.com/video/BV1Mx4y1G7by](https://www.bilibili.com/video/BV1Mx4y1G7by)
 
 ## 特别鸣谢
 

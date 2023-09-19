@@ -92,6 +92,7 @@ public class MainCompleteFragment extends AbstractMainFragment {
 
         pathSelectFragment = PathSelector.build(this, MConstants.BUILD_FRAGMENT)
                 .setRootPath(ConfigData.getOutputFilePath())
+                .setSortType(MConstants.SortRules.SORT_TIME_DESC)
                 .setFrameLayoutId(R.id.main_complete_view)
                 .setShowTitlebarFragment(false)
                 .setAlwaysShowHandleFragment(true)
