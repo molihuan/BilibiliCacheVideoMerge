@@ -29,4 +29,7 @@
     <string name="tip_uri_authorization_permission_content_hlb">访问%s目录需要授予权限,\n是否进行授权?</string>
     <string name="option_confirm_hlb">确定</string>
     <string name="option_cancel_hlb">取消</string>
+    <string name="CHECK_UPDATES">检查更新</string>
+    <string name="UPDATE_LOGS">更新日志</string>
+    <string name="SPONSOR">赞助</string>
 </resources>

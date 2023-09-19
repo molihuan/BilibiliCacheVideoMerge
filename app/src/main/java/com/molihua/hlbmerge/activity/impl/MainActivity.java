@@ -161,15 +161,12 @@ public class MainActivity extends AbstractMainActivity implements NavigationView
             intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
         } else if (id == R.id.item_teach) {
-            GeneralTools.jumpBrowser(this, LConstants.URL_GITEE_HOMEPAGE);
+            GeneralTools.jumpProjectAddress(this);
         } else if (id == R.id.item_aboutus) {
             intent = new Intent(this, AboutActivity.class);
             startActivity(intent);
         } else if (id == R.id.item_updatalog) {
-            intent = new Intent(this, HtmlActivity.class);
-            intent.putExtra("url", "file:///android_asset/updataLog.html");
-            intent.putExtra("title", "更新日志");
-            startActivity(intent);
+            UpdataTools.limitClickCheckUpdata(this);
         } else if (id == R.id.item_exitapp) {
             MobclickAgent.onKillProcess(this);
             finish();

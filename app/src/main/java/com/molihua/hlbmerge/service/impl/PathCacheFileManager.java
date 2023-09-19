@@ -108,7 +108,7 @@ public class PathCacheFileManager extends BaseCacheFileManager {
                         .setFlag(BaseCacheFileManager.FLAG_CACHE_FILE_BACK)
                         .setWholeVisibility(View.VISIBLE)
                         .setCollectionPath(collectionPath)
-                        .setChapterName("返回上一级")
+                        .setChapterName("返回上一级(长按多选)")
                         .setBoxVisibility(View.INVISIBLE)
                         .setBoxCheck(false)
                         .setUseUri(false)

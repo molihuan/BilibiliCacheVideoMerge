@@ -8,15 +8,16 @@
         <item
             android:id="@+id/item_teach"
             android:icon="@drawable/helptp"
-            android:title="使用教程(官网)" />
-        <item
-            android:id="@+id/item_aboutus"
-            android:title="关于我们"
-            android:icon="@drawable/aboutustp" />
+            android:title="开源地址(使用教程)" />
         <item
             android:id="@+id/item_updatalog"
             android:icon="@drawable/updatatp"
-            android:title="更新日志" />
+            android:title="@string/CHECK_UPDATES" />
+        <item
+            android:id="@+id/item_aboutus"
+            android:title="关于"
+            android:icon="@drawable/aboutustp" />
+
         <item
             android:id="@+id/item_exitapp"
             android:title="退出"
