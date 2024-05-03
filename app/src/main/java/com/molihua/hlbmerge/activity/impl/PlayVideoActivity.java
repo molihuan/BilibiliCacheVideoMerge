@@ -9,6 +9,8 @@ import com.molihua.hlbmerge.R;
 import com.molihua.hlbmerge.activity.BaseActivity;
 import com.molihua.hlbmerge.controller.videocontroller.DKVideoController;
 import com.molihua.hlbmerge.utils.FileTool;
+import com.molihua.hlbmerge.utils.GeneralTools;
+import com.molihua.hlbmerge.utils.LConstants;
 import com.molihuan.pathselector.utils.Mtools;
 
 import java.io.File;
@@ -27,6 +29,7 @@ public class PlayVideoActivity extends BaseActivity implements View.OnClickListe
     private Button btn_copypath;
     //更新弹幕按钮
     private Button btn_updataxml;
+    private Button btn_jump_source_vedio;
     //分享按钮
     private Button shareBtn;
 
@@ -50,6 +53,7 @@ public class PlayVideoActivity extends BaseActivity implements View.OnClickListe
     @Override
     public void getComponents() {
         btn_copypath = findViewById(R.id.btn_copypath);
+        btn_jump_source_vedio = findViewById(R.id.btn_jump_source_vedio);
         btn_updataxml = findViewById(R.id.btn_updataxml);
         videoView = findViewById(R.id.play_video_view);
         shareBtn = findViewById(R.id.btn_share);
@@ -84,6 +88,7 @@ public class PlayVideoActivity extends BaseActivity implements View.OnClickListe
     @Override
     public void setListeners() {
         btn_copypath.setOnClickListener(this);
+        btn_jump_source_vedio.setOnClickListener(this);
         btn_updataxml.setOnClickListener(this);
         shareBtn.setOnClickListener(this);
     }
@@ -96,12 +101,22 @@ public class PlayVideoActivity extends BaseActivity implements View.OnClickListe
                 ClipboardUtils.copyText(videoPath);
                 Mtools.toast("文件路径已复制到剪贴板");
                 break;
+            case R.id.btn_jump_source_vedio:
+                String bvid = FileTool.getVedioMetadataTitle(videoPath);
+                if (bvid == null) {
+                    Mtools.toast("无法获取bvid,请重新导出,如果重新导出也无法获取则缓存文件不完整导致。");
+                    return;
+                }
+                GeneralTools.jumpBrowser(this, LConstants.URL_BILIBILI_VIDEO_PRE + bvid);
+                break;
             case R.id.btn_updataxml:
                 Mtools.toast("还在开发中...");
                 break;
             case R.id.btn_share:
                 FileTool.shareFile(this, new File(videoPath));
                 break;
+            default:
+
 
         }
     }

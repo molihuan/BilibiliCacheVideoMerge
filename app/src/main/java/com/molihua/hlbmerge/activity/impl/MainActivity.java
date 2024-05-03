@@ -219,9 +219,12 @@ public class MainActivity extends AbstractMainActivity implements NavigationView
         );
     }
 
+
     @Override
     protected void onStart() {
         super.onStart();
+        GeneralTools.getShizukuPermission(this);
+
         if (ConfigData.isAgreeTerm()) {
             UriTool.grantedUriPermission(ConfigData.getCacheFilePath(), this);
         }

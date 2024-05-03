@@ -25,6 +25,13 @@
                 android:textAllCaps="false" />
 
             <Button
+                android:id="@+id/btn_jump_source_vedio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="跳转原视频"
+                android:textAllCaps="false" />
+
+            <Button
                 android:id="@+id/btn_updataxml"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

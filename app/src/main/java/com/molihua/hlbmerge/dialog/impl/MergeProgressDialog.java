@@ -41,7 +41,7 @@ public class MergeProgressDialog {
     //退出执行ffmpeg命令
     public static boolean FLAG_EXIT_RUN_COMMAND = false;
     //ffmpeg命令模板
-    public static String ffmpegCmdTemplate;
+    private static String ffmpegCmdTemplate;
 
     /**
      * 显示合并进度弹窗
@@ -159,7 +159,7 @@ public class MergeProgressDialog {
                                             FileUtils.copy(cacheFile.getDanmakuPath(), completeOutPath + ".xml");
                                         }
 
-                                        cmdStr = String.format(ffmpegCmdTemplate, cacheFile.getAudioPath(), cacheFile.getVideoPath(), completeOutPathSuf);
+                                        cmdStr = String.format(ffmpegCmdTemplate, cacheFile.getAudioPath(), cacheFile.getVideoPath(), cacheFile.getBvId(), completeOutPathSuf);
                                         ConfigData.ffmpegCore.runCommand(cmdStr, ffmpegCallback);
 
 
@@ -365,7 +365,7 @@ public class MergeProgressDialog {
                                 switch (type) {
                                     case 0:
                                         //构造ffmpeg命令
-                                        String cmdStr = String.format(ffmpegCmdTemplate, cacheFile.getAudioPath(), cacheFile.getVideoPath(), reName);
+                                        String cmdStr = String.format(ffmpegCmdTemplate, cacheFile.getAudioPath(), cacheFile.getVideoPath(), cacheFile.getBvId(), reName);
                                         ConfigData.ffmpegCore.runCommand(cmdStr, ffmpegCallback);
                                         break;
                                     case 1:
@@ -400,7 +400,7 @@ public class MergeProgressDialog {
                                 switch (type) {
                                     case 0:
                                         //构造ffmpeg命令
-                                        String cmdStr = String.format(ffmpegCmdTemplate, cacheFile.getAudioPath(), cacheFile.getVideoPath(), completeOutPathSuf);
+                                        String cmdStr = String.format(ffmpegCmdTemplate, cacheFile.getAudioPath(), cacheFile.getVideoPath(), cacheFile.getBvId(), completeOutPathSuf);
                                         ConfigData.ffmpegCore.runCommand(cmdStr, ffmpegCallback);
                                         break;
                                     case 1:

@@ -43,7 +43,7 @@ public class UriCacheFileManager extends BaseCacheFileManager {
         cacheFileList = initCollectionFileList(path, cacheFileList);
 
         CacheSrc<Uri> needUri = new CacheSrc<>();
-        String[] names = new String[3];
+        String[] names = new String[4];
 
 
         //获取所有的合集路径
@@ -92,6 +92,7 @@ public class UriCacheFileManager extends BaseCacheFileManager {
                             .setBoxCheck(false)
                             .setUseUri(true)
                             .setCoverUrl(names[2])
+                            .setBvId(names[3])
             );
 
 
@@ -130,7 +131,7 @@ public class UriCacheFileManager extends BaseCacheFileManager {
         cacheFileList = initChapterFileList(collectionPath, cacheFileList);
 
         CacheSrc<Uri> needUri = new CacheSrc<>();
-        String[] names = new String[3];
+        String[] names = new String[4];
 
         showLoadingDialog();
 
@@ -180,6 +181,7 @@ public class UriCacheFileManager extends BaseCacheFileManager {
                             .setBoxCheck(false)
                             .setUseUri(true)
                             .setCoverUrl(names[2])
+                            .setBvId(names[3])
             );
         }
         dismissLoadingDialog();
@@ -200,7 +202,18 @@ public class UriCacheFileManager extends BaseCacheFileManager {
         boolean result = false;
         //判断kv中是否存在
         if (ConfigData.containsKey(key)) {
-            CacheDo cacheDo = ConfigData.getInstance(key, CacheDo.class);
+            CacheDo cacheDo = null;
+            try {
+                cacheDo = ConfigData.getInstance(key, CacheDo.class);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            if (cacheDo == null) {
+                ConfigData.clearTempData();
+                return getCacheMsgByMMKV(documentFile, prePathName, needUri, names);
+            }
+
             //获取章节里需要的Uri
             needUri.setAudio(Uri.parse(cacheDo.getAudio() == null ? "" : cacheDo.getAudio()));
             needUri.setVideo(Uri.parse(cacheDo.getVideo() == null ? "" : cacheDo.getVideo()));
@@ -210,6 +223,7 @@ public class UriCacheFileManager extends BaseCacheFileManager {
             names[0] = cacheDo.getTitle();
             names[1] = cacheDo.getSubTitle();
             names[2] = cacheDo.getCoverUrl();
+            names[3] = cacheDo.getBvId();
 
 
         } else {
@@ -241,6 +255,7 @@ public class UriCacheFileManager extends BaseCacheFileManager {
             cacheDo.setTitle(names[0]);
             cacheDo.setSubTitle(names[1]);
             cacheDo.setCoverUrl(names[2]);
+            cacheDo.setBvId(names[3]);
 
             ConfigData.saveInstance(key, cacheDo, MMKV.ExpireInMinute);
         }
@@ -267,7 +282,7 @@ public class UriCacheFileManager extends BaseCacheFileManager {
         List<CacheFile> tempList = new ArrayList<>();
 
         CacheSrc<Uri> needUri = new CacheSrc<>();
-        String[] names = new String[3];
+        String[] names = new String[4];
 
         String collectionPath;
         //遍历所有合集
@@ -309,6 +324,7 @@ public class UriCacheFileManager extends BaseCacheFileManager {
                                 .setBoxCheck(false)
                                 .setUseUri(true)
                                 .setCoverUrl(names[2])
+                                .setBvId(names[3])
                 );
 
 

@@ -31,6 +31,13 @@ public class RxFFmpegCore extends BaseFFmpegCore {
         String[] cmd = cmdStr.split(" ");
         Mtools.log("核心:" + getClass().getSimpleName() + "\n命令:" + cmdStr);
 
+//        XTask.postToMain(new Runnable() {
+//            @Override
+//            public void run() {
+//                Mtools.toast(cmdStr, Toast.LENGTH_LONG);
+//            }
+//        });
+
         //执行命令
         return RxFFmpegInvoke.getInstance()
                 .runCommand(cmd, (RxFFmpegInvoke.IFFmpegListener) ffmpegCallback);

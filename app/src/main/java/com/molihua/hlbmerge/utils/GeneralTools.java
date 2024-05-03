@@ -3,19 +3,24 @@ package com.molihua.hlbmerge.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.blankj.molihuan.utilcode.util.LogUtils;
 import com.hjq.permissions.OnPermissionCallback;
 import com.molihua.hlbmerge.activity.AbstractMainActivity;
 import com.molihua.hlbmerge.dao.ConfigData;
 import com.molihuan.pathselector.utils.FileTools;
 import com.molihuan.pathselector.utils.PermissionsTools;
+import com.molihuan.pathselector.utils.VersionTool;
 import com.xuexiang.xui.widget.dialog.DialogLoader;
 
 import java.util.List;
+
+import rikka.shizuku.Shizuku;
 
 
 /**
@@ -25,6 +30,43 @@ import java.util.List;
  * @Description: 通用工具
  */
 public class GeneralTools {
+
+    private static boolean isShizukuInstalled(Context context) {
+        try {
+            context.getPackageManager().getPackageInfo("moe.shizuku.privileged.api", 0);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static boolean getShizukuPermission(Context context) {
+        Intent shizukuIntent = context.getPackageManager().getLaunchIntentForPackage("moe.shizuku.privileged.api");
+        if (shizukuIntent != null) {
+            if (Shizuku.pingBinder()) {
+                boolean permissionIsGranted = Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED;
+                if (permissionIsGranted) {
+                    return true;
+                } else {
+                    Shizuku.addRequestPermissionResultListener(new Shizuku.OnRequestPermissionResultListener() {
+                        @Override
+                        public void onRequestPermissionResult(int requestCode, int grantResult) {
+                            LogUtils.d("授权结果:" + requestCode + ":" + grantResult);
+                            if (grantResult == 0) {
+                                LogUtils.d("Shizuku授权成功");
+                            }
+                        }
+                    });
+                    Shizuku.requestPermission(0);
+                }
+            }
+        }
+
+        return true;
+    }
+
+
     /**
      * 调用第三方浏览器打开网址
      *
@@ -45,17 +87,20 @@ public class GeneralTools {
 
     public static void initPermissionsOfStorage(AbstractMainActivity context) {
         //存储权限的申请
-        PermissionsTools.generalPermissionsOfStorage(context, new OnPermissionCallback() {
-            @Override
-            public void onGranted(@NonNull List<String> permissions, boolean all) {
-                boolean dataUseUri = FileTools.underAndroidDataUseUri(ConfigData.getCacheFilePath());
-                if (!dataUseUri) {
-                    //获取数据刷新列表
-                    context.updateCollectionFileList();
-                    context.refreshCacheFileList();
+        if (!VersionTool.isAndroid13()) {
+            PermissionsTools.generalPermissionsOfStorage(context, new OnPermissionCallback() {
+                @Override
+                public void onGranted(@NonNull List<String> permissions, boolean all) {
+                    boolean dataUseUri = FileTools.underAndroidDataUseUri(ConfigData.getCacheFilePath());
+                    if (!dataUseUri) {
+                        //获取数据刷新列表
+                        context.updateCollectionFileList();
+                        context.refreshCacheFileList();
+                    }
                 }
-            }
-        });
+            });
+        }
+
 
         PermissionsTools.specialPermissionsOfStorageWithDialog(context, true, new OnPermissionCallback() {
             @Override

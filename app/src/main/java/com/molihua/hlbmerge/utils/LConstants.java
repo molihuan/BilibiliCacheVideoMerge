@@ -13,6 +13,8 @@ public class LConstants {
     //bilibili主页url
     public static final String URL_BILIBILI_HOMEPAGE = "https://space.bilibili.com/454222981";
 
+    public static final String URL_BILIBILI_VIDEO_PRE = "https://www.bilibili.com/video/";
+
 
     //**************************    Fragment Tag标志    ****************************
     public static final String TAG_FRAGMENT_MAIN_TITLEBAR = "frameLayout_main_titlebar_area_mlh";

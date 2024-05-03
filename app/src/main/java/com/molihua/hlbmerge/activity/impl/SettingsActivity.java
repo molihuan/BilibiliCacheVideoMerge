@@ -249,7 +249,7 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
         } else if (id == R.id.rela_custom_ffmpeg_cmd) {
             new MaterialDialog.Builder(this)
                     .title("提示")
-                    .content("请使用三个%s分别代表:输入音频、输入视频、输出视频")
+                    .content("请使用三个%s分别代表:输入音频、输入视频、bvId、输出视频")
                     .input(
                             "ffmpeg命令",
                             ConfigData.getFfmpegCmdTemplate(),

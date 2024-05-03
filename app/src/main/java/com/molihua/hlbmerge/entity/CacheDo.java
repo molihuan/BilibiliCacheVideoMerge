@@ -16,6 +16,7 @@ public class CacheDo implements Parcelable {
     private String subTitle;
 
     private String coverUrl;
+    private String bvId;
 
     public static final Creator<CacheDo> CREATOR = new Creator<CacheDo>() {
         @Override
@@ -29,6 +30,7 @@ public class CacheDo implements Parcelable {
             cd.setTitle(source.readString());
             cd.setSubTitle(source.readString());
             cd.setCoverUrl(source.readString());
+            cd.setBvId(source.readString());
             return cd;
         }
 
@@ -101,6 +103,15 @@ public class CacheDo implements Parcelable {
         return this;
     }
 
+    public String getBvId() {
+        return bvId;
+    }
+
+    public CacheDo setBvId(String bvId) {
+        this.bvId = bvId;
+        return this;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -118,6 +129,7 @@ public class CacheDo implements Parcelable {
         parcel.writeString(title);
         parcel.writeString(subTitle);
         parcel.writeString(coverUrl);
+        parcel.writeString(bvId);
     }
 
     @Override
@@ -130,6 +142,7 @@ public class CacheDo implements Parcelable {
                 ", title='" + title + '\'' +
                 ", subTitle='" + subTitle + '\'' +
                 ", coverUrl='" + coverUrl + '\'' +
+                ", bvId='" + bvId + '\'' +
                 '}';
     }
 }
