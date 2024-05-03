@@ -307,7 +307,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="预备选项(%s分别为:输入音频、输入视频、输出视频)"
+                            android:text="预备选项(%s分别为:输入音频、输入视频、bvId、输出视频)"
                             android:textColor="@color/black_mlh"
                             android:textSize="16dp" />
 

@@ -23,6 +23,10 @@ import java.io.File;
 import java.io.FileFilter;
 import java.util.Map;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import io.microshow.rxffmpeg.RxFFmpegInvoke;
 
 /**
  * @ClassName: FileTools
@@ -233,6 +237,24 @@ public class FileTool {
             //e.printStackTrace();
         }
 
+        //解析bv号
+        try {
+            result[3] = jsonObject
+                    .getString("bvid");
+        } catch (JSONException e) {
+            Mtools.log("无法从json中解析bvid");
+            //e.printStackTrace();
+        }
+        if (result[3] == null || result[3].trim().length() <= 1) {
+            try {
+                result[3] = "av" + jsonObject
+                        .getString("avid");
+            } catch (JSONException e) {
+                Mtools.log("无法从json中解析bvid");
+                //e.printStackTrace();
+            }
+        }
+
 
         //获取合集名称
         try {
@@ -379,6 +401,26 @@ public class FileTool {
         builder.insert(0, preFoldName + "下");
         builder.append("没找到");
         return builder.toString();
+    }
+
+    /**
+     * 获取视频里的Metadata中的Title
+     *
+     * @param videoPath
+     * @return
+     */
+    public static String getVedioMetadataTitle(String videoPath) {
+        String mediaInfo = RxFFmpegInvoke.getInstance().getMediaInfo(videoPath);
+
+        String pattern = "title\\s*=\\s*'([A-Za-z0-9]+)';";
+        Pattern regex = Pattern.compile(pattern);
+        Matcher matcher = regex.matcher(mediaInfo);
+
+        if (matcher.find()) {
+            return matcher.group(1);
+        }
+
+        return null;
     }
 
 }

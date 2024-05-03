@@ -6,8 +6,14 @@ plugins {
 /**
  * ffmpeg核心类型可以只打包单核心
  */
+enum FFmpegCoreType {
+    ALL,
+    RXFFMPEG,
+    FFMPEGCOMMAND
+}
 
 def ffmpegCoreType = "-1"
+
 
 //ffmpeg核心依赖
 dependencies {
@@ -38,10 +44,10 @@ android {
 
     defaultConfig {
         applicationId "com.molihua.hlbmerge"
-        minSdk 21
+        minSdk 24
         targetSdk 33
-        versionCode 58
-        versionName "1.6.9.8"
+        versionCode 59
+        versionName "1.6.9.9"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -106,7 +112,7 @@ android {
             java {
                 //配置编译时忽略java文件
                 switch (ffmpegCoreType) {
-                    case "-1":
+                    case "-1"://全核心
                         break
                     case "0":
                         //RxFFmpeg依赖
@@ -138,6 +144,7 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    buildToolsVersion '30.0.3'
 
 }
 
@@ -171,14 +178,16 @@ dependencies {
     implementation 'com.umeng.umsdk:asms:1.6.3'// 必选
     implementation 'com.umeng.umsdk:apm:1.8.0'// U-APM产品包依赖(必选)
     //bugly依赖
-    implementation 'com.tencent.bugly:crashreport:latest.release'
+    implementation 'com.tencent.bugly:crashreport:4.1.9.2'
     //kotlin
     implementation 'androidx.core:core-ktx:1.9.0'
     //协程
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
-    //黄油刀
-//    implementation 'com.jakewharton:butterknife:10.2.3'
-//    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.3'
+
+    def shizuku_version = "13.1.5"
+    implementation "dev.rikka.shizuku:api:$shizuku_version"
+    // Add this line if you want to support Shizuku
+    implementation "dev.rikka.shizuku:provider:$shizuku_version"
 
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.5.0'

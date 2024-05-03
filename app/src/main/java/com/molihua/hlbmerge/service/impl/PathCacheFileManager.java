@@ -33,7 +33,7 @@ public class PathCacheFileManager extends BaseCacheFileManager {
 
         CacheSrc<String> needPath = new CacheSrc<>();
 
-        String[] names = new String[3];
+        String[] names = new String[4];
         //获取所有的合集
         File[] collectionFile = FileTool.getCollectionChapterFile(path);
 
@@ -89,6 +89,7 @@ public class PathCacheFileManager extends BaseCacheFileManager {
                             .setBoxCheck(false)
                             .setUseUri(false)
                             .setCoverUrl(names[2])
+                            .setBvId(names[3])
             );
         }
 
@@ -122,7 +123,7 @@ public class PathCacheFileManager extends BaseCacheFileManager {
         cacheFileList = initChapterFileList(collectionPath, cacheFileList);
 
         CacheSrc<String> needPath = new CacheSrc<>();
-        String[] names = new String[3];
+        String[] names = new String[4];
         //获取一个合集下面所有的章节
         File[] chapterFile = FileTool.getCollectionChapterFile(collectionPath);
         for (int i = 0; i < chapterFile.length; i++) {
@@ -155,6 +156,7 @@ public class PathCacheFileManager extends BaseCacheFileManager {
                             .setBoxCheck(false)
                             .setUseUri(false)
                             .setCoverUrl(names[2])
+                            .setBvId(names[3])
             );
         }
 
@@ -179,7 +181,7 @@ public class PathCacheFileManager extends BaseCacheFileManager {
         List<CacheFile> tempList = new ArrayList<>();
 
         CacheSrc<String> needPath = new CacheSrc<>();
-        String[] names = new String[3];
+        String[] names = new String[4];
 
         String collectionPath;
         //遍历所有合集
@@ -218,6 +220,7 @@ public class PathCacheFileManager extends BaseCacheFileManager {
                                 .setBoxCheck(false)
                                 .setUseUri(false)
                                 .setCoverUrl(names[2])
+                                .setBvId(names[3])
                 );
             }
 

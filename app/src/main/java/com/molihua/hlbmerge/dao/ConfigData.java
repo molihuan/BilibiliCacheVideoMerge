@@ -52,6 +52,7 @@ public class ConfigData {
     public final static int FFMPEG_CORE_TYPE_RXFFMPEG = 0;
 
     public final static int FFMPEG_CORE_TYPE_FFMPEGCOMMAND = 1;
+    //临时配置前缀
     public final static String TEMP_DATA_PERFIX = "TEMP_DATA_PERFIX_";
 
     private final static MMKV kv = MMKV.defaultMMKV();
@@ -134,8 +135,11 @@ public class ConfigData {
             //-vcodec copy ：视频只拷贝，不编解码
             //-acodec copy : 音频只拷贝，不编解码
             //-c copy      : 只拷贝，不编解码
-            setFfmpegCmdTemplate("ffmpeg -i %s -i %s -c copy %s");
+            setFfmpegCmdTemplate("ffmpeg -i %s -i %s -metadata title='%s' -c copy %s");
         }
+
+        //检查是否为最新的ffmpeg模板
+        checkLatestFfmpegTemplate();
 
         if (!kv.containsKey("ffmpegCoreType")) {
             setFfmpegCoreType(FFMPEG_CORE_TYPE_RXFFMPEG);
@@ -149,10 +153,17 @@ public class ConfigData {
             setClearTempDataMills(TimeUtils.getNowMills() + UpdataTools.TIMESTAMP_WEEK);
         }
 
-
+        //必须放最后
         autoClearTempData();
 
 
+    }
+
+    private static void checkLatestFfmpegTemplate() {
+        String template = getFfmpegCmdTemplate();
+        if (!template.contains("-metadata title='%s'")) {
+            setFfmpegCmdTemplate("ffmpeg -i %s -i %s -metadata title='%s' -c copy %s");
+        }
     }
 
     /**
@@ -184,6 +195,9 @@ public class ConfigData {
         }
     }
 
+    /**
+     * 自动清理临时数据(一周)
+     */
     public static void autoClearTempData() {
         long nowMills = TimeUtils.getNowMills();
         long clearMills = ConfigData.getClearTempDataMills();

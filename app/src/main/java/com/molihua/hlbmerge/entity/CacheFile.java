@@ -48,6 +48,9 @@ public class CacheFile implements Serializable, Cloneable {
     private DocumentFile documentFile;
     //图片封面地址
     private String coverUrl;
+    //bvid
+    private String bvId;
+
 
     public CacheFile() {
     }
@@ -196,6 +199,15 @@ public class CacheFile implements Serializable, Cloneable {
         return this;
     }
 
+    public String getBvId() {
+        return bvId;
+    }
+
+    public CacheFile setBvId(String bvId) {
+        this.bvId = bvId;
+        return this;
+    }
+
     @NonNull
     @Override
     public CacheFile clone() throws CloneNotSupportedException {
@@ -224,6 +236,7 @@ public class CacheFile implements Serializable, Cloneable {
                 ", useUri=" + useUri +
                 ", documentFile=" + documentFile +
                 ", coverUrl=" + coverUrl +
+                ", bvId=" + bvId +
                 '}';
     }
 
