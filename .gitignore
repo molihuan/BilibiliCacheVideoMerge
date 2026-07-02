@@ -9,4 +9,4 @@
 .cxx
 local.properties
 app/build
-.idea
+.kotlin
