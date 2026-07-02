@@ -286,7 +286,7 @@ public class MergeProgressDialog {
             CacheFile tempCacheFile = null;
             try {
                 tempCacheFile = cacheFile.clone();
-            } catch (CloneNotSupportedException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 

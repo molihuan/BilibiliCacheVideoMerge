@@ -205,7 +205,7 @@ public class UriTool {
         return fileList;
     }
 
-    public static CacheSrc getNeedUri(DocumentFile chapterFile, CacheSrc result) {
+    public static CacheSrc<Uri> getNeedUri(DocumentFile chapterFile, CacheSrc<Uri> result) {
         DocumentFile[] files = chapterFile.listFiles();
         if (files != null) {
             for (int i = 0; i < files.length; i++) {

@@ -36,26 +36,6 @@ import io.microshow.rxffmpeg.RxFFmpegInvoke;
  */
 public class FileTool {
     /**
-     * 获取上一级名称
-     *
-     * @param path
-     * @return
-     */
-    public static String getParentName(String path) {
-
-        if (path.endsWith(File.separator)) {
-            path = path.substring(0, path.length() - 1);
-        }
-
-        // 拆分字符串获取路径元素
-        String[] elements = path.split(File.separator);
-
-        // 获取最后一个路径元素作为父目录名
-        String parentName = elements[elements.length - 2];
-        return parentName;
-    }
-
-    /**
      * 通过全路径获取名称
      *
      * @param path
@@ -151,19 +131,6 @@ public class FileTool {
     }
 
 
-    /**
-     * 获取所有的合集路径、获取一个合集下的所有章节路径
-     *
-     * @return 所有的合集路径、个合集下的所有章节路径即：allCollectionPath或allChapterPath
-     */
-    public static String[] getCollectionChapterPath(String path) {
-        File[] collectionFile = getCollectionChapterFile(path);
-        String[] result = new String[collectionFile.length];
-        for (int i = 0; i < collectionFile.length; i++) {
-            result[i] = collectionFile[i].getAbsolutePath();
-        }
-        return result;
-    }
 
     public static File[] getCollectionChapterFile(String path) {
         File file = new File(path);
@@ -338,19 +305,14 @@ public class FileTool {
     /**
      * 通过章节路径获取需要的路径
      *
-     * @param chapterPath
      * @param result
      * @return result[0]:audio.m4s
      * result[1]:video.m4s
      * result[2]:entry.json
      * result[3]:danmaku.xml
      */
-    public static CacheSrc getNeedPath(String chapterPath, CacheSrc result) {
-        File file = new File(chapterPath);
-        return getNeedPath(file, result);
-    }
 
-    public static CacheSrc getNeedPath(File chapterFile, CacheSrc result) {
+    public static CacheSrc<String> getNeedPath(File chapterFile, CacheSrc<String> result) {
         File[] files = chapterFile.listFiles();
         if (files != null) {
             for (int i = 0; i < files.length; i++) {

@@ -1,0 +1,32 @@
+package com.molihua.hlbmerge.utils;
+
+/**
+ * @ClassName Constant
+ * @Description 常量
+ * @Author molihuan
+ * @Date 2022/6/22 0:59
+ */
+object LConstants {
+
+    //去除一些特殊的字符的正则表达式 /r去换行
+    const val SPECIAL_CHARACTERS_REGULAR_RULE =
+        "[\t\r\n`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】\"‘；：”“’。， 、？-]*";
+
+    //bilibili主页url
+    const val URL_BILIBILI_HOMEPAGE = "https://space.bilibili.com/454222981";
+
+    const val URL_BILIBILI_VIDEO_PRE = "https://www.bilibili.com/video/";
+
+
+    //**************************    Fragment Tag标志    ****************************
+    const val TAG_FRAGMENT_MAIN_TITLEBAR = "frameLayout_main_titlebar_area_mlh";
+    const val TAG_FRAGMENT_MAIN_HANDLE = "frameLayout_main_handle_area_mlh";
+    const val TAG_FRAGMENT_MAIN_FILE_SHOW = "frameLayout_main_file_show_area_mlh";
+    const val TAG_FRAGMENT_MAIN_FFMPEG = "frameLayout_main_ffmpeg_area_mlh";
+
+    //本项目地址
+    const val PROJECT_ADDRESS_GITHUB = "https://github.com/molihuan/BilibiliCacheVideoMerge";
+    const val PROJECT_ADDRESS_GITEE = "https://gitee.com/molihuan/BilibiliCacheVideoMergeAndroid";
+
+
+}
