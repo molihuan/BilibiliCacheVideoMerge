@@ -51,7 +51,7 @@ class PathCacheFileManager(context: Context) : BaseCacheFileManager(context) {
                 names[1] = srcErrorMsg
             } else {
                 //获取合集名称和章节名称
-                names = FileTool.getCollectionChapterName(needPath.getJson(), names)
+                names = FileTool.getCollectionChapterName(needPath.json, names)
             }
 
 
@@ -66,10 +66,10 @@ class PathCacheFileManager(context: Context) : BaseCacheFileManager(context) {
                     collectionPath = collectionFile[i]!!.absolutePath,
                     collectionName = names[0],
                     chapterName = names[1],
-                    audioPath = needPath.getAudio(),
-                    videoPath = needPath.getVideo(),
-                    jsonPath = needPath.getJson(),
-                    danmakuPath = needPath.getDanmaku(),
+                    audioPath = needPath.audio,
+                    videoPath = needPath.video,
+                    jsonPath = needPath.json,
+                    danmakuPath = needPath.danmaku,
                     boxVisibility = View.INVISIBLE,
                     boxCheck = false,
                     useUri = false,
@@ -125,7 +125,7 @@ class PathCacheFileManager(context: Context) : BaseCacheFileManager(context) {
                 names[1] = srcErrorMsg
             } else {
                 //获取合集名称和章节名称
-                names = FileTool.getCollectionChapterName(needPath.getJson(), names)
+                names = FileTool.getCollectionChapterName(needPath.json, names)
             }
             cacheFileList.add(
                 CacheFile(
@@ -135,10 +135,10 @@ class PathCacheFileManager(context: Context) : BaseCacheFileManager(context) {
                     collectionName = names[0],
                     chapterPath = chapterFile[i]!!.absolutePath,
                     chapterName = names[1],
-                    audioPath = needPath.getAudio(),
-                    videoPath = needPath.getVideo(),
-                    jsonPath = needPath.getJson(),
-                    danmakuPath = needPath.getDanmaku(),
+                    audioPath = needPath.audio,
+                    videoPath = needPath.video,
+                    jsonPath = needPath.json,
+                    danmakuPath = needPath.danmaku,
                     boxVisibility = View.INVISIBLE,
                     boxCheck = false,
                     useUri = false,
@@ -191,7 +191,7 @@ class PathCacheFileManager(context: Context) : BaseCacheFileManager(context) {
                         names[1] = srcErrorMsg
                     } else {
                         //获取合集名称和章节名称
-                        names = FileTool.getCollectionChapterName(needPath.getJson(), names)
+                        names = FileTool.getCollectionChapterName(needPath.json, names)
                     }
                     tempList.add(
                         CacheFile(
@@ -201,10 +201,10 @@ class PathCacheFileManager(context: Context) : BaseCacheFileManager(context) {
                             collectionName = names[0],
                             chapterPath = chapterFile[i]!!.absolutePath,
                             chapterName = names[1],
-                            audioPath = needPath.getAudio(),
-                            videoPath = needPath.getVideo(),
-                            jsonPath = needPath.getJson(),
-                            danmakuPath = needPath.getDanmaku(),
+                            audioPath = needPath.audio,
+                            videoPath = needPath.video,
+                            jsonPath = needPath.json,
+                            danmakuPath = needPath.danmaku,
                             boxVisibility = View.INVISIBLE,
                             boxCheck = false,
                             useUri = false,

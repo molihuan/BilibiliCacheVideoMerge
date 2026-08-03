@@ -69,13 +69,13 @@ class UriCacheFileManager(val fragment: Fragment) :
                     collectionPath = itemShowPath,
                     collectionName = names[0],
                     chapterName = names[1],
-                    jsonPath = if (needUri.getJson() == null) null else needUri.getJson()
+                    jsonPath = if (needUri.json == null) null else needUri.json
                         .toString(),
-                    audioPath = if (needUri.getAudio() == null) null else needUri.getAudio()
+                    audioPath = if (needUri.audio == null) null else needUri.audio
                         .toString(),
-                    videoPath = if (needUri.getVideo() == null) null else needUri.getVideo()
+                    videoPath = if (needUri.video == null) null else needUri.video
                         .toString(),
-                    danmakuPath = if (needUri.getDanmaku() == null) null else needUri.getDanmaku()
+                    danmakuPath = if (needUri.danmaku == null) null else needUri.danmaku
                         .toString(),
                     boxVisibility = View.INVISIBLE,
                     boxCheck = false,
@@ -163,13 +163,13 @@ class UriCacheFileManager(val fragment: Fragment) :
                     collectionName = names[0],
                     chapterPath = collectionPath + File.separator + prePathName,
                     chapterName = names[1],
-                    jsonPath = if (needUri.getJson() == null) null else needUri.getJson()
+                    jsonPath = if (needUri.json == null) null else needUri.json
                         .toString(),
-                    audioPath = if (needUri.getAudio() == null) null else needUri.getAudio()
+                    audioPath = if (needUri.audio == null) null else needUri.audio
                         .toString(),
-                    videoPath = if (needUri.getVideo() == null) null else needUri.getVideo()
+                    videoPath = if (needUri.video == null) null else needUri.video
                         .toString(),
-                    danmakuPath = if (needUri.getDanmaku() == null) null else needUri.getDanmaku()
+                    danmakuPath = if (needUri.danmaku == null) null else needUri.danmaku
                         .toString(),
                     boxVisibility = View.INVISIBLE,
                     boxCheck = false,
@@ -231,11 +231,11 @@ class UriCacheFileManager(val fragment: Fragment) :
             val cacheDo = CacheDo()
             //获取章节里需要的Uri
             needUri = UriTool.getNeedUri(documentFile, needUri)
-            cacheDo.setJson(if (needUri.getJson() == null) "" else needUri.getJson().toString())
-                .setAudio(if (needUri.getAudio() == null) "" else needUri.getAudio().toString())
-                .setVideo(if (needUri.getVideo() == null) "" else needUri.getVideo().toString())
+            cacheDo.setJson(if (needUri.json == null) "" else needUri.json.toString())
+                .setAudio(if (needUri.audio == null) "" else needUri.audio.toString())
+                .setVideo(if (needUri.video == null) "" else needUri.video.toString())
                 .setDanmaku(
-                    if (needUri.getDanmaku() == null) "" else needUri.getDanmaku().toString()
+                    if (needUri.danmaku == null) "" else needUri.danmaku.toString()
                 )
 
             //校验needUri
@@ -249,7 +249,7 @@ class UriCacheFileManager(val fragment: Fragment) :
                 //获取合集名称和章节名称
 //                names = UriTool.getCollectionChapterName(needUri.getJson(), names);
                 try {
-                    names = UriTool.uriToJsonString(mContext, needUri.getJson(), names)
+                    names = UriTool.uriToJsonString(mContext, needUri.json, names)
                 } catch (e: IOException) {
                     throw RuntimeException(e)
                 }
@@ -310,7 +310,7 @@ class UriCacheFileManager(val fragment: Fragment) :
                         names[1] = srcErrorMsg
                     } else {
                         //获取合集名称和章节名称
-                        names = UriTool.getCollectionChapterName(needUri.getJson(), names)
+                        names = UriTool.getCollectionChapterName(needUri.json, names)
                     }
 
                     tempList.add(
@@ -321,13 +321,13 @@ class UriCacheFileManager(val fragment: Fragment) :
                             collectionName = names[0],
                             chapterPath = collectionPath + File.separator + chapterFile[i]!!.name,
                             chapterName = names[1],
-                            audioPath = if (needUri.getAudio() == null) null else needUri.getAudio()
+                            audioPath = if (needUri.audio == null) null else needUri.audio
                                 .toString(),
-                            videoPath = if (needUri.getVideo() == null) null else needUri.getVideo()
+                            videoPath = if (needUri.video == null) null else needUri.video
                                 .toString(),
-                            jsonPath = if (needUri.getJson() == null) null else needUri.getJson()
+                            jsonPath = if (needUri.json == null) null else needUri.json
                                 .toString(),
-                            danmakuPath = if (needUri.getDanmaku() == null) null else needUri.getDanmaku()
+                            danmakuPath = if (needUri.danmaku == null) null else needUri.danmaku
                                 .toString(),
                             boxVisibility = View.INVISIBLE,
                             boxCheck = false,
